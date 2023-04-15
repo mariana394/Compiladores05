@@ -1,5 +1,4 @@
 #Grammar declaration
-
 def p_program(p):
     '''program : PROGRAM ID SEMICOLON program_libraries program_vars program_function program_main END'''
     p[0] = "COMPILED"
