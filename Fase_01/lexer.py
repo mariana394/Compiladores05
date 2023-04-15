@@ -40,6 +40,9 @@ reserved = {
    #ESCRIBIR
    'print':'PRINT',
 
+   #LEER
+    'read':'READ',
+
    #RETORNO
    'return' : 'RETURN',
 
@@ -51,7 +54,17 @@ reserved = {
    'main'  : 'MAIN',
 
    #TERMINAR EL PROGRAMA
-   'end' :'END'
+   'end' :'END',
+
+   #FUNCIONES ESPECIALES
+   'exploration' : 'EXPLORATION',
+   'financial_state' : 'FINANCIAL_STATE',
+   'season_analyzer' : 'SEASON_ANALYZER',
+   'trend_prediction' : 'TREND_PREDICTION',
+   'dummi_regression' : 'DUMMI_REGRESSION',
+   
+   #FUNCIONES ESPECIALES NICE TO HAVE
+   'model_predict' : 'MODEL_PREDICT'
 }
 #List of tokens 
 tokens = [
@@ -70,10 +83,12 @@ tokens = [
     'ASSIGN', #=
     'GTHAN',
     'LTHAN',
-    'NOTEQUAL',
+    'NOTEQUAL', #!=
     'COLON',
     'SEMICOLON',
     'COMMA',
+    'OR',
+    'AND',
     
     'PLUS',
     'MINUS',
@@ -102,6 +117,8 @@ t_NOTEQUAL = r'!='
 t_COLON = r':'
 t_SEMICOLON = r';'
 t_COMMA = r','
+t_OR = r'\|\|'
+t_AND = r'&&'
 t_PLUS = r'\+'
 t_MINUS = r'-'
 t_MULTIPLY = r'\*'
