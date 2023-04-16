@@ -1,0 +1,25 @@
+program TESTCORRECTO;
+
+import pandas as pd
+import numpy as np
+
+var dataframe costos, ventas;
+char inicio, fin;
+
+function void message (char name, int size){
+	print ('test', 'test2', name, test2);
+}
+
+main {
+a = 2;
+read(csvcostos)
+read(csvventas)
+financial_state(ventas, costos,inicio, fin)
+
+if (costos == pesos){
+	print('Nosepudoleerelarchivodecostos');
+};
+
+
+}
+end
