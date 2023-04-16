@@ -6,11 +6,11 @@
 
 ### Descripción general del avance
 <br> **STATUS: ** "Jala con errores"
-<br>La version 2.4.0 de DATALOR presenta el lexer y el parser con la debida sintaxis y reglas gramaticas. Se realizaron pruebas para revisar el funcionamiento correcto, se realizaron correcciones y siguen pendientes algunos errores y observaciones a corregir mencionadas a continuacion:
+<br>La version 3.4.0 de DATALOR presenta el lexer y el parser con la debida sintaxis y reglas gramaticas. Se realizaron pruebas para revisar el funcionamiento correcto, se realizaron correcciones y siguen pendientes algunos errores y observaciones a corregir mencionadas a continuacion:
 
 ## Bugs de versión
 
-### version 2.4.0
+### version 3.4.0
 <br> Se mantienen los errores de la version 2.3.0
 
  ### version 2.3.0
@@ -33,9 +33,10 @@
 
 
 ## Correcciones de diseño
- ### version 2.4.0
+ ### version 3.4.0
  <br> function - Se modifico para que lograra tener 0 o mas funciones
  <br> validacion correcta for (parametros, body, no acepta funciones como parametro)
+ <br> Se agregaron al lexer tokens faltantes
  
  ### version 2.3.0
  <br>return - Se cambio el parametro de return de var_cte a exp
@@ -43,4 +44,5 @@
  <br>assign - Ya es posible asignar read y funciones especiales a una variable
 
  ## Por revisar...
- <br> Integracion de tipo boolean
+ <br> * Integracion de tipo boolean
+ <br> * Comentarios con python o propios del lenguaje
