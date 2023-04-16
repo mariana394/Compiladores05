@@ -32,7 +32,10 @@ reserved = {
    'int' : 'INT',
    'float': 'FLOAT',
    'char' : 'CHAR',
-   'timestamp' : 'TIMESTAMP',
+
+   #TIPOS_VARIABLES_COMPUESTA 
+   'dataframe' : 'DATAFRAME',
+    'date' : 'DATE',
 
     #DECLARACION DE VARIABLES
    'var':'VAR',
@@ -59,7 +62,7 @@ reserved = {
    #FUNCIONES ESPECIALES
    'exploration' : 'EXPLORATION',
    'financial_state' : 'FINANCIAL_STATE',
-   'season_analyzer' : 'SEASON_ANALYZER',
+   'season_analyzer' : 'SEASON_ANALYSIS',
    'trend_prediction' : 'TREND_PREDICTION',
    'dummi_regression' : 'DUMMI_REGRESSION',
    
@@ -136,7 +139,7 @@ def t_CTE_FLOAT(t):
     return t
 
 def t_CTE_CHAR(t):
-    r'\'[a-zA-Z0-9]\''
+    r'\'[a-zA-Z0-9]*\''
     t.value = str(t.value)    
     return t
 
@@ -164,21 +167,36 @@ lexer = lex.lex()
 
 #data = 
 '''
-program test;
-var a,b,c;
-main{
-    a = 1;
-    b = 2;
-    c = a + b;
-    print(c);
+program TESTCORRECTO;
+
+import pandas as pd
+import numpy as np
+import csv 
+
+var
+dataframe costos, ventas;
+date inicio, fin;
+
+function void message (char name, int size){
+	print ("Se ha leido el dataframe ", name, " con un tamano de ", size);
+}
+
+main {
+costos = read csvcostos;
+ventas = read csvventas;
+inicio = '10011999';
+fin = '10012023';
+
+print(financial_state(ventas, costos,inicio, fin))
+
 }
 end
 '''
 
-# Pasar la entrada
+#Pasar la entrada
 #lexer.input(data)
 
-# Tokenize
+#Tokenize
 #while True:
 #    tok = lexer.token()
 #    if not tok: 
