@@ -97,6 +97,8 @@ tokens = [
     'MINUS',
     'MULTIPLY',
     'DIVIDE',
+    'MODULE',
+    'POWER',
     
     #CONSTANTES
     'CTE_INT',
@@ -126,6 +128,8 @@ t_PLUS = r'\+'
 t_MINUS = r'-'
 t_MULTIPLY = r'\*'
 t_DIVIDE = r'/'
+t_MODULE = r'%'
+t_POWER = r'^'
 
 #CONSTANTES
 def t_CTE_INT(t):
