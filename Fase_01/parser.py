@@ -46,11 +46,11 @@ def p_program_vars(p):
             | empty'''
 
 #<VAR CTE>
-def p_var_cte(p):
-    '''var_cte : ID 
-             | CTE_INT 
-             | CTE_FLOAT
-             | CTE_CHAR'''
+# def p_var_cte(p):
+#     '''var_cte : ID 
+#              | CTE_INT 
+#              | CTE_FLOAT
+#              | CTE_CHAR'''
 
 def p_s_type(p):
     '''s_type : INT 
@@ -89,8 +89,7 @@ def p_var_s_matrix(p):
                     | empty'''
 
 def p_variable(p):
-    '''variable : ID variable_array
-                | empty'''
+    '''variable : ID variable_array'''
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
@@ -103,7 +102,7 @@ def p_variable_matrix(p):
 #FUNCTIONS
 #Uso de las funciones en el programa
 def p_program_function(p):
-    '''program_function : FUNCTION function_type ID LPAREN param RPAREN LBRACKET inner_body return RBRACKET'''
+    '''program_function : FUNCTION function_type ID LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET'''
 
 def p_function_type(p):
     '''function_type : s_type
@@ -119,12 +118,12 @@ def p_param2(p):
 
 #<RETURN>
 def p_return(p):
-    '''return : RETURN var_cte SEMICOLON
+    '''return : RETURN exp SEMICOLON
               | empty'''
 
 #Uso del main en el programa
 def p_program_main(p):
-    '''program_main : MAIN LBRACKET inner_body RBRACKET'''
+    '''program_main : MAIN LBRACKET program_vars inner_body RBRACKET'''
 
 
 #<BODY>
@@ -133,15 +132,18 @@ def p_body(p):
 
 #<INNER_BODY>
 def p_inner_body(p):
-    '''inner_body : program_vars inner_body2'''
+    '''inner_body :  statement inner_body
+                  | empty'''
 
-def p_inner_body2(p):
-    '''inner_body2 : statement inner_body2
-                   | empty'''
 
 #<ASSIGN>
 def p_assign(p):
-    '''assign : variable ASSIGN exp SEMICOLON'''
+    '''assign : variable ASSIGN specialf_assign SEMICOLON'''
+
+def p_specialf_assign(p):
+    '''specialf_assign : exp
+                       | special_function
+                       | read'''
 
 #<CONDITION>
 def p_condition(p):
@@ -157,8 +159,7 @@ def p_print(p):
     
 #Notas modificar print para que sirva con exp en ID
 def p_print_type(p):
-    '''print_type : ID
-                  | CTE_CHAR'''
+    '''print_type : exp'''
 
 def p_print_many(p):
     '''print_many : print_type print_many2 '''
@@ -192,7 +193,8 @@ def p_for_end(p):
 
 # <CALL_FUNCTION>
 def p_call_function(p):
-    '''call_function : ID LPAREN exp exp_many RPAREN'''
+    '''call_function : ID LPAREN exp exp_many RPAREN '''
+
 
 #<EXP_MANY>
 def p_exp_many(p):
@@ -204,10 +206,8 @@ def p_statement(p):
     '''statement : assign
                  | condition
                  | print
-                 | read
                  | cycle
-                 | call_function
-                 | special_function'''
+                 | call_function'''
 
 #<SPECIAL_FUNCTIONS>
 def p_special_function(p):
