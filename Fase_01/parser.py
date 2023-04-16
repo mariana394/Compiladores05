@@ -102,7 +102,8 @@ def p_variable_matrix(p):
 #FUNCTIONS
 #Uso de las funciones en el programa
 def p_program_function(p):
-    '''program_function : FUNCTION function_type ID LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET'''
+    '''program_function : FUNCTION function_type ID LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
+                        | empty'''
 
 def p_function_type(p):
     '''function_type : s_type
