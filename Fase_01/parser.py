@@ -313,7 +313,7 @@ def p_m_exp_sr_2(p):
     
 #<TERM>
 def p_term(p):
-    '''term : factor term_pc'''
+    '''term : sub_factor term_pc'''
 
 def p_term_pc(p):
     '''term_pc : term_pc_2 term
@@ -321,8 +321,18 @@ def p_term_pc(p):
 
 def p_term_pc_2(p):
     '''term_pc_2 : MULTIPLY
-                 | DIVIDE'''
-    
+                 | DIVIDE
+                 | MODULE'''
+
+#<SUB_FACTOR>
+def p_sub_factor(p):
+    '''sub_factor : factor sub_factor_pc'''
+
+def p_sub_factor_pc(p):
+    '''sub_factor_pc: MODULE sub_factor
+                    | empty'''
+
+
 #<FACTOR>
 
 def p_factor(p):
