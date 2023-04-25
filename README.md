@@ -6,7 +6,9 @@
 
 ### Descripción general del avance
 <br> **STATUS: ** "Jala con errores"
+<br>Se encuentra el cubo semantico de manera textual dentro del documento de documentacion
 <br>La version 3.4.0 de DATALOR presenta el lexer y el parser con la debida sintaxis y reglas gramaticas. Se realizaron pruebas para revisar el funcionamiento correcto, se realizaron correcciones y siguen pendientes algunos errores y observaciones a corregir mencionadas a continuacion:
+Z
 
 ## Bugs de versión
 
