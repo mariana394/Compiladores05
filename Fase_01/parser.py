@@ -7,7 +7,7 @@
 import ply.yacc as yacc
 from lexer import tokens
 import sys
-
+from func_var_tables import DirFunc
 
 #Global variables
 curr_type = ''
@@ -15,8 +15,7 @@ scope = 0
 curr_name = ''
 curr_function = ''
 
-
-#Grammar declaration
+tables = DirFunc()
 
 #<PROGRAM>
 def p_program(p):
@@ -27,6 +26,15 @@ def p_program(p):
 def p_empty(p):
     'empty : '
     pass
+
+#Generic Neuralgic Points
+
+#Neuralgic Point for saving the ID and passing it to the corresponding table
+def p_id_saver(p):
+    '''id_saver : ID empty '''
+    global curr_name
+    curr_name = p[1]
+    print(curr_name)
 
 #<LIBRERIES>
 #Uso de las librerias en el programa  
@@ -50,7 +58,7 @@ def p_var_type(p):
 
 def p_program_vars(p):
     '''program_vars : VAR var_type  
-            | empty'''
+                    | empty'''
 
 #<VAR CTE>
 # def p_var_cte(p):
@@ -63,10 +71,16 @@ def p_s_type(p):
     '''s_type : INT 
               | FLOAT
               | CHAR'''
+    global curr_type 
+    curr_type = p[1]
+    #print(curr_type)
 
 def p_c_type(p):
     '''c_type : DATAFRAME
               | DATE'''
+    global curr_type 
+    curr_type = p[1]
+    #print(curr_type)
     
 
 def p_var_multiple(p):
@@ -106,23 +120,46 @@ def p_variable_matrix(p):
     '''variable_matrix : LSQBRACKET exp RSQBRACKET
                        | empty'''
     
-#FUNCTIONS
+#_________________________________________FUNCTIONS______________________________________#
+#
 #Uso de las funciones en el programa
 def p_program_function(p):
-    '''program_function : FUNCTION function_type ID LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
+    '''program_function : FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
                         | empty'''
 
-def p_function_type(p):
-    '''function_type : s_type
-                    | VOID'''
-    
+def p_f_type(p):
+    '''f_type : INT 
+              | FLOAT
+              | CHAR
+              | VOID'''
+    global curr_type,scope
+    curr_type = p[1]
+    scope += 1
+    print(curr_type,scope)
+#______FUNCTION___NEURALGIC POINTS________#
+
+def p_func_creator(p):
+    '''func_creator : empty'''
+    global scope, curr_function, curr_type, curr_name
+    curr_function = curr_name
+    tables.add_function(curr_name,scope,curr_type)
+#_____________________________________________________
+
 #<PARAM>
 def p_param(p):
-    '''param : s_type ID param2'''
+    '''param : s_type id_saver test param2'''
+    
+
 
 def p_param2(p):
-    '''param2 : COMMA s_type ID param2
+    '''param2 : COMMA s_type id_saver test param2
               | empty'''
+
+def p_test(p):
+    '''test : empty'''
+    global curr_type, curr_name, scope
+    print (curr_type, curr_name, scope)
+    tables.add_vars(curr_name,scope,curr_type)
 
 #<RETURN>
 def p_return(p):
@@ -336,8 +373,8 @@ def p_sub_factor(p):
     '''sub_factor : factor sub_factor_pc'''
 
 def p_sub_factor_pc(p):
-    '''sub_factor_pc: MODULE sub_factor
-                    | empty'''
+    '''sub_factor_pc : MODULE sub_factor
+                     | empty'''
 
 
 #<FACTOR>

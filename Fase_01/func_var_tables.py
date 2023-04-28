@@ -50,8 +50,7 @@ class DirFunc:
 			return True
 		else:
 			return False
-		
-
+	
 	#ADD VARIABLES
 	def add_vars(self, name, scope, type):
 		#Check if the variable already exists no matter the scope
