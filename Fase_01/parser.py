@@ -9,6 +9,13 @@ from lexer import tokens
 import sys
 
 
+#Global variables
+curr_type = ''
+scope = 0 
+curr_name = ''
+curr_function = ''
+
+
 #Grammar declaration
 
 #<PROGRAM>
