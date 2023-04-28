@@ -13,7 +13,6 @@ function int message (char name, int size){
 	print ('test', 'test2', name, test2, size);
 }
 
-
 function int patito(int p){
     do{
         b = 2;
@@ -22,7 +21,18 @@ function int patito(int p){
     return b;
 }
 
-function void prueba (int a){
+function void prueba(int a){
+
+   for (i to 10){
+        a = b[i];
+        if (i == 2){
+            
+            print('entro');
+        };
+    };
+}
+
+function void test(int a){
 
    for (i to 10){
         a = b[i];

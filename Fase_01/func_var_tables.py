@@ -41,7 +41,7 @@ class DirFunc:
 			self.vars[scope]['function_name'] = name
 			self.vars[scope]['vars'] = {}
 
-			print(self.dir_func.keys(), self.dir_func.values())
+			#print(self.dir_func.keys(), self.dir_func.values())
 		
 	#VARIABLES
 	# CHECK IF THE VARIABLE ALREADY EXISTS IN THE SCOPE 
@@ -60,9 +60,14 @@ class DirFunc:
 		else:
 			newVar = {name: { 'type': type, 'address': ''}}
 			self.vars[scope]['vars'].update(newVar)
-		print(self.vars[scope]['vars'].keys())	
-		print(self.vars[scope]['vars'].values())	
+			
+		#print(self.vars[scope]['vars'].keys())	
+		#print(self.vars[scope]['vars'].values())	
 
-	
+	#ADD PARAMS
+	def add_params(self, func_name, type):
+		
+		self.dir_func[func_name]['params'].append(type)
+		#print(self.dir_func.values())
 
 

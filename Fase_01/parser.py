@@ -27,14 +27,14 @@ def p_empty(p):
     'empty : '
     pass
 
-#Generic Neuralgic Points
+#__________________GENERIC NEURALGIC POINTS__________________#
 
 #Neuralgic Point for saving the ID and passing it to the corresponding table
 def p_id_saver(p):
     '''id_saver : ID empty '''
     global curr_name
     curr_name = p[1]
-    print(curr_name)
+    #print(curr_name)
 
 #<LIBRERIES>
 #Uso de las librerias en el programa  
@@ -71,6 +71,7 @@ def p_s_type(p):
     '''s_type : INT 
               | FLOAT
               | CHAR'''
+    #NEURALGIC POINTS
     global curr_type 
     curr_type = p[1]
     #print(curr_type)
@@ -78,10 +79,10 @@ def p_s_type(p):
 def p_c_type(p):
     '''c_type : DATAFRAME
               | DATE'''
+    #NEURALGIC POINTS
     global curr_type 
     curr_type = p[1]
     #print(curr_type)
-    
 
 def p_var_multiple(p):
     '''var_multiple : var_type
@@ -122,11 +123,11 @@ def p_variable_matrix(p):
     
 #_________________________________________FUNCTIONS______________________________________#
 #
-#Uso de las funciones en el programa
+#Program functions 
 def p_program_function(p):
     '''program_function : FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
                         | empty'''
-
+#type of funtion return
 def p_f_type(p):
     '''f_type : INT 
               | FLOAT
@@ -147,19 +148,18 @@ def p_func_creator(p):
 
 #<PARAM>
 def p_param(p):
-    '''param : s_type id_saver test param2'''
+    '''param : s_type id_saver add_params param2'''
     
-
-
 def p_param2(p):
-    '''param2 : COMMA s_type id_saver test param2
+    '''param2 : COMMA s_type id_saver add_params param2
               | empty'''
 
-def p_test(p):
-    '''test : empty'''
-    global curr_type, curr_name, scope
-    print (curr_type, curr_name, scope)
+#________PARAMS NEURALGIC POINTS___________________________
+def p_add_params(p):
+    '''add_params : empty'''
+    global curr_type, curr_name, scope, curr_function
     tables.add_vars(curr_name,scope,curr_type)
+    tables.add_params(curr_function,curr_type)
 
 #<RETURN>
 def p_return(p):
@@ -169,7 +169,6 @@ def p_return(p):
 #Uso del main en el programa
 def p_program_main(p):
     '''program_main : MAIN LBRACKET program_vars inner_body RBRACKET'''
-
 
 #<BODY>
 def p_body(p):
