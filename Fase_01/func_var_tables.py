@@ -46,28 +46,38 @@ class DirFunc:
 	#VARIABLES
 	# CHECK IF THE VARIABLE ALREADY EXISTS IN THE SCOPE 
 	def search_variable(self, name,scope):
-		if (name in self.vars[scope].values()):
+		if (name in self.vars[scope]['vars'].keys()):
 			return True
 		else:
 			return False
 	
 	#ADD VARIABLES
-	def add_vars(self, name, scope, type):
+	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
 		if(self.search_variable(name, scope)):
 			print("Variable already declared")
 			exit()
 		else:
-			newVar = {name: { 'type': type, 'address': ''}}
-			self.vars[scope]['vars'].update(newVar)
+			# CHECK IF IT IS A NORMAL VARIABLE
+			if(rowDim is None and columnDim is None):
+				newVar = {name: { 'type': type, 'address': ''}}
+				self.vars[scope]['vars'].update(newVar)
+				print(self.vars.values())
+			else:
+				if(rowDim is None):
+					print('hola')
+					#SAVE THE VALUE OF THE 
+
 			
+			#print('DEBUG' , self.vars[scope].values())
 		#print(self.vars[scope]['vars'].keys())	
 		#print(self.vars[scope]['vars'].values())	
+		
 
 	#ADD PARAMS
 	def add_params(self, func_name, type):
 		
 		self.dir_func[func_name]['params'].append(type)
-		#print(self.dir_func.values())
+		
 
 

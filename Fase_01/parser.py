@@ -14,6 +14,9 @@ curr_type = ''
 scope = 0 
 curr_name = ''
 curr_function = ''
+curr_rows = 0
+curr_columns = 0
+curr_dim = 0 #por si las moscas
 
 tables = DirFunc()
 
@@ -89,29 +92,53 @@ def p_var_multiple(p):
                     | empty'''
 
 def p_var_c_type(p):
-    '''var_c_type : c_type ID var_c_type2 SEMICOLON var_multiple'''
+    '''var_c_type : c_type id_saver add_c_var var_c_type2 SEMICOLON var_multiple'''
 
 def p_var_c_type2(p):
-    '''var_c_type2 : COMMA ID var_c_type2
+    '''var_c_type2 : COMMA id_saver add_c_var var_c_type2
                    | empty'''
     
+def p_add_c_var(p):
+    '''add_c_var : empty'''
+    global curr_type, curr_name, scope
+    tables.add_vars(curr_name,scope,curr_type)
+    
+#------Será necesario saber el tamaño de las variables tipo array??------#
 def p_var_s_type(p):
-    '''var_s_type : s_type ID var_s_array var_s_type2 SEMICOLON var_multiple'''
+    '''var_s_type : s_type id_saver var_s_array var_s_type2 SEMICOLON var_multiple'''
 
 def p_var_s_type2(p):
-    '''var_s_type2 : COMMA ID var_s_array var_s_type2
+    '''var_s_type2 : COMMA id_saver var_s_array var_s_type2
                    | empty'''
+    
+#------NOT FUNCTIONAL------#
+def p_add_s_var(p):
+    '''add_s_var : empty'''
+    global curr_type, curr_name, scope, curr_columns, curr_rows
+    tables.add_vars(curr_name,scope,curr_type, curr_rows, curr_columns)
 
+#----var_s_dimensions era anteriormente CTE_INT y funcionaba bien-----#
 def p_var_s_array(p):
-    '''var_s_array : LSQBRACKET CTE_INT RSQBRACKET var_s_matrix
+    '''var_s_array : LSQBRACKET var_s_dimesions RSQBRACKET var_s_matrix 
                    | empty'''
 
 def p_var_s_matrix(p):
-    '''var_s_matrix : LSQBRACKET CTE_INT RSQBRACKET
+    '''var_s_matrix : LSQBRACKET var_s_dimesions RSQBRACKET
                     | empty'''
 
+#------NOT FUNCTIONAL------#
+def p_var_s_dimesions(p):
+    '''var_s_dimesions : CTE_INT empty'''
+    global curr_rows, curr_columns, curr_dim
+    if (curr_rows != 0):
+        if (curr_columns == 0):
+            curr_columns = p[1]
+    else:
+        curr_rows = p[1]
+
+
 def p_variable(p):
-    '''variable : ID variable_array'''
+    '''variable : id_saver variable_array'''
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix

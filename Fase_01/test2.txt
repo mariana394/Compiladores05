@@ -13,6 +13,7 @@ function int message (char name, int size){
 	print ('test', 'test2', name, test2, size);
 }
 
+
 function int patito(int p){
     do{
         b = 2;
@@ -32,7 +33,7 @@ function void prueba(int a){
     };
 }
 
-function void test(int a){
+function void test (int a){
 
    for (i to 10){
         a = b[i];
