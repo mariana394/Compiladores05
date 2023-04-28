@@ -32,13 +32,19 @@ reserved = {
    'int' : 'INT',
    'float': 'FLOAT',
    'char' : 'CHAR',
-   'timestamp' : 'TIMESTAMP',
+
+   #TIPOS_VARIABLES_COMPUESTA 
+   'dataframe' : 'DATAFRAME',
+    'date' : 'DATE',
 
     #DECLARACION DE VARIABLES
    'var':'VAR',
 
    #ESCRIBIR
    'print':'PRINT',
+
+   #LEER
+    'read':'READ',
 
    #RETORNO
    'return' : 'RETURN',
@@ -51,7 +57,17 @@ reserved = {
    'main'  : 'MAIN',
 
    #TERMINAR EL PROGRAMA
-   'end' :'END'
+   'end' :'END',
+
+   #FUNCIONES ESPECIALES
+   'exploration' : 'EXPLORATION',
+   'financial_state' : 'FINANCIAL_STATE',
+   'season_analyzer' : 'SEASON_ANALYSIS',
+   'trend_prediction' : 'TREND_PREDICTION',
+   'dummi_regression' : 'DUMMI_REGRESSION',
+   
+   #FUNCIONES ESPECIALES NICE TO HAVE
+   'model_predict' : 'MODEL_PREDICT'
 }
 #List of tokens 
 tokens = [
@@ -70,15 +86,19 @@ tokens = [
     'ASSIGN', #=
     'GTHAN',
     'LTHAN',
-    'NOTEQUAL',
+    'NOTEQUAL', #!=
     'COLON',
     'SEMICOLON',
     'COMMA',
+    'OR',
+    'AND',
     
     'PLUS',
     'MINUS',
     'MULTIPLY',
     'DIVIDE',
+    'MODULE',
+    'POWER',
     
     #CONSTANTES
     'CTE_INT',
@@ -102,10 +122,14 @@ t_NOTEQUAL = r'!='
 t_COLON = r':'
 t_SEMICOLON = r';'
 t_COMMA = r','
+t_OR = r'\|\|'
+t_AND = r'&&'
 t_PLUS = r'\+'
 t_MINUS = r'-'
 t_MULTIPLY = r'\*'
 t_DIVIDE = r'/'
+t_MODULE = r'%'
+t_POWER = r'^'
 
 #CONSTANTES
 def t_CTE_INT(t):
@@ -119,7 +143,7 @@ def t_CTE_FLOAT(t):
     return t
 
 def t_CTE_CHAR(t):
-    r'\'[a-zA-Z0-9]\''
+    r'\'[a-zA-Z0-9]*\''
     t.value = str(t.value)    
     return t
 
@@ -147,21 +171,36 @@ lexer = lex.lex()
 
 #data = 
 '''
-program test;
-var a,b,c;
-main{
-    a = 1;
-    b = 2;
-    c = a + b;
-    print(c);
+program TESTCORRECTO;
+
+import pandas as pd
+import numpy as np
+import csv 
+
+var
+dataframe costos, ventas;
+date inicio, fin;
+
+function void message (char name, int size){
+	print ("Se ha leido el dataframe ", name, " con un tamano de ", size);
+}
+
+main {
+costos = read csvcostos;
+ventas = read csvventas;
+inicio = '10011999';
+fin = '10012023';
+
+print(financial_state(ventas, costos,inicio, fin))
+
 }
 end
 '''
 
-# Pasar la entrada
+#Pasar la entrada
 #lexer.input(data)
 
-# Tokenize
+#Tokenize
 #while True:
 #    tok = lexer.token()
 #    if not tok: 
