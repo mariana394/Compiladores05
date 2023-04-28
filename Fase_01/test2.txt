@@ -22,7 +22,18 @@ function int patito(int p){
     return b;
 }
 
-function void prueba (int a){
+function void prueba(int a){
+
+   for (i to 10){
+        a = b[i];
+        if (i == 2){
+            
+            print('entro');
+        };
+    };
+}
+
+function void test (int a){
 
    for (i to 10){
         a = b[i];

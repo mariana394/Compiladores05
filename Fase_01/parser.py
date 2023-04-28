@@ -7,9 +7,18 @@
 import ply.yacc as yacc
 from lexer import tokens
 import sys
+from func_var_tables import DirFunc
 
+#Global variables
+curr_type = ''
+scope = 0 
+curr_name = ''
+curr_function = ''
+curr_rows = 0
+curr_columns = 0
+curr_dim = 0 #por si las moscas
 
-#Grammar declaration
+tables = DirFunc()
 
 #<PROGRAM>
 def p_program(p):
@@ -20,6 +29,15 @@ def p_program(p):
 def p_empty(p):
     'empty : '
     pass
+
+#__________________GENERIC NEURALGIC POINTS__________________#
+
+#Neuralgic Point for saving the ID and passing it to the corresponding table
+def p_id_saver(p):
+    '''id_saver : ID empty '''
+    global curr_name
+    curr_name = p[1]
+    #print(curr_name)
 
 #<LIBRERIES>
 #Uso de las librerias en el programa  
@@ -43,7 +61,7 @@ def p_var_type(p):
 
 def p_program_vars(p):
     '''program_vars : VAR var_type  
-            | empty'''
+                    | empty'''
 
 #<VAR CTE>
 # def p_var_cte(p):
@@ -56,40 +74,71 @@ def p_s_type(p):
     '''s_type : INT 
               | FLOAT
               | CHAR'''
+    #NEURALGIC POINTS
+    global curr_type 
+    curr_type = p[1]
+    #print(curr_type)
 
 def p_c_type(p):
     '''c_type : DATAFRAME
               | DATE'''
-    
+    #NEURALGIC POINTS
+    global curr_type 
+    curr_type = p[1]
+    #print(curr_type)
 
 def p_var_multiple(p):
     '''var_multiple : var_type
                     | empty'''
 
 def p_var_c_type(p):
-    '''var_c_type : c_type ID var_c_type2 SEMICOLON var_multiple'''
+    '''var_c_type : c_type id_saver add_c_var var_c_type2 SEMICOLON var_multiple'''
 
 def p_var_c_type2(p):
-    '''var_c_type2 : COMMA ID var_c_type2
+    '''var_c_type2 : COMMA id_saver add_c_var var_c_type2
                    | empty'''
     
+def p_add_c_var(p):
+    '''add_c_var : empty'''
+    global curr_type, curr_name, scope
+    tables.add_vars(curr_name,scope,curr_type)
+    
+#------Será necesario saber el tamaño de las variables tipo array??------#
 def p_var_s_type(p):
-    '''var_s_type : s_type ID var_s_array var_s_type2 SEMICOLON var_multiple'''
+    '''var_s_type : s_type id_saver var_s_array var_s_type2 SEMICOLON var_multiple'''
 
 def p_var_s_type2(p):
-    '''var_s_type2 : COMMA ID var_s_array var_s_type2
+    '''var_s_type2 : COMMA id_saver var_s_array var_s_type2
                    | empty'''
+    
+#------NOT FUNCTIONAL------#
+def p_add_s_var(p):
+    '''add_s_var : empty'''
+    global curr_type, curr_name, scope, curr_columns, curr_rows
+    tables.add_vars(curr_name,scope,curr_type, curr_rows, curr_columns)
 
+#----var_s_dimensions era anteriormente CTE_INT y funcionaba bien-----#
 def p_var_s_array(p):
-    '''var_s_array : LSQBRACKET CTE_INT RSQBRACKET var_s_matrix
+    '''var_s_array : LSQBRACKET var_s_dimesions RSQBRACKET var_s_matrix 
                    | empty'''
 
 def p_var_s_matrix(p):
-    '''var_s_matrix : LSQBRACKET CTE_INT RSQBRACKET
+    '''var_s_matrix : LSQBRACKET var_s_dimesions RSQBRACKET
                     | empty'''
 
+#------NOT FUNCTIONAL------#
+def p_var_s_dimesions(p):
+    '''var_s_dimesions : CTE_INT empty'''
+    global curr_rows, curr_columns, curr_dim
+    if (curr_rows != 0):
+        if (curr_columns == 0):
+            curr_columns = p[1]
+    else:
+        curr_rows = p[1]
+
+
 def p_variable(p):
-    '''variable : ID variable_array'''
+    '''variable : id_saver variable_array'''
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
@@ -99,23 +148,45 @@ def p_variable_matrix(p):
     '''variable_matrix : LSQBRACKET exp RSQBRACKET
                        | empty'''
     
-#FUNCTIONS
-#Uso de las funciones en el programa
+#_________________________________________FUNCTIONS______________________________________#
+#
+#Program functions 
 def p_program_function(p):
-    '''program_function : FUNCTION function_type ID LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
+    '''program_function : FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
                         | empty'''
+#type of funtion return
+def p_f_type(p):
+    '''f_type : INT 
+              | FLOAT
+              | CHAR
+              | VOID'''
+    global curr_type,scope
+    curr_type = p[1]
+    scope += 1
+    print(curr_type,scope)
+#______FUNCTION___NEURALGIC POINTS________#
 
-def p_function_type(p):
-    '''function_type : s_type
-                    | VOID'''
-    
+def p_func_creator(p):
+    '''func_creator : empty'''
+    global scope, curr_function, curr_type, curr_name
+    curr_function = curr_name
+    tables.add_function(curr_name,scope,curr_type)
+#_____________________________________________________
+
 #<PARAM>
 def p_param(p):
-    '''param : s_type ID param2'''
-
+    '''param : s_type id_saver add_params param2'''
+    
 def p_param2(p):
-    '''param2 : COMMA s_type ID param2
+    '''param2 : COMMA s_type id_saver add_params param2
               | empty'''
+
+#________PARAMS NEURALGIC POINTS___________________________
+def p_add_params(p):
+    '''add_params : empty'''
+    global curr_type, curr_name, scope, curr_function
+    tables.add_vars(curr_name,scope,curr_type)
+    tables.add_params(curr_function,curr_type)
 
 #<RETURN>
 def p_return(p):
@@ -125,7 +196,6 @@ def p_return(p):
 #Uso del main en el programa
 def p_program_main(p):
     '''program_main : MAIN LBRACKET program_vars inner_body RBRACKET'''
-
 
 #<BODY>
 def p_body(p):
@@ -313,7 +383,7 @@ def p_m_exp_sr_2(p):
     
 #<TERM>
 def p_term(p):
-    '''term : factor term_pc'''
+    '''term : sub_factor term_pc'''
 
 def p_term_pc(p):
     '''term_pc : term_pc_2 term
@@ -321,8 +391,18 @@ def p_term_pc(p):
 
 def p_term_pc_2(p):
     '''term_pc_2 : MULTIPLY
-                 | DIVIDE'''
-    
+                 | DIVIDE
+                 | MODULE'''
+
+#<SUB_FACTOR>
+def p_sub_factor(p):
+    '''sub_factor : factor sub_factor_pc'''
+
+def p_sub_factor_pc(p):
+    '''sub_factor_pc : MODULE sub_factor
+                     | empty'''
+
+
 #<FACTOR>
 
 def p_factor(p):

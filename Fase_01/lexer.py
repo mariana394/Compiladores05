@@ -129,7 +129,7 @@ t_MINUS = r'-'
 t_MULTIPLY = r'\*'
 t_DIVIDE = r'/'
 t_MODULE = r'%'
-t_POWER = r'^'
+t_POWER = r'\^'
 
 #CONSTANTES
 def t_CTE_INT(t):
