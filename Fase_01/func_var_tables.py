@@ -55,18 +55,38 @@ class DirFunc:
 	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
 		if(self.search_variable(name, scope)):
-			print("Variable already declared")
+			print("Variable already declared",name)
 			exit()
 		else:
 			# CHECK IF IT IS A NORMAL VARIABLE
-			if(rowDim is None and columnDim is None):
-				newVar = {name: { 'type': type, 'address': ''}}
+			# 0 -> Normal variable
+			# 1 -> Array variable
+			# 2 -> Matrix variable
+
+			#Check if the rowDim and ColDim are 0 or 
+			if(rowDim is None and columnDim is None or rowDim == 0 and columnDim == 0 ):
+				newVar = {name: { 'type': type, 'size': 0,'address': ''}}
 				self.vars[scope]['vars'].update(newVar)
 				print(self.vars.values())
 			else:
-				if(rowDim is None):
-					print('hola')
-					#SAVE THE VALUE OF THE 
+				# MATRIX
+				if(rowDim != 0 and columnDim != 0):
+					newVar = {name: { 'type': type, 'size': [rowDim,columnDim],'address': ''}}
+					self.vars[scope]['vars'].update(newVar)
+					print(self.vars.values())
+				
+				#ARRAY
+				else:
+					newVar = {name: { 'type': type, 'size': [rowDim],'address': ''}}
+					self.vars[scope]['vars'].update(newVar)
+					print(self.vars.values())
+					
+			
+	# Checking for sizes of the arrays and matrix to be greater than 0 and not allowing the user to create for example a[0]
+	def check_stype_size(self, size):
+		if(size == 0):
+			print('Size must be greater than 0')
+			exit()
 
 			
 			#print('DEBUG' , self.vars[scope].values())
@@ -78,6 +98,6 @@ class DirFunc:
 	def add_params(self, func_name, type):
 		
 		self.dir_func[func_name]['params'].append(type)
-		
+		#print(self.dir_func.values())
 
 

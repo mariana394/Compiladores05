@@ -105,18 +105,20 @@ def p_add_c_var(p):
     
 #------Será necesario saber el tamaño de las variables tipo array??------#
 def p_var_s_type(p):
-    '''var_s_type : s_type id_saver var_s_array var_s_type2 SEMICOLON var_multiple'''
+    '''var_s_type : s_type id_saver var_s_array add_s_var var_s_type2 SEMICOLON var_multiple'''
 
 def p_var_s_type2(p):
-    '''var_s_type2 : COMMA id_saver var_s_array var_s_type2
+    '''var_s_type2 : COMMA id_saver var_s_array add_s_var var_s_type2
                    | empty'''
-    
-#------NOT FUNCTIONAL------#
+
+#____NEURALGIC POINT______#
 def p_add_s_var(p):
     '''add_s_var : empty'''
     global curr_type, curr_name, scope, curr_columns, curr_rows
     tables.add_vars(curr_name,scope,curr_type, curr_rows, curr_columns)
-
+    #RESET variables to 0 for the next one to be read
+    curr_columns = 0
+    curr_rows = 0
 #----var_s_dimensions era anteriormente CTE_INT y funcionaba bien-----#
 def p_var_s_array(p):
     '''var_s_array : LSQBRACKET var_s_dimesions RSQBRACKET var_s_matrix 
@@ -126,15 +128,20 @@ def p_var_s_matrix(p):
     '''var_s_matrix : LSQBRACKET var_s_dimesions RSQBRACKET
                     | empty'''
 
-#------NOT FUNCTIONAL------#
+#____NEURALGIC POINT______#
 def p_var_s_dimesions(p):
     '''var_s_dimesions : CTE_INT empty'''
     global curr_rows, curr_columns, curr_dim
+    #____Classifying s_type variables____#
+    #MATRIX
     if (curr_rows != 0):
         if (curr_columns == 0):
             curr_columns = p[1]
+            tables.check_stype_size(curr_columns)
+    #ARRAY        
     else:
         curr_rows = p[1]
+        tables.check_stype_size(curr_rows)  
 
 
 def p_variable(p):
@@ -192,11 +199,17 @@ def p_add_params(p):
 def p_return(p):
     '''return : RETURN exp SEMICOLON
               | empty'''
-
+#____________________MAIN_________________#
 #Uso del main en el programa
 def p_program_main(p):
-    '''program_main : MAIN LBRACKET program_vars inner_body RBRACKET'''
+    '''program_main : MAIN main_id LBRACKET program_vars inner_body RBRACKET'''
 
+def p_main_id(p):
+    '''main_id : empty'''
+    global scope
+    scope += 1
+    tables.add_function('main',scope,'void')
+    
 #<BODY>
 def p_body(p):
     '''body : LBRACKET inner_body RBRACKET'''
