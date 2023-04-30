@@ -1,7 +1,7 @@
 # -----------------------------------------------------------
 # DATALOR: CHECKING FOR CONGRUENCE
-# Mariana Favarony Avila 12A01704671
-# Mario Juarez 12 A01411049
+# Mariana Favarony Avila - A01704671
+# Mario Juarez - A01411049
 # semantics.... 
 # -----------------------------------------------------------
 

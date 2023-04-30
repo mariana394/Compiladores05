@@ -4,6 +4,11 @@
 # # Mario Juarez - A01411049
 # #  
 # # ------------------------------------------------------------
+from dictionary import Dictionary
+from vitual_memory import VirtualMemory
+dic = Dictionary()
+memory = VirtualMemory()
+
 class DirFunc:
 	def __init__(self):
 		
@@ -54,6 +59,7 @@ class DirFunc:
 	#ADD VARIABLES
 	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
+		type = type.upper()
 		if(self.search_variable(name, scope)):
 			print("Variable already declared",name)
 			exit()
@@ -65,19 +71,22 @@ class DirFunc:
 
 			#Check if the rowDim and ColDim are 0 or 
 			if(rowDim is None and columnDim is None or rowDim == 0 and columnDim == 0 ):
-				newVar = {name: { 'type': type, 'size': 0,'address': ''}}
+				tipo = dic.datalor_translator(type)
+				newVar = {name: { 'type': tipo, 'size': 0,'address': memory.assign_memory(tipo,scope)}}
 				self.vars[scope]['vars'].update(newVar)
 				print(self.vars.values())
 			else:
 				# MATRIX
 				if(rowDim != 0 and columnDim != 0):
-					newVar = {name: { 'type': type, 'size': [rowDim,columnDim],'address': ''}}
+					tipo = dic.datalor_translator(type)
+					newVar = {name: { 'type': tipo, 'size': [rowDim,columnDim],'address': memory.assign_memory(tipo,scope)}}
 					self.vars[scope]['vars'].update(newVar)
 					print(self.vars.values())
 				
 				#ARRAY
 				else:
-					newVar = {name: { 'type': type, 'size': [rowDim],'address': ''}}
+					tipo = dic.datalor_translator(type)
+					newVar = {name: { 'type': tipo, 'size': [rowDim],'address': memory.assign_memory(tipo,scope)}}
 					self.vars[scope]['vars'].update(newVar)
 					print(self.vars.values())
 					
