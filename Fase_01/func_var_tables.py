@@ -4,6 +4,13 @@
 # # Mario Juarez - A01411049
 # #  
 # # ------------------------------------------------------------
+from dictionary import Dictionary
+from vitual_memory import VirtualMemory
+import pandas as pd
+
+dic = Dictionary()
+memory = VirtualMemory()
+
 class DirFunc:
 	def __init__(self):
 		
@@ -22,6 +29,8 @@ class DirFunc:
 			"function_name": "global", 
 			"vars": {}
 		}}
+		#Initialize the constant dictionary varibales
+		self.constants = {}
 		
 	#FUNCIONES
 	# Function for adding functions to function directory
@@ -54,19 +63,43 @@ class DirFunc:
 	#ADD VARIABLES
 	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
+		type = type.upper()
 		if(self.search_variable(name, scope)):
-			print("Variable already declared")
+			print("Variable already declared",name)
 			exit()
 		else:
 			# CHECK IF IT IS A NORMAL VARIABLE
-			if(rowDim is None and columnDim is None):
-				newVar = {name: { 'type': type, 'address': ''}}
+			# 0 -> Normal variable
+			# 1 -> Array variable
+			# 2 -> Matrix variable
+
+			#Check if the rowDim and ColDim are 0 or 
+			if(rowDim is None and columnDim is None or rowDim == 0 and columnDim == 0 ):
+				tipo = dic.datalor_translator(type)
+				newVar = {name: { 'type': tipo, 'size': 0,'address': memory.assign_memory(tipo,scope)}}
 				self.vars[scope]['vars'].update(newVar)
-				print(self.vars.values())
+				#print(self.vars.values())
 			else:
-				if(rowDim is None):
-					print('hola')
-					#SAVE THE VALUE OF THE 
+				# MATRIX
+				if(rowDim != 0 and columnDim != 0):
+					tipo = dic.datalor_translator(type)
+					newVar = {name: { 'type': tipo, 'size': [rowDim,columnDim],'address': memory.assign_memory(tipo,scope)}}
+					self.vars[scope]['vars'].update(newVar)
+					#print(self.vars.values())
+				
+				#ARRAY
+				else:
+					tipo = dic.datalor_translator(type)
+					newVar = {name: { 'type': tipo, 'size': [rowDim],'address': memory.assign_memory(tipo,scope)}}
+					self.vars[scope]['vars'].update(newVar)
+					#print(self.vars.values())
+					
+			
+	# Checking for sizes of the arrays and matrix to be greater than 0 and not allowing the user to create for example a[0]
+	def check_stype_size(self, size):
+		if(size == 0):
+			print('Size must be greater than 0')
+			exit()
 
 			
 			#print('DEBUG' , self.vars[scope].values())
@@ -75,9 +108,51 @@ class DirFunc:
 		
 
 	#ADD PARAMS
-	def add_params(self, func_name, type):
-		
+	def add_params(self, func_name, type):	
 		self.dir_func[func_name]['params'].append(type)
+		#print(self.dir_func.values())
+
+	#Function for filling in the constants table with their values and address
+	def add_const(self, value, type):
+		#Check if the constant already exists
+		if (value not in self.constants.keys()):
+		#Check if the constant is an integer value
+			type = type.__name__
+			if(type == 'int'):
+				tipo = dic.datalor_translator('CTE_INT')
+				newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
+				self.constants.update(newVar)
+			else: 
+				if(type == 'float'):
+					tipo = dic.datalor_translator('CTE_FLOAT')
+					newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
+					self.constants.update(newVar)
+				# else:
+				# 	if(type == 'str'):
+				# 		tipo = dic.datalor_translator('CTE_CHAR')
+				# 		newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
+				# 		self.constants.update(newVar)
+
+			
+			# print(self.constants.keys())
+			# print(self.constants.values())
+	def print(self):
+		#print(tabulate(self.vars,headers='keys'))
+		print("\n____________________TABLA DE FUNCIONES________________\n")
+		for keys in self.dir_func.keys():	
+			print('\nFuncion ', keys)
+			df = pd.DataFrame.from_dict(self.dir_func[keys], orient='index')
+			print(df)
+		print("\n")
 		
+		print("____________________TABLA DE VARIABLES________________")
+		for keys in self.vars.keys():	
+			print('\nScope ', self.vars[keys]['function_name'])
+			df = pd.DataFrame.from_dict(self.vars[keys]['vars'], orient='index')
+			print(df)
+		print("\n")
+	#GET ADDRESS FOR CREATING QUADRUPLE
+	#def get_address(self, item, scope):
+
 
 

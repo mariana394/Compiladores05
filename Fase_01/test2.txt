@@ -49,8 +49,8 @@ var
 int a, b[3],c, d[2][2];
 float n , m , p[3];
 char csvcostos, csvventas, taquitos;
-
-a = b + 2;
+n = 0.5;
+a = b + 10;
 message(csvcostos)
 test2 = message(csvventas);
 test3 = read(taquitos);
@@ -59,10 +59,8 @@ costos = financial_state(ventas, costos,inicio, fin);
 if (costos == pesos && prueba){
 	print('Nosepudoleerelarchivodecostos');
 }else{
-    
-    a = 2;
+    a = 2 ^ 6;
 };
-
 
 }
 end
