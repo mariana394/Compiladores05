@@ -1,0 +1,66 @@
+program TEST_INCORRECTO;
+
+
+import pandas as pd
+import numpy as np
+
+var dataframe costos, ventas;
+char inicio, fin;
+
+function int message (char name, int size){
+	var 
+	int test2;
+	print ('test', 'test2', name, test2, size);
+}
+
+
+function int patito(int p){
+    do{
+        b = 2;
+    }while(a);
+
+    return b;
+}
+
+function void prueba(int a){
+
+   for (i to 10){
+        a = b[i];
+        if (i == 2){
+            
+            print('entro');
+        };
+    };
+}
+
+function void test (int a){
+
+   for (i to 10){
+        a = b[i];
+        if (i == 2){
+            
+            print('entro');
+        };
+    };
+}
+
+main {
+var
+int a, b[3],c, d[2][2];
+float n , m , p[3];
+char csvcostos, csvventas, taquitos;
+n = 0.5;
+a = b + 10;
+message(csvcostos)
+test2 = message(csvventas);
+test3 = read(taquitos);
+costos = financial_state(ventas, costos,inicio, fin);
+
+if (costos == pesos && prueba){
+	print('Nosepudoleerelarchivodecostos');
+}else{
+    a = 2 ^ 6;
+};
+
+}
+end
