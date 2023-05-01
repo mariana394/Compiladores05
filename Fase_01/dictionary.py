@@ -50,6 +50,10 @@ class Dictionary:
             'SEMICOLON': 26,
             'COMMA': 27,               
 
+            #CONST
+            'CTE_INT' : 28,
+            'CTE_FLOAT': 29,
+            'CTE_CHAR': 30 
         }
 
     def datalor_translator(self, token):

@@ -27,6 +27,8 @@ class DirFunc:
 			"function_name": "global", 
 			"vars": {}
 		}}
+		#Initialize the constant dictionary varibales
+		self.constants = {}
 		
 	#FUNCIONES
 	# Function for adding functions to function directory
@@ -74,21 +76,21 @@ class DirFunc:
 				tipo = dic.datalor_translator(type)
 				newVar = {name: { 'type': tipo, 'size': 0,'address': memory.assign_memory(tipo,scope)}}
 				self.vars[scope]['vars'].update(newVar)
-				print(self.vars.values())
+				#print(self.vars.values())
 			else:
 				# MATRIX
 				if(rowDim != 0 and columnDim != 0):
 					tipo = dic.datalor_translator(type)
 					newVar = {name: { 'type': tipo, 'size': [rowDim,columnDim],'address': memory.assign_memory(tipo,scope)}}
 					self.vars[scope]['vars'].update(newVar)
-					print(self.vars.values())
+					#print(self.vars.values())
 				
 				#ARRAY
 				else:
 					tipo = dic.datalor_translator(type)
 					newVar = {name: { 'type': tipo, 'size': [rowDim],'address': memory.assign_memory(tipo,scope)}}
 					self.vars[scope]['vars'].update(newVar)
-					print(self.vars.values())
+					#print(self.vars.values())
 					
 			
 	# Checking for sizes of the arrays and matrix to be greater than 0 and not allowing the user to create for example a[0]
@@ -104,9 +106,31 @@ class DirFunc:
 		
 
 	#ADD PARAMS
-	def add_params(self, func_name, type):
-		
+	def add_params(self, func_name, type):	
 		self.dir_func[func_name]['params'].append(type)
 		#print(self.dir_func.values())
 
+	#Function for filling in the constants table with their values and address
+	def add_const(self, value, type):
+		#Check if the constant already exists
+		if (value not in self.constants.keys()):
+		#Check if the constant is an integer value
+			type = type.__name__
+			if(type == 'int'):
+				tipo = dic.datalor_translator('CTE_INT')
+				newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
+				self.constants.update(newVar)
+			else: 
+				if(type == 'float'):
+					tipo = dic.datalor_translator('CTE_FLOAT')
+					newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
+					self.constants.update(newVar)
+				# else:
+				# 	if(type == 'str'):
+				# 		tipo = dic.datalor_translator('CTE_CHAR')
+				# 		newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
+				# 		self.constants.update(newVar)
+
+			print(self.constants.keys())
+			print(self.constants.values())
 

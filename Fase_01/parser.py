@@ -39,7 +39,13 @@ def p_id_saver(p):
     curr_name = p[1]
     #print(curr_name)
 
-#<LIBRERIES>
+#Neuralgic point for constant Int, helps us to save the constant in the constants table and memory no matter where the constant is in the code. 
+# cte_int -> for (top of the cycle), array/matrix dimensions, special functions
+def p_int_const_saver(p):
+    '''int_const_saver : CTE_INT empty'''
+    tables.add_const(p[1], type (p[1]))
+
+#_________________________<LIBRERIES>_____________________________#
 #Uso de las librerias en el programa  
   
 def p_program_libraries(p):
@@ -133,6 +139,8 @@ def p_var_s_dimesions(p):
     '''var_s_dimesions : CTE_INT empty'''
     global curr_rows, curr_columns, curr_dim
     #____Classifying s_type variables____#
+    #Add the size as a constant in the constants variable
+    tables.add_const(p[1], type (p[1]))
     #MATRIX
     if (curr_rows != 0):
         if (curr_columns == 0):
@@ -146,6 +154,8 @@ def p_var_s_dimesions(p):
 
 def p_variable(p):
     '''variable : id_saver variable_array'''
+    global curr_name
+    print('factor variable ', curr_name)
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
@@ -222,12 +232,18 @@ def p_inner_body(p):
 
 #<ASSIGN>
 def p_assign(p):
-    '''assign : variable ASSIGN specialf_assign SEMICOLON'''
+    '''assign : variable keep_assign specialf_assign SEMICOLON'''
+
 
 def p_specialf_assign(p):
     '''specialf_assign : exp
                        | special_function
                        | read'''
+    
+#keep the assign 
+def p_keep_assign(p):
+    '''keep_assign : ASSIGN empty'''
+    print('factor = ', p[1])
 
 #<CONDITION>
 def p_condition(p):
@@ -272,13 +288,21 @@ def p_for(p):
     '''for : FOR LPAREN ID TO for_end RPAREN body SEMICOLON'''
 
 def p_for_end(p):
-    '''for_end : CTE_INT
+    '''for_end : int_const_saver
                | ID'''
+
 
 # <CALL_FUNCTION>
 def p_call_function(p):
-    '''call_function : ID LPAREN exp exp_many RPAREN '''
+    '''call_function : test LPAREN exp exp_many RPAREN '''
+    #TEST 
+    #print('factor funcion ', p[-1])
 
+def p_test(p):
+    '''test : ID empty'''
+    global curr_name
+    curr_name = p[1]
+    print('factor funcion ', curr_name)
 
 #<EXP_MANY>
 def p_exp_many(p):
@@ -313,7 +337,7 @@ def p_explore_var(p):
                    | empty'''  
 
 def p_explor_cte(p):
-    '''explor_cte : COMMA CTE_INT
+    '''explor_cte : COMMA int_const_saver
                   | empty'''
     
 #<FINANCIAL_STATE>
@@ -328,7 +352,7 @@ def p_season_analysis(p):
 
 #<TREND_PREDICTION>
 def p_trend_prediction(p):
-    '''trend_prediction : TREND_PREDICTION LPAREN variable COMMA CTE_INT COMMA CTE_INT COMMA CTE_INT RPAREN'''
+    '''trend_prediction : TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN'''
 
 #<DUMMI_PREDICTION>
 def p_dummi_regression(p):
@@ -343,7 +367,7 @@ def p_dr_array_mp(p):
                    | empty'''
 
 def p_dr_int(p):
-    '''dr_int : COMMA CTE_INT
+    '''dr_int : COMMA int_const_saver
               | empty'''
     
 #<MODEL_PREDICT>
@@ -385,6 +409,7 @@ def p_expression_comp_2(p):
 #<M_EXP>
 def p_m_exp(p):
     '''m_exp : term m_exp_sr'''
+    
 
 def p_m_exp_sr(p): 
     '''m_exp_sr : m_exp_sr_2 m_exp
@@ -393,6 +418,8 @@ def p_m_exp_sr(p):
 def p_m_exp_sr_2(p):
     '''m_exp_sr_2 : PLUS
                   | MINUS'''
+    #Punto neuralgico 2
+    print("factor (+/-) ",p[1])
     
 #<TERM>
 def p_term(p):
@@ -406,15 +433,19 @@ def p_term_pc_2(p):
     '''term_pc_2 : MULTIPLY
                  | DIVIDE
                  | MODULE'''
+    print("factor (* / %)",p[1])
 
 #<SUB_FACTOR>
 def p_sub_factor(p):
     '''sub_factor : factor sub_factor_pc'''
 
 def p_sub_factor_pc(p):
-    '''sub_factor_pc : MODULE sub_factor
+    '''sub_factor_pc : sub_factor_pc_2 sub_factor
                      | empty'''
 
+def p_sub_factor_pc_2(p):
+    '''sub_factor_pc_2 : POWER empty'''
+    print("factor (^)",p[1])
 
 #<FACTOR>
 
@@ -428,10 +459,11 @@ def p_factor_exp(p):
     '''factor_exp : LPAREN exp RPAREN'''
 
 def p_factor_cte(p):
-    '''factor_cte : CTE_INT
-                  | CTE_FLOAT
+    '''factor_cte : CTE_FLOAT
+                  | CTE_INT
                   | CTE_CHAR'''
-
+    tables.add_const(p[1], type (p[1]))
+    print("factor constante",p[1])
 
 # Build the parser
 parser = yacc.yacc()

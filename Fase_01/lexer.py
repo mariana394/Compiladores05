@@ -132,14 +132,14 @@ t_MODULE = r'%'
 t_POWER = r'\^'
 
 #CONSTANTES
-def t_CTE_INT(t):
-    r'\d+'
-    t.value = int(t.value)    
-    return t
-
 def t_CTE_FLOAT(t):
     r'\d+\.\d+'
     t.value = float(t.value)    
+    return t
+
+def t_CTE_INT(t):
+    r'\d+'
+    t.value = int(t.value)    
     return t
 
 def t_CTE_CHAR(t):
