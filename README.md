@@ -5,19 +5,25 @@
 
 
 ### Descripción general del avance
-<br> **STATUS: ** "Jala con errores"
-<br>Se encuentra el cubo semantico de manera textual dentro del documento de documentacion
+<br> **STATUS: ** "Jala para avance 2"
+<br> Tabla de funciones y de variables creada y funcional
+<br> Cubo semantico creado
 <br>La version 3.4.0 de DATALOR presenta el lexer y el parser con la debida sintaxis y reglas gramaticas. Se realizaron pruebas para revisar el funcionamiento correcto, se realizaron correcciones y siguen pendientes algunos errores y observaciones a corregir mencionadas a continuacion:
-Z
+
 
 ## Bugs de versión
+### version 3.5.3
+<br> Se mantienen warnings de las versiones anterioes 
+
+<br> A las variables locales aun no se les asigna espacio en memoria 
+<br> Pendiente: verificacion de la declaracion de varibles
 
 ### version 3.4.0
 <br> Se mantienen los errores de la version 2.3.0
-
+ 
  ### version 2.3.0
  <br>call_function - Al llamar una funcion void sin asignar a nada esta se llama sin finalizar con punto y coma. El punto y coma solo existe en asignacion 
-<br> * Se mantienen 2 conflicts shift/reduce en el parser
+<br> * Se mantienen 2 conflicts shift/reduce en el parser (WARNINGS)
 <br> function -> La funcion no estaba ciclada en la parte inicial del programa lo que nos mandaba a que solo se pudiera definir una funcion. Adicionalmente no acepta funciones sin parametros (esta bien)
  <br>Char - No funciona con espacios en blanco
 <br>Colon - Se han declarado, pero no se estan usando
