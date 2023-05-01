@@ -22,9 +22,12 @@ tables = DirFunc()
 
 #<PROGRAM>
 def p_program(p):
-    '''program : PROGRAM ID SEMICOLON program_libraries program_vars program_function program_main END'''
+    '''program : PROGRAM ID SEMICOLON program_libraries program_vars program_function program_main end'''
     p[0] = "COMPILED"
 
+def p_end(p):
+    '''end : END empty'''
+    tables.print()
 #EMPTY
 def p_empty(p):
     'empty : '
@@ -155,7 +158,7 @@ def p_var_s_dimesions(p):
 def p_variable(p):
     '''variable : id_saver variable_array'''
     global curr_name
-    print('factor variable ', curr_name)
+    #print('factor variable ', curr_name)
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
@@ -180,7 +183,7 @@ def p_f_type(p):
     global curr_type,scope
     curr_type = p[1]
     scope += 1
-    print(curr_type,scope)
+    #print(curr_type,scope)
 #______FUNCTION___NEURALGIC POINTS________#
 
 def p_func_creator(p):
@@ -243,7 +246,7 @@ def p_specialf_assign(p):
 #keep the assign 
 def p_keep_assign(p):
     '''keep_assign : ASSIGN empty'''
-    print('factor = ', p[1])
+    #print('factor = ', p[1])
 
 #<CONDITION>
 def p_condition(p):
@@ -294,15 +297,15 @@ def p_for_end(p):
 
 # <CALL_FUNCTION>
 def p_call_function(p):
-    '''call_function : test LPAREN exp exp_many RPAREN '''
+    '''call_function : function_saver LPAREN exp exp_many RPAREN '''
     #TEST 
     #print('factor funcion ', p[-1])
 
-def p_test(p):
-    '''test : ID empty'''
+def p_function_saver(p):
+    '''function_saver : ID empty'''
     global curr_name
     curr_name = p[1]
-    print('factor funcion ', curr_name)
+    #print('factor funcion ', curr_name)
 
 #<EXP_MANY>
 def p_exp_many(p):
@@ -419,7 +422,7 @@ def p_m_exp_sr_2(p):
     '''m_exp_sr_2 : PLUS
                   | MINUS'''
     #Punto neuralgico 2
-    print("factor (+/-) ",p[1])
+    #("factor (+/-) ",p[1])
     
 #<TERM>
 def p_term(p):
@@ -433,7 +436,7 @@ def p_term_pc_2(p):
     '''term_pc_2 : MULTIPLY
                  | DIVIDE
                  | MODULE'''
-    print("factor (* / %)",p[1])
+    #print("factor (* / %)",p[1])
 
 #<SUB_FACTOR>
 def p_sub_factor(p):
@@ -445,7 +448,7 @@ def p_sub_factor_pc(p):
 
 def p_sub_factor_pc_2(p):
     '''sub_factor_pc_2 : POWER empty'''
-    print("factor (^)",p[1])
+    #print("factor (^)",p[1])
 
 #<FACTOR>
 
@@ -463,7 +466,7 @@ def p_factor_cte(p):
                   | CTE_INT
                   | CTE_CHAR'''
     tables.add_const(p[1], type (p[1]))
-    print("factor constante",p[1])
+    #print("factor constante",p[1])
 
 # Build the parser
 parser = yacc.yacc()

@@ -6,6 +6,8 @@
 # # ------------------------------------------------------------
 from dictionary import Dictionary
 from vitual_memory import VirtualMemory
+import pandas as pd
+
 dic = Dictionary()
 memory = VirtualMemory()
 
@@ -131,6 +133,26 @@ class DirFunc:
 				# 		newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
 				# 		self.constants.update(newVar)
 
-			print(self.constants.keys())
-			print(self.constants.values())
+			
+			# print(self.constants.keys())
+			# print(self.constants.values())
+	def print(self):
+		#print(tabulate(self.vars,headers='keys'))
+		print("\n____________________TABLA DE FUNCIONES________________\n")
+		for keys in self.dir_func.keys():	
+			print('\nFuncion ', keys)
+			df = pd.DataFrame.from_dict(self.dir_func[keys], orient='index')
+			print(df)
+		print("\n")
+		
+		print("____________________TABLA DE VARIABLES________________")
+		for keys in self.vars.keys():	
+			print('\nScope ', self.vars[keys]['function_name'])
+			df = pd.DataFrame.from_dict(self.vars[keys]['vars'], orient='index')
+			print(df)
+		print("\n")
+	#GET ADDRESS FOR CREATING QUADRUPLE
+	#def get_address(self, item, scope):
+
+
 
