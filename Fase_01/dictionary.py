@@ -127,3 +127,6 @@ class Dictionary:
         else:
             print("UNDEFINED TOKEN", token)
             exit()
+
+    #def oracle_cmddwtm(self, left,operator, right):
+

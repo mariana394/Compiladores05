@@ -8,6 +8,8 @@ import ply.yacc as yacc
 from lexer import tokens
 import sys
 from func_var_tables import DirFunc
+from quadruples import Quadruples
+from dictionary import Dictionary
 
 #Global variables
 curr_type = ''
@@ -18,9 +20,10 @@ curr_rows = 0
 curr_columns = 0
 curr_dim = 0 #por si las moscas
 
-#Function Directory
+#Objects
 tables = DirFunc()
-
+quad = Quadruples()
+oracle = Dictionary()
 #<PROGRAM>
 def p_program(p):
     '''program : PROGRAM ID SEMICOLON program_libraries program_vars program_function program_main end'''
@@ -159,7 +162,8 @@ def p_var_s_dimesions(p):
 def p_variable(p):
     '''variable : id_saver variable_array'''
     global curr_name, scope
-    tables.search_variable_existance(curr_name, scope)
+    type = tables.search_variable_existance(curr_name, scope)
+    quad.type_stack_push(type)
     #print('factor variable ', curr_name)
 
 def p_variable_array(p):
@@ -237,7 +241,7 @@ def p_inner_body(p):
 
 #<ASSIGN>
 def p_assign(p):
-    '''assign : variable keep_assign specialf_assign SEMICOLON'''
+    '''assign : variable keep_assign specialf_assign end_assign'''
 
 
 def p_specialf_assign(p):
@@ -245,10 +249,27 @@ def p_specialf_assign(p):
                        | special_function
                        | read'''
     
-#keep the assign 
+#keep the assign -> STACK
 def p_keep_assign(p):
     '''keep_assign : ASSIGN empty'''
     #print('factor = ', p[1])
+    global curr_name
+    quad.operands_stack_push(curr_name)
+    quad.operators_stack_push('ASSIGN')
+    #quad.type_stack_push(curr_type)
+
+
+#END-> Quadruple
+def p_end_assign(p):
+    '''end_assign : SEMICOLON empty'''
+    global scope, curr_name
+    #izq_type = tables.vars[scope]['vars'][curr_name]['type']
+    #print("IZQUIERDO", izq_type)
+    #oracle.oracle_cmddwtm()
+    #operator = quad.operators_stack_pop()
+    #operandR = quad.operands_stack_pop()
+    #result = quad.operands_stack_pop()
+   # quad.create_quadruple(operator,operandR,result)
 
 #<CONDITION>
 def p_condition(p):
@@ -467,8 +488,14 @@ def p_factor_cte(p):
     '''factor_cte : CTE_FLOAT
                   | CTE_INT
                   | CTE_CHAR'''
+    global  curr_name
     tables.add_const(p[1], type (p[1]))
-    #print("factor constante",p[1])
+    type_test = type(p[1]).__name__
+    if(type_test == 'str'):
+        type_test = 'char'
+
+    prueba = oracle.datalor_translator(type_test.upper())
+    print(curr_name , "ha", type_test, prueba)
 
 # Build the parser
 parser = yacc.yacc()

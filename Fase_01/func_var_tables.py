@@ -37,7 +37,7 @@ class DirFunc:
 	def add_function(self, name, scope, type):
 		#SEARCHING IF THE FUNCTION ALREADY EXISTS
 		if(name in self.dir_func.keys()):
-			print("Function " + name + " already declared")
+			print("Function " + name + " already declared", scope)
 			exit()
 		else:
 			self.dir_func[name] = {}
@@ -67,12 +67,13 @@ class DirFunc:
 	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
 	def search_variable_existance(self, name, scope):
 		if (name in self.vars[scope]['vars'].keys()):
-			return True
+			return self.vars[scope]['vars'][name]['type']
 		else:
 			if (name in self.vars[0]['vars'].keys()):
-				return True
+				return self.vars[0]['vars'][name]['type']
 			else:
-				print('Variable not declared')
+			#CHECK VAR AND SCOPE
+				print('Variable not declared ', name, scope)
 				exit()
 		
 	
@@ -168,6 +169,12 @@ class DirFunc:
 		for keys in self.vars.keys():	
 			print('\nScope ', self.vars[keys]['function_name'])
 			df = pd.DataFrame.from_dict(self.vars[keys]['vars'], orient='index')
+			print(df)
+		print("\n")
+
+		print("____________________TABLA DE CONSTANTES_______________")
+		for keys in self.vars.keys():	
+			df = pd.DataFrame.from_dict(self.constants, orient='index')
 			print(df)
 		print("\n")
 	#GET ADDRESS FOR CREATING QUADRUPLE
