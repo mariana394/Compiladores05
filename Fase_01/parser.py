@@ -18,6 +18,7 @@ curr_rows = 0
 curr_columns = 0
 curr_dim = 0 #por si las moscas
 
+#Function Directory
 tables = DirFunc()
 
 #<PROGRAM>
@@ -62,7 +63,7 @@ def p_from_library(p):
 def p_import_library(p):
     '''import_library : IMPORT ID AS ID  program_libraries'''   
 
-#VARIABLES
+#__________________________VARIABLES____________________
 #Uso de las variables en el programa
 def p_var_type(p):
     '''var_type : var_c_type
@@ -157,7 +158,8 @@ def p_var_s_dimesions(p):
 
 def p_variable(p):
     '''variable : id_saver variable_array'''
-    global curr_name
+    global curr_name, scope
+    tables.search_variable_existance(curr_name, scope)
     #print('factor variable ', curr_name)
 
 def p_variable_array(p):

@@ -52,19 +52,36 @@ class DirFunc:
 
 			#print(self.dir_func.keys(), self.dir_func.values())
 		
-	#VARIABLES
-	# CHECK IF THE VARIABLE ALREADY EXISTS IN THE SCOPE 
-	def search_variable(self, name,scope):
+	#__________________VARIABLES________________________________
+	
+	#VARIABLES VALIDATION
+
+	# CHECK IF THE VARIABLE ALREADY EXISTS IN THE SCOPE
+	# You can declare another varibale with the same name in a specific scope different than global 
+	def search_variable_declaration(self, name,scope):
 		if (name in self.vars[scope]['vars'].keys()):
 			return True
 		else:
 			return False
+		
+	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
+	def search_variable_existance(self, name, scope):
+		if (name in self.vars[scope]['vars'].keys()):
+			return True
+		else:
+			if (name in self.vars[0]['vars'].keys()):
+				return True
+			else:
+				print('Variable not declared')
+				exit()
+		
 	
+	#_________________CREATING VARIABLES_________________
 	#ADD VARIABLES
 	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
 		type = type.upper()
-		if(self.search_variable(name, scope)):
+		if(self.search_variable_declaration(name, scope)):
 			print("Variable already declared",name)
 			exit()
 		else:
@@ -136,6 +153,8 @@ class DirFunc:
 			
 			# print(self.constants.keys())
 			# print(self.constants.values())
+
+	
 	def print(self):
 		#print(tabulate(self.vars,headers='keys'))
 		print("\n____________________TABLA DE FUNCIONES________________\n")
@@ -153,6 +172,8 @@ class DirFunc:
 		print("\n")
 	#GET ADDRESS FOR CREATING QUADRUPLE
 	#def get_address(self, item, scope):
+
+	
 
 
 
