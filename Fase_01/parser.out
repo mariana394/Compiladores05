@@ -76,7 +76,7 @@ Rule 66    condition2 -> empty
 Rule 67    print -> PRINT LPAREN print_many RPAREN SEMICOLON
 Rule 68    print_type -> exp
 Rule 69    print_many -> print_type print_many2
-Rule 70    print_many2 -> COMMA print_type print_many2
+Rule 70    print_many2 -> COMMA print_many
 Rule 71    print_many2 -> empty
 Rule 72    read -> READ LPAREN variable RPAREN
 Rule 73    cycle -> for
@@ -263,9 +263,9 @@ model_predict        : 93
 param                : 40
 param2               : 47 48
 print                : 85
-print_many           : 67
-print_many2          : 69 70
-print_type           : 69 70
+print_many           : 67 70
+print_many2          : 69
+print_type           : 69
 program              : 0
 program_function     : 1 40
 program_libraries    : 1 10
@@ -2458,7 +2458,7 @@ state 156
 state 157
 
     (69) print_many -> print_type . print_many2
-    (70) print_many2 -> . COMMA print_type print_many2
+    (70) print_many2 -> . COMMA print_many
     (71) print_many2 -> . empty
     (3) empty -> .
 
@@ -3248,7 +3248,8 @@ state 210
 
 state 211
 
-    (70) print_many2 -> COMMA . print_type print_many2
+    (70) print_many2 -> COMMA . print_many
+    (69) print_many -> . print_type print_many2
     (68) print_type -> . exp
     (110) exp -> . t_exp exp_or
     (113) t_exp -> . expression t_exp_and
@@ -3275,7 +3276,8 @@ state 211
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    print_type                     shift and go to state 243
+    print_many                     shift and go to state 243
+    print_type                     shift and go to state 157
     exp                            shift and go to state 158
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
@@ -3745,16 +3747,10 @@ state 242
 
 state 243
 
-    (70) print_many2 -> COMMA print_type . print_many2
-    (70) print_many2 -> . COMMA print_type print_many2
-    (71) print_many2 -> . empty
-    (3) empty -> .
+    (70) print_many2 -> COMMA print_many .
 
-    COMMA           shift and go to state 211
-    RPAREN          reduce using rule 3 (empty -> .)
+    RPAREN          reduce using rule 70 (print_many2 -> COMMA print_many .)
 
-    print_many2                    shift and go to state 268
-    empty                          shift and go to state 212
 
 state 244
 
@@ -3795,7 +3791,7 @@ state 245
     COMMA           shift and go to state 214
     RPAREN          reduce using rule 3 (empty -> .)
 
-    exp_many                       shift and go to state 269
+    exp_many                       shift and go to state 268
     empty                          shift and go to state 215
 
 state 246
@@ -3826,7 +3822,7 @@ state 246
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    exp                            shift and go to state 270
+    exp                            shift and go to state 269
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
     m_exp                          shift and go to state 143
@@ -3897,7 +3893,7 @@ state 250
 
     (76) for -> FOR LPAREN ID TO for_end . RPAREN body SEMICOLON
 
-    RPAREN          shift and go to state 271
+    RPAREN          shift and go to state 270
 
 
 state 251
@@ -3915,13 +3911,13 @@ state 252
     RPAREN          reduce using rule 3 (empty -> .)
     COMMA           reduce using rule 3 (empty -> .)
 
-    empty                          shift and go to state 272
+    empty                          shift and go to state 271
 
 state 253
 
     (75) while -> DO body WHILE LPAREN exp . RPAREN SEMICOLON
 
-    RPAREN          shift and go to state 273
+    RPAREN          shift and go to state 272
 
 
 state 254
@@ -3931,11 +3927,11 @@ state 254
     (52) return -> . empty
     (3) empty -> .
 
-    RETURN          shift and go to state 275
+    RETURN          shift and go to state 274
     RBRACKET        reduce using rule 3 (empty -> .)
 
-    return                         shift and go to state 274
-    empty                          shift and go to state 276
+    return                         shift and go to state 273
+    empty                          shift and go to state 275
 
 state 255
 
@@ -3944,7 +3940,7 @@ state 255
 
     ID              shift and go to state 37
 
-    id_saver                       shift and go to state 277
+    id_saver                       shift and go to state 276
 
 state 256
 
@@ -3960,11 +3956,11 @@ state 257
     (98) explor_cte -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 279
+    COMMA           shift and go to state 278
     RPAREN          reduce using rule 3 (empty -> .)
 
-    explor_cte                     shift and go to state 278
-    empty                          shift and go to state 280
+    explor_cte                     shift and go to state 277
+    empty                          shift and go to state 279
 
 state 258
 
@@ -3974,7 +3970,7 @@ state 258
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 281
+    variable                       shift and go to state 280
     id_saver                       shift and go to state 87
 
 state 259
@@ -3993,7 +3989,7 @@ state 260
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 282
+    variable                       shift and go to state 281
     id_saver                       shift and go to state 87
 
 state 261
@@ -4004,7 +4000,7 @@ state 261
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 283
+    variable                       shift and go to state 282
     id_saver                       shift and go to state 87
 
 state 262
@@ -4021,7 +4017,7 @@ state 263
 
     CTE_INT         shift and go to state 252
 
-    int_const_saver                shift and go to state 284
+    int_const_saver                shift and go to state 283
 
 state 264
 
@@ -4031,14 +4027,14 @@ state 264
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 285
+    variable                       shift and go to state 284
     id_saver                       shift and go to state 87
 
 state 265
 
     (64) condition -> IF LPAREN exp RPAREN body condition2 . SEMICOLON
 
-    SEMICOLON       shift and go to state 286
+    SEMICOLON       shift and go to state 285
 
 
 state 266
@@ -4048,7 +4044,7 @@ state 266
 
     LBRACKET        shift and go to state 115
 
-    body                           shift and go to state 287
+    body                           shift and go to state 286
 
 state 267
 
@@ -4059,35 +4055,28 @@ state 267
 
 state 268
 
-    (70) print_many2 -> COMMA print_type print_many2 .
-
-    RPAREN          reduce using rule 70 (print_many2 -> COMMA print_type print_many2 .)
-
-
-state 269
-
     (81) exp_many -> COMMA exp exp_many .
 
     RPAREN          reduce using rule 81 (exp_many -> COMMA exp exp_many .)
 
 
-state 270
+state 269
 
     (38) variable_matrix -> LSQBRACKET exp . RSQBRACKET
 
-    RSQBRACKET      shift and go to state 288
+    RSQBRACKET      shift and go to state 287
 
 
-state 271
+state 270
 
     (76) for -> FOR LPAREN ID TO for_end RPAREN . body SEMICOLON
     (55) body -> . LBRACKET inner_body RBRACKET
 
     LBRACKET        shift and go to state 115
 
-    body                           shift and go to state 289
+    body                           shift and go to state 288
 
-state 272
+state 271
 
     (5) int_const_saver -> CTE_INT empty .
 
@@ -4095,21 +4084,21 @@ state 272
     COMMA           reduce using rule 5 (int_const_saver -> CTE_INT empty .)
 
 
-state 273
+state 272
 
     (75) while -> DO body WHILE LPAREN exp RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 290
+    SEMICOLON       shift and go to state 289
 
 
-state 274
+state 273
 
     (40) program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return . RBRACKET program_function
 
-    RBRACKET        shift and go to state 291
+    RBRACKET        shift and go to state 290
 
 
-state 275
+state 274
 
     (51) return -> RETURN . exp SEMICOLON
     (110) exp -> . t_exp exp_or
@@ -4137,7 +4126,7 @@ state 275
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    exp                            shift and go to state 292
+    exp                            shift and go to state 291
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
     m_exp                          shift and go to state 143
@@ -4151,14 +4140,14 @@ state 275
     id_saver                       shift and go to state 87
     function_saver                 shift and go to state 86
 
-state 276
+state 275
 
     (52) return -> empty .
 
     RBRACKET        reduce using rule 52 (return -> empty .)
 
 
-state 277
+state 276
 
     (48) param2 -> COMMA s_type id_saver . add_params param2
     (50) add_params -> . empty
@@ -4167,33 +4156,33 @@ state 277
     COMMA           reduce using rule 3 (empty -> .)
     RPAREN          reduce using rule 3 (empty -> .)
 
-    add_params                     shift and go to state 293
+    add_params                     shift and go to state 292
     empty                          shift and go to state 166
 
-state 278
+state 277
 
     (94) exploration -> EXPLORATION LPAREN variable explore_var explor_cte . RPAREN
 
-    RPAREN          shift and go to state 294
+    RPAREN          shift and go to state 293
 
 
-state 279
+state 278
 
     (97) explor_cte -> COMMA . int_const_saver
     (5) int_const_saver -> . CTE_INT empty
 
     CTE_INT         shift and go to state 252
 
-    int_const_saver                shift and go to state 295
+    int_const_saver                shift and go to state 294
 
-state 280
+state 279
 
     (98) explor_cte -> empty .
 
     RPAREN          reduce using rule 98 (explor_cte -> empty .)
 
 
-state 281
+state 280
 
     (95) explore_var -> COMMA variable .
 
@@ -4201,14 +4190,14 @@ state 281
     RPAREN          reduce using rule 95 (explore_var -> COMMA variable .)
 
 
-state 282
+state 281
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable . COMMA variable COMMA variable RPAREN
 
-    COMMA           shift and go to state 296
+    COMMA           shift and go to state 295
 
 
-state 283
+state 282
 
     (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable . dr_array dr_int RPAREN
     (103) dr_array -> . COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET
@@ -4216,29 +4205,29 @@ state 283
     (3) empty -> .
 
   ! shift/reduce conflict for COMMA resolved as shift
-    COMMA           shift and go to state 297
+    COMMA           shift and go to state 296
     RPAREN          reduce using rule 3 (empty -> .)
 
   ! COMMA           [ reduce using rule 3 (empty -> .) ]
 
-    dr_array                       shift and go to state 298
-    empty                          shift and go to state 299
+    dr_array                       shift and go to state 297
+    empty                          shift and go to state 298
+
+state 283
+
+    (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver . COMMA int_const_saver COMMA int_const_saver RPAREN
+
+    COMMA           shift and go to state 299
+
 
 state 284
 
-    (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver . COMMA int_const_saver COMMA int_const_saver RPAREN
+    (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA variable . COMMA RPAREN
 
     COMMA           shift and go to state 300
 
 
 state 285
-
-    (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA variable . COMMA RPAREN
-
-    COMMA           shift and go to state 301
-
-
-state 286
 
     (64) condition -> IF LPAREN exp RPAREN body condition2 SEMICOLON .
 
@@ -4251,14 +4240,14 @@ state 286
     RETURN          reduce using rule 64 (condition -> IF LPAREN exp RPAREN body condition2 SEMICOLON .)
 
 
-state 287
+state 286
 
     (65) condition2 -> ELSE body .
 
     SEMICOLON       reduce using rule 65 (condition2 -> ELSE body .)
 
 
-state 288
+state 287
 
     (38) variable_matrix -> LSQBRACKET exp RSQBRACKET .
 
@@ -4281,14 +4270,14 @@ state 288
     RSQBRACKET      reduce using rule 38 (variable_matrix -> LSQBRACKET exp RSQBRACKET .)
 
 
-state 289
+state 288
 
     (76) for -> FOR LPAREN ID TO for_end RPAREN body . SEMICOLON
 
-    SEMICOLON       shift and go to state 302
+    SEMICOLON       shift and go to state 301
 
 
-state 290
+state 289
 
     (75) while -> DO body WHILE LPAREN exp RPAREN SEMICOLON .
 
@@ -4301,7 +4290,7 @@ state 290
     RETURN          reduce using rule 75 (while -> DO body WHILE LPAREN exp RPAREN SEMICOLON .)
 
 
-state 291
+state 290
 
     (40) program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET . program_function
     (40) program_function -> . FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
@@ -4311,17 +4300,17 @@ state 291
     FUNCTION        shift and go to state 16
     MAIN            reduce using rule 3 (empty -> .)
 
-    program_function               shift and go to state 303
+    program_function               shift and go to state 302
     empty                          shift and go to state 17
 
-state 292
+state 291
 
     (51) return -> RETURN exp . SEMICOLON
 
-    SEMICOLON       shift and go to state 304
+    SEMICOLON       shift and go to state 303
 
 
-state 293
+state 292
 
     (48) param2 -> COMMA s_type id_saver add_params . param2
     (48) param2 -> . COMMA s_type id_saver add_params param2
@@ -4331,24 +4320,24 @@ state 293
     COMMA           shift and go to state 222
     RPAREN          reduce using rule 3 (empty -> .)
 
-    param2                         shift and go to state 305
+    param2                         shift and go to state 304
     empty                          shift and go to state 223
 
-state 294
+state 293
 
     (94) exploration -> EXPLORATION LPAREN variable explore_var explor_cte RPAREN .
 
     SEMICOLON       reduce using rule 94 (exploration -> EXPLORATION LPAREN variable explore_var explor_cte RPAREN .)
 
 
-state 295
+state 294
 
     (97) explor_cte -> COMMA int_const_saver .
 
     RPAREN          reduce using rule 97 (explor_cte -> COMMA int_const_saver .)
 
 
-state 296
+state 295
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA . variable COMMA variable RPAREN
     (35) variable -> . id_saver variable_array
@@ -4356,30 +4345,30 @@ state 296
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 306
+    variable                       shift and go to state 305
     id_saver                       shift and go to state 87
 
-state 297
+state 296
 
     (103) dr_array -> COMMA . LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET
 
-    LSQBRACKET      shift and go to state 307
+    LSQBRACKET      shift and go to state 306
 
 
-state 298
+state 297
 
     (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable dr_array . dr_int RPAREN
     (107) dr_int -> . COMMA int_const_saver
     (108) dr_int -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 308
+    COMMA           shift and go to state 307
     RPAREN          reduce using rule 3 (empty -> .)
 
-    dr_int                         shift and go to state 309
-    empty                          shift and go to state 310
+    dr_int                         shift and go to state 308
+    empty                          shift and go to state 309
 
-state 299
+state 298
 
     (104) dr_array -> empty .
 
@@ -4387,23 +4376,23 @@ state 299
     RPAREN          reduce using rule 104 (dr_array -> empty .)
 
 
-state 300
+state 299
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA . int_const_saver COMMA int_const_saver RPAREN
     (5) int_const_saver -> . CTE_INT empty
 
     CTE_INT         shift and go to state 252
 
-    int_const_saver                shift and go to state 311
+    int_const_saver                shift and go to state 310
 
-state 301
+state 300
 
     (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA variable COMMA . RPAREN
 
-    RPAREN          shift and go to state 312
+    RPAREN          shift and go to state 311
 
 
-state 302
+state 301
 
     (76) for -> FOR LPAREN ID TO for_end RPAREN body SEMICOLON .
 
@@ -4416,79 +4405,79 @@ state 302
     RETURN          reduce using rule 76 (for -> FOR LPAREN ID TO for_end RPAREN body SEMICOLON .)
 
 
-state 303
+state 302
 
     (40) program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function .
 
     MAIN            reduce using rule 40 (program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function .)
 
 
-state 304
+state 303
 
     (51) return -> RETURN exp SEMICOLON .
 
     RBRACKET        reduce using rule 51 (return -> RETURN exp SEMICOLON .)
 
 
-state 305
+state 304
 
     (48) param2 -> COMMA s_type id_saver add_params param2 .
 
     RPAREN          reduce using rule 48 (param2 -> COMMA s_type id_saver add_params param2 .)
 
 
-state 306
+state 305
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable . COMMA variable RPAREN
 
-    COMMA           shift and go to state 313
+    COMMA           shift and go to state 312
 
 
-state 307
+state 306
 
     (103) dr_array -> COMMA LSQBRACKET . CTE_CHAR dr_array_mp RSQBRACKET
 
-    CTE_CHAR        shift and go to state 314
+    CTE_CHAR        shift and go to state 313
 
 
-state 308
+state 307
 
     (107) dr_int -> COMMA . int_const_saver
     (5) int_const_saver -> . CTE_INT empty
 
     CTE_INT         shift and go to state 252
 
-    int_const_saver                shift and go to state 315
+    int_const_saver                shift and go to state 314
 
-state 309
+state 308
 
     (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable dr_array dr_int . RPAREN
 
-    RPAREN          shift and go to state 316
+    RPAREN          shift and go to state 315
 
 
-state 310
+state 309
 
     (108) dr_int -> empty .
 
     RPAREN          reduce using rule 108 (dr_int -> empty .)
 
 
-state 311
+state 310
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver . COMMA int_const_saver RPAREN
 
-    COMMA           shift and go to state 317
+    COMMA           shift and go to state 316
 
 
-state 312
+state 311
 
     (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN .
 
     SEMICOLON       reduce using rule 109 (model_predict -> MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN .)
 
 
-state 313
+state 312
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA . variable RPAREN
     (35) variable -> . id_saver variable_array
@@ -4496,101 +4485,101 @@ state 313
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 318
+    variable                       shift and go to state 317
     id_saver                       shift and go to state 87
 
-state 314
+state 313
 
     (103) dr_array -> COMMA LSQBRACKET CTE_CHAR . dr_array_mp RSQBRACKET
     (105) dr_array_mp -> . COMMA CTE_CHAR dr_array_mp
     (106) dr_array_mp -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 319
+    COMMA           shift and go to state 318
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    dr_array_mp                    shift and go to state 320
-    empty                          shift and go to state 321
+    dr_array_mp                    shift and go to state 319
+    empty                          shift and go to state 320
 
-state 315
+state 314
 
     (107) dr_int -> COMMA int_const_saver .
 
     RPAREN          reduce using rule 107 (dr_int -> COMMA int_const_saver .)
 
 
-state 316
+state 315
 
     (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable dr_array dr_int RPAREN .
 
     SEMICOLON       reduce using rule 102 (dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable dr_array dr_int RPAREN .)
 
 
-state 317
+state 316
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA . int_const_saver RPAREN
     (5) int_const_saver -> . CTE_INT empty
 
     CTE_INT         shift and go to state 252
 
-    int_const_saver                shift and go to state 322
+    int_const_saver                shift and go to state 321
 
-state 318
+state 317
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA variable . RPAREN
 
-    RPAREN          shift and go to state 323
+    RPAREN          shift and go to state 322
+
+
+state 318
+
+    (105) dr_array_mp -> COMMA . CTE_CHAR dr_array_mp
+
+    CTE_CHAR        shift and go to state 323
 
 
 state 319
 
-    (105) dr_array_mp -> COMMA . CTE_CHAR dr_array_mp
+    (103) dr_array -> COMMA LSQBRACKET CTE_CHAR dr_array_mp . RSQBRACKET
 
-    CTE_CHAR        shift and go to state 324
+    RSQBRACKET      shift and go to state 324
 
 
 state 320
-
-    (103) dr_array -> COMMA LSQBRACKET CTE_CHAR dr_array_mp . RSQBRACKET
-
-    RSQBRACKET      shift and go to state 325
-
-
-state 321
 
     (106) dr_array_mp -> empty .
 
     RSQBRACKET      reduce using rule 106 (dr_array_mp -> empty .)
 
 
-state 322
+state 321
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver . RPAREN
 
-    RPAREN          shift and go to state 326
+    RPAREN          shift and go to state 325
 
 
-state 323
+state 322
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA variable RPAREN .
 
     SEMICOLON       reduce using rule 99 (financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA variable RPAREN .)
 
 
-state 324
+state 323
 
     (105) dr_array_mp -> COMMA CTE_CHAR . dr_array_mp
     (105) dr_array_mp -> . COMMA CTE_CHAR dr_array_mp
     (106) dr_array_mp -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 319
+    COMMA           shift and go to state 318
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    dr_array_mp                    shift and go to state 327
-    empty                          shift and go to state 321
+    dr_array_mp                    shift and go to state 326
+    empty                          shift and go to state 320
 
-state 325
+state 324
 
     (103) dr_array -> COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET .
 
@@ -4598,14 +4587,14 @@ state 325
     RPAREN          reduce using rule 103 (dr_array -> COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET .)
 
 
-state 326
+state 325
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN .
 
     SEMICOLON       reduce using rule 101 (trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN .)
 
 
-state 327
+state 326
 
     (105) dr_array_mp -> COMMA CTE_CHAR dr_array_mp .
 
@@ -4615,4 +4604,4 @@ WARNING:
 WARNING: Conflicts:
 WARNING: 
 WARNING: shift/reduce conflict for COMMA in state 230 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 283 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 282 resolved as shift

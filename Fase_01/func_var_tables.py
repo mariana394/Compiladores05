@@ -173,9 +173,10 @@ class DirFunc:
 		print("\n")
 
 		print("____________________TABLA DE CONSTANTES_______________")
-		for keys in self.vars.keys():	
-			df = pd.DataFrame.from_dict(self.constants, orient='index')
-			print(df)
+		
+		df = pd.DataFrame.from_dict(self.constants, orient='index')
+		print(df)
+		
 		print("\n")
 	#GET ADDRESS FOR CREATING QUADRUPLE
 	#def get_address(self, item, scope):

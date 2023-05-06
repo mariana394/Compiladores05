@@ -19,6 +19,7 @@ curr_function = ''
 curr_rows = 0
 curr_columns = 0
 curr_dim = 0 #por si las moscas
+curr_temp = 0
 
 #Objects
 tables = DirFunc()
@@ -164,7 +165,9 @@ def p_variable(p):
     global curr_name, scope
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type)
-    #print('factor variable ', curr_name)
+    quad.operands_stack_push(curr_name)
+
+    print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
@@ -291,7 +294,7 @@ def p_print_many(p):
     '''print_many : print_type print_many2 '''
 
 def p_print_many2(p):
-    '''print_many2 : COMMA print_type print_many2
+    '''print_many2 : COMMA print_many
                    | empty'''
 
 
@@ -489,13 +492,15 @@ def p_factor_cte(p):
                   | CTE_INT
                   | CTE_CHAR'''
     global  curr_name
+    curr_name = p[1]
     tables.add_const(p[1], type (p[1]))
     type_test = type(p[1]).__name__
     if(type_test == 'str'):
         type_test = 'char'
-
-    prueba = oracle.datalor_translator(type_test.upper())
-    print(curr_name , "ha", type_test, prueba)
+    const_type = oracle.datalor_translator(type_test.upper())
+    quad.type_stack_push(const_type)
+    quad.operands_stack_push(curr_name)
+    print('Const ',curr_name , type_test, const_type)
 
 # Build the parser
 parser = yacc.yacc()
