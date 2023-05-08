@@ -16,6 +16,7 @@ curr_type = ''
 scope = 0 
 curr_name = ''
 curr_function = ''
+# GB for arrays and Matrix
 curr_rows = 0
 curr_columns = 0
 curr_dim = 0 #por si las moscas
@@ -242,7 +243,7 @@ def p_inner_body(p):
                   | empty'''
 
 
-#<ASSIGN>
+#__________________________<ASSIGN>____________________________________
 def p_assign(p):
     '''assign : variable keep_assign specialf_assign end_assign'''
 
@@ -256,25 +257,24 @@ def p_specialf_assign(p):
 def p_keep_assign(p):
     '''keep_assign : ASSIGN empty'''
     #print('factor = ', p[1])
-    global curr_name
+    global curr_name, scope
+    #PUSH operators and operanas to the stakc
     quad.operands_stack_push(curr_name)
-    quad.operators_stack_push('ASSIGN')
+    quad.operators_stack_push('21')
+    #save the type 
+    # var_type = tables.search_variable_existance(curr_name, scope)
+    # quad.type_stack_push(var_type)
+
+   
     #quad.type_stack_push(curr_type)
 
 
 #END-> Quadruple
 def p_end_assign(p):
     '''end_assign : SEMICOLON empty'''
-    global scope, curr_name
-    #izq_type = tables.vars[scope]['vars'][curr_name]['type']
-    #print("IZQUIERDO", izq_type)
-    #oracle.oracle_cmddwtm()
-    #operator = quad.operators_stack_pop()
-    #operandR = quad.operands_stack_pop()
-    #result = quad.operands_stack_pop()
-   # quad.create_quadruple(operator,operandR,result)
+    quad.assign_quadruple()
 
-#<CONDITION>
+#_________________________<CONDITION>___________________________________
 def p_condition(p):
     '''condition : IF LPAREN exp RPAREN body condition2 SEMICOLON'''
 

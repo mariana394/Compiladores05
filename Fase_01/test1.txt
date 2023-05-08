@@ -14,7 +14,7 @@ function float message (char name, int size, char test){
 
 main {
 var
-int a;
+int a, b[3];
 char csvcostos, csvventas, taquitos, pesos;
 
 a = 2;
