@@ -184,6 +184,8 @@ def p_variable_matrix(p):
 def p_program_function(p):
     '''program_function : FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
                         | empty'''
+
+
 #type of funtion return
 def p_f_type(p):
     '''f_type : INT 
@@ -477,7 +479,7 @@ def p_term_pc_2(p):
                  | MODULE'''
     #NEURALGIC POINT 2
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-
+    quad.power_quadruple()
 #____________________________________<SUB_FACTOR>____________________________________
 def p_sub_factor(p):
     '''sub_factor : factor sub_factor_pc'''

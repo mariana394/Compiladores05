@@ -18,14 +18,15 @@ class VirtualMemory:
         self.g_df_size = 1999
 
          #LOCALES
-        self.l_i_size = 1999
-        self.l_f_size = 1999
-        self.l_c_size = 1999
+        self.l_i_size = 2999
+        self.l_f_size = 2999
+        self.l_c_size = 2999
+        self.l_df_size = 2999
 
-            #TEMPORALES
-        self.t_i_size = 1999
-        self.t_f_size = 1999
-        self.t_c_size = 1999
+        #     #TEMPORALES
+        # self.t_i_size = 1999
+        # self.t_f_size = 1999
+        # self.t_c_size = 1999
 
             #CONSTANTES
         self.c_i_size = 1999
@@ -42,13 +43,14 @@ class VirtualMemory:
 
         #LOCALES
         self.l_i_init = 9000
-        self.l_f_init = 11000
-        self.l_c_init = 13000
+        self.l_f_init = 12000
+        self.l_c_init = 15000
+        self.l_df_init = 18000
 
-        #TEMPORALES
-        self.t_i_init = 15000
-        self.t_f_init = 17000
-        self.t_c_init = 19000
+        # #TEMPORALES
+        # self.t_i_init = 15000
+        # self.t_f_init = 17000
+        # self.t_c_init = 19000
 
         #CONSTANTES
         self.c_i_init = 21000
@@ -67,11 +69,12 @@ class VirtualMemory:
         self.l_i_cont = 0
         self.l_f_cont = 0
         self.l_c_cont = 0
+        self.l_df_cont = 0
 
-        #TEMPORALES
-        self.t_i_cont = 0
-        self.t_f_cont = 0
-        self.t_c_cont = 0
+        # #TEMPORALES
+        # self.t_i_cont = 0
+        # self.t_f_cont = 0
+        # self.t_c_cont = 0
 
         #CONSTANTES
         self.c_i_cont = 0
@@ -85,6 +88,13 @@ class VirtualMemory:
             print('overflow')
             exit()
             
+    #RESET DE LAS VARIABLES LOCALES/TEMPORALES
+    def reset_local_temporal(self):
+        self.l_i_cont = 0
+        self.l_f_cont = 0
+        self.l_c_cont = 0
+        self.l_df_cont = 0
+
 
     # ASSIGN ADDRESS MEMORY TO THE VARIABLES
     def assign_memory(self, tipo, scope):
@@ -157,5 +167,36 @@ class VirtualMemory:
                         return address
             #LOCAL
             else:
-                #print('tacos')
-                a = 1
+                print('Dentro de locales')
+                match tipo:
+                    #INT
+                    case 1:
+                        #Overflow checker
+                        self.overflow(self.l_i_cont, self.l_i_size)
+                        #returns the address
+                        address = self.l_i_init + self.l_i_cont
+                        self.l_i_cont += 1
+                        #print(address)
+                        return address
+                    #FLOAT
+                    case 2:
+                        self.overflow(self.l_f_cont, self.l_f_size)
+                        #return the address
+                        address = self.l_f_init + self.l_f_cont
+                        self.l_f_cont += 1
+                        #print(address)
+                        return address
+                    #CHAR
+                    case 3:
+                        self.overflow(self.l_c_cont, self.l_c_size)
+                        #return the address
+                        address = self.l_c_init + self.l_c_cont
+                        self.l_c_cont += 1
+                        #print (address)
+                        return address
+                    #DATAFRAME
+                    case 6:
+                        self.overflow(self.l_df_cont, self.l_df_size)
+                        #return the address
+                        address = self.l_df_init + self.l_df_cont
+                        self.l_df_cont += 1

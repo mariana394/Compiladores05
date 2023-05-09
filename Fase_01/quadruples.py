@@ -62,6 +62,9 @@ class Quadruples:
     def reset_temp(self):
         self.index_temp = 0
 
+
+    #Function to resolve EXP for queadruples 
+
     #_________________________ASSIGN__________________#
     def assign_quadruple(self):
         #print(self.pOperators, self.pOperands)
@@ -71,15 +74,30 @@ class Quadruples:
         result = self.operands_stack_pop()
        #POP to the types
         #print(self.pTypes)
-        typeD = self.type_stack_pop()
+        typeR = self.type_stack_pop()
         typeRes = self.type_stack_pop()
         #ASK THE ORACLE IF MDDWTM
-        oracle_answer = oracle.oracle_cmddwtm(str(typeRes),str(typeD),str(operator))
+        oracle_answer = oracle.oracle_cmddwtm(str(typeRes),str(typeR),str(operator))
         print("Oracle answer",oracle_answer)
        #CREATING THE CUADRUPLE
         self.quadruple.append([operator, operandR,'',result])
         print(self.quadruple)
 
+    #__________________EXPRESSIONS QUACRUPLES________________________
+     
+    def power_quadruple(self):
+        operator = self.pOperators[-1]
+        if(operator == 16):
+            operandR = self.operands_stack_pop()
+            typeR = self.type_stack_pop()
+            operatorL = self.operands_stack_pop()
+            typeL = self.type_stack_pop()
+            operator = self.operators_stack_pop()
+            
+            #ASK TO THE ORACLE
+            type_result = oracle.oracle_cmddwtm(str(typeL)),str(typeR,str(operator))
+            self.pTypes.append(type_result)
+            
     #def solve_expressions(self, precedencia):
        # print("")
         #if ()

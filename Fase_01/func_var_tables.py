@@ -36,10 +36,16 @@ class DirFunc:
 	# Function for adding functions to function directory
 	def add_function(self, name, scope, type):
 		#SEARCHING IF THE FUNCTION ALREADY EXISTS
+
 		if(name in self.dir_func.keys()):
 			print("Function " + name + " already declared", scope)
 			exit()
 		else:
+			# PUNTO NEURALGICO PARA RESETEAR LAS LOCALES - CAMBIAR AL PUNTO DONDE TERMINA
+			# LA FUNCIÓN UNA VEZ QUE ESTE PUNTO ESTE CREADO
+			memory.reset_local_temporal()
+
+
 			self.dir_func[name] = {}
 			self.dir_func[name]["return_type"] = type
 			self.dir_func[name]["scope"] = scope
