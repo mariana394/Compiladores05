@@ -19,7 +19,7 @@ float c;
 
 char csvcostos, csvventas, taquitos, pesos;
 
-b = 2.5;
+b = 2.5 || 2;
 c = 3.5;
 
 

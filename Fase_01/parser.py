@@ -404,15 +404,20 @@ def p_model_predict(p):
     '''model_predict : MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN'''
 
 
-#<EXP>
+#_____________________<EXP>___________________________
 def p_exp(p):
     '''exp : t_exp exp_or'''
 
 def p_exp_or(p):
     '''exp_or : OR exp
               | empty'''
+    global curr_name
+    curr_name = p[1]
+    quad.operators_stack_push(curr_name)
+    print("entro al OR", curr_name)
 
-#<T_EXP>
+
+#___________________<T_EXP>___________________________
 def p_t_exp(p):
     '''t_exp : expression t_exp_and'''
 
