@@ -143,11 +143,11 @@ class Dictionary:
                 if(operator in self.semantics[left][right]):
                     return self.semantics[left][right][operator]
                 else:
-                    print("Type mistmatch ", operator)
+                    print("Type mistmatch")
                     exit()
 
             else:
-                print("Type mismatch ", right)
+                print("Type mismatch")
                 exit()
         
         
