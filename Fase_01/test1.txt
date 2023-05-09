@@ -24,6 +24,5 @@ if (costos == pesos){
 	print('Nosepudoleerelarchivodecostos');
 };
 
-
 }
 end
