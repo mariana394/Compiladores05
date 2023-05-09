@@ -55,6 +55,26 @@ class Dictionary:
             'CTE_FLOAT': 29,
             'CTE_CHAR': 30 
         }
+        self.datalor_symbol_dictionary = {
+            
+            #OPERADORES LOGICOS
+            '&&':9,
+            '||':10,
+
+            #OPERADORES
+            '+':11,
+            '-':12,
+            '*':13,
+            '/':14,
+            '%':15,
+            '^':16,
+            #EXPRESSIONS
+            '==': 20, #==
+            '=': 21, #=
+            '>': 22,
+            '<': 23,
+            '!=': 24, #!=
+        }
 
         self.semantics = {
             '1': {
@@ -126,6 +146,7 @@ class Dictionary:
         }
 
 
+    #TRANSLATOR TOKEN->Number
     def datalor_translator(self, token):
         if token in self.datalor_dictionary.keys():
             return self.datalor_dictionary[token]
@@ -136,6 +157,15 @@ class Dictionary:
     # 
     # ##
 
+    #TRANSLATOR SYMBOL->NUMBER
+    def datalor_translator_symbols(self, symbol):
+        if symbol in self.datalor_symbol_dictionary.keys():
+            return self.datalor_symbol_dictionary[symbol]
+        else:
+            print("UNDEFINED SYMBOL", symbol)
+            exit()
+
+    #CHECK SEMANTICS
     def oracle_cmddwtm(self, left, right, operator ):
 
         if(left in self.semantics.keys()):

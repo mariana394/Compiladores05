@@ -117,91 +117,93 @@ Rule 107   dr_int -> COMMA int_const_saver
 Rule 108   dr_int -> empty
 Rule 109   model_predict -> MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN
 Rule 110   exp -> t_exp exp_or
-Rule 111   exp_or -> OR exp
+Rule 111   exp_or -> exp_keep_or exp
 Rule 112   exp_or -> empty
-Rule 113   t_exp -> expression t_exp_and
-Rule 114   t_exp_and -> AND t_exp
-Rule 115   t_exp_and -> empty
-Rule 116   expression -> m_exp expression_comp
-Rule 117   expression_comp -> expression_comp_2 m_exp
-Rule 118   expression_comp -> empty
-Rule 119   expression_comp_2 -> EQUAL
-Rule 120   expression_comp_2 -> NOTEQUAL
-Rule 121   expression_comp_2 -> LTHAN
-Rule 122   expression_comp_2 -> GTHAN
-Rule 123   m_exp -> term m_exp_sr
-Rule 124   m_exp_sr -> m_exp_sr_2 m_exp
-Rule 125   m_exp_sr -> empty
-Rule 126   m_exp_sr_2 -> PLUS
-Rule 127   m_exp_sr_2 -> MINUS
-Rule 128   term -> sub_factor term_pc
-Rule 129   term_pc -> term_pc_2 term
-Rule 130   term_pc -> empty
-Rule 131   term_pc_2 -> MULTIPLY
-Rule 132   term_pc_2 -> DIVIDE
-Rule 133   term_pc_2 -> MODULE
-Rule 134   sub_factor -> factor sub_factor_pc
-Rule 135   sub_factor_pc -> sub_factor_pc_2 sub_factor
-Rule 136   sub_factor_pc -> empty
-Rule 137   sub_factor_pc_2 -> POWER empty
-Rule 138   factor -> factor_exp
-Rule 139   factor -> factor_cte
-Rule 140   factor -> variable
-Rule 141   factor -> call_function
-Rule 142   factor_exp -> LPAREN exp RPAREN
-Rule 143   factor_cte -> CTE_FLOAT
-Rule 144   factor_cte -> CTE_INT
-Rule 145   factor_cte -> CTE_CHAR
+Rule 113   exp_keep_or -> OR
+Rule 114   t_exp -> expression t_exp_and
+Rule 115   t_exp_and -> AND keep_and t_exp
+Rule 116   t_exp_and -> empty
+Rule 117   keep_and -> empty
+Rule 118   expression -> m_exp expression_comp
+Rule 119   expression_comp -> expression_comp_2 m_exp
+Rule 120   expression_comp -> empty
+Rule 121   expression_comp_2 -> EQUAL
+Rule 122   expression_comp_2 -> NOTEQUAL
+Rule 123   expression_comp_2 -> LTHAN
+Rule 124   expression_comp_2 -> GTHAN
+Rule 125   m_exp -> term m_exp_sr
+Rule 126   m_exp_sr -> m_exp_sr_2 m_exp
+Rule 127   m_exp_sr -> empty
+Rule 128   m_exp_sr_2 -> PLUS
+Rule 129   m_exp_sr_2 -> MINUS
+Rule 130   term -> sub_factor term_pc
+Rule 131   term_pc -> term_pc_2 term
+Rule 132   term_pc -> empty
+Rule 133   term_pc_2 -> MULTIPLY
+Rule 134   term_pc_2 -> DIVIDE
+Rule 135   term_pc_2 -> MODULE
+Rule 136   sub_factor -> factor sub_factor_pc
+Rule 137   sub_factor_pc -> sub_factor_pc_2 sub_factor
+Rule 138   sub_factor_pc -> empty
+Rule 139   sub_factor_pc_2 -> POWER empty
+Rule 140   factor -> factor_exp
+Rule 141   factor -> factor_cte
+Rule 142   factor -> variable
+Rule 143   factor -> call_function
+Rule 144   factor_exp -> LPAREN exp RPAREN
+Rule 145   factor_cte -> CTE_FLOAT
+Rule 146   factor_cte -> CTE_INT
+Rule 147   factor_cte -> CTE_CHAR
 
 Terminals, with rules where they appear
 
-AND                  : 114
+AND                  : 115
 AS                   : 10
 ASSIGN               : 62
 CHAR                 : 17 44
 COLON                : 
 COMMA                : 23 27 48 70 81 95 97 99 99 99 101 101 101 102 103 105 107 109 109
-CTE_CHAR             : 103 105 145
-CTE_FLOAT            : 143
-CTE_INT              : 5 34 144
+CTE_CHAR             : 103 105 147
+CTE_FLOAT            : 145
+CTE_INT              : 5 34 146
 DATAFRAME            : 18
 DATE                 : 19
-DIVIDE               : 132
+DIVIDE               : 134
 DO                   : 75
 DUMMI_REGRESSION     : 102
 ELSE                 : 65
 END                  : 2
-EQUAL                : 119
+EQUAL                : 121
 EXPLORATION          : 94
 FINANCIAL_STATE      : 99
 FLOAT                : 16 43
 FOR                  : 76
 FROM                 : 8
 FUNCTION             : 40
-GTHAN                : 122
+GTHAN                : 124
 ID                   : 1 4 8 10 10 76 78 80
 IF                   : 64
 IMPORT               : 10
 INT                  : 15 42
 LBRACKET             : 40 53 55
-LPAREN               : 40 64 67 72 75 76 79 94 99 100 101 102 109 142
+LPAREN               : 40 64 67 72 75 76 79 94 99 100 101 102 109 144
 LSQBRACKET           : 30 32 36 38 103
-LTHAN                : 121
+LTHAN                : 123
 MAIN                 : 53
-MINUS                : 127
+MINUS                : 129
 MODEL_PREDICT        : 109
-MODULE               : 133
-MULTIPLY             : 131
-NOTEQUAL             : 120
-OR                   : 111
-PLUS                 : 126
-POWER                : 137
+MODULE               : 135
+MULTIPLY             : 133
+NOTEQUAL             : 122
+OR                   : 113
+PLUS                 : 128
+POWER                : 139
 PRINT                : 67
 PROGRAM              : 1
 RBRACKET             : 40 53 55
 READ                 : 72
 RETURN               : 51
-RPAREN               : 40 64 67 72 75 76 79 94 99 100 101 102 109 142
+RPAREN               : 40 64 67 72 75 76 79 94 99 100 101 102 109 144
 RSQBRACKET           : 30 32 36 38 103
 SEASON_ANALYSIS      : 100
 SEMICOLON            : 1 22 26 51 63 64 67 75 76
@@ -220,7 +222,7 @@ add_s_var            : 26 27
 assign               : 83
 body                 : 64 65 75 76
 c_type               : 22
-call_function        : 87 141
+call_function        : 87 143
 condition            : 84
 condition2           : 64
 cycle                : 86
@@ -228,22 +230,23 @@ dr_array             : 102
 dr_array_mp          : 103 105
 dr_int               : 102
 dummi_regression     : 90
-empty                : 2 4 5 7 9 14 21 24 25 28 29 31 33 34 37 39 41 46 49 50 52 54 57 62 63 66 71 80 82 96 98 104 106 108 112 115 118 125 130 136 137
+empty                : 2 4 5 7 9 14 21 24 25 28 29 31 33 34 37 39 41 46 49 50 52 54 57 62 63 66 71 80 82 96 98 104 106 108 112 116 117 120 127 132 138 139
 end                  : 1
 end_assign           : 58
-exp                  : 36 38 51 59 64 68 75 79 81 111 142
+exp                  : 36 38 51 59 64 68 75 79 81 111 144
+exp_keep_or          : 111
 exp_many             : 79 81
 exp_or               : 110
 explor_cte           : 94
 exploration          : 88
 explore_var          : 94
-expression           : 113
-expression_comp      : 116
-expression_comp_2    : 117
+expression           : 114
+expression_comp      : 118
+expression_comp_2    : 119
 f_type               : 40
-factor               : 134
-factor_cte           : 139
-factor_exp           : 138
+factor               : 136
+factor_cte           : 141
+factor_exp           : 140
 financial_state      : 89
 for                  : 73
 for_end              : 76
@@ -254,10 +257,11 @@ id_saver             : 22 23 26 27 35 40 47 48
 import_library       : 6
 inner_body           : 40 53 55 56
 int_const_saver      : 77 97 101 101 101 107
+keep_and             : 115
 keep_assign          : 58
-m_exp                : 116 117 124
-m_exp_sr             : 123
-m_exp_sr_2           : 124
+m_exp                : 118 119 126
+m_exp_sr             : 125
+m_exp_sr_2           : 126
 main_id              : 53
 model_predict        : 93
 param                : 40
@@ -278,14 +282,14 @@ season_analysis      : 91
 special_function     : 60
 specialf_assign      : 58
 statement            : 56
-sub_factor           : 128 135
-sub_factor_pc        : 134
-sub_factor_pc_2      : 135
-t_exp                : 110 114
-t_exp_and            : 113
-term                 : 123 129
-term_pc              : 128
-term_pc_2            : 129
+sub_factor           : 130 137
+sub_factor_pc        : 136
+sub_factor_pc_2      : 137
+t_exp                : 110 115
+t_exp_and            : 114
+term                 : 125 131
+term_pc              : 130
+term_pc_2            : 131
 trend_prediction     : 92
 var_c_type           : 11
 var_c_type2          : 22 23
@@ -296,7 +300,7 @@ var_s_matrix         : 30
 var_s_type           : 12
 var_s_type2          : 26 27
 var_type             : 13 20
-variable             : 58 72 94 95 99 99 99 99 100 101 102 102 109 109 140
+variable             : 58 72 94 95 99 99 99 99 100 101 102 102 109 109 142
 variable_array       : 35
 variable_matrix      : 36
 while                : 74
@@ -1509,25 +1513,25 @@ state 104
     (92) special_function -> . trend_prediction
     (93) special_function -> . model_predict
     (72) read -> . READ LPAREN variable RPAREN
-    (113) t_exp -> . expression t_exp_and
+    (114) t_exp -> . expression t_exp_and
     (94) exploration -> . EXPLORATION LPAREN variable explore_var explor_cte RPAREN
     (99) financial_state -> . FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA variable RPAREN
     (102) dummi_regression -> . DUMMI_REGRESSION LPAREN variable COMMA variable dr_array dr_int RPAREN
     (100) season_analysis -> . SEASON_ANALYSIS LPAREN variable RPAREN
     (101) trend_prediction -> . TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN
     (109) model_predict -> . MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -1593,19 +1597,19 @@ state 106
 
     (64) condition -> IF LPAREN . exp RPAREN body condition2 SEMICOLON
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -1637,19 +1641,19 @@ state 107
     (69) print_many -> . print_type print_many2
     (68) print_type -> . exp
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -1681,19 +1685,19 @@ state 108
 
     (79) call_function -> function_saver LPAREN . exp exp_many RPAREN
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -1746,19 +1750,19 @@ state 110
 
     (36) variable_array -> LSQBRACKET . exp RSQBRACKET variable_matrix
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -1937,24 +1941,24 @@ state 121
 
 state 122
 
-    (140) factor -> variable .
+    (142) factor -> variable .
 
-    POWER           reduce using rule 140 (factor -> variable .)
-    MULTIPLY        reduce using rule 140 (factor -> variable .)
-    DIVIDE          reduce using rule 140 (factor -> variable .)
-    MODULE          reduce using rule 140 (factor -> variable .)
-    PLUS            reduce using rule 140 (factor -> variable .)
-    MINUS           reduce using rule 140 (factor -> variable .)
-    EQUAL           reduce using rule 140 (factor -> variable .)
-    NOTEQUAL        reduce using rule 140 (factor -> variable .)
-    LTHAN           reduce using rule 140 (factor -> variable .)
-    GTHAN           reduce using rule 140 (factor -> variable .)
-    AND             reduce using rule 140 (factor -> variable .)
-    OR              reduce using rule 140 (factor -> variable .)
-    SEMICOLON       reduce using rule 140 (factor -> variable .)
-    RPAREN          reduce using rule 140 (factor -> variable .)
-    COMMA           reduce using rule 140 (factor -> variable .)
-    RSQBRACKET      reduce using rule 140 (factor -> variable .)
+    POWER           reduce using rule 142 (factor -> variable .)
+    MULTIPLY        reduce using rule 142 (factor -> variable .)
+    DIVIDE          reduce using rule 142 (factor -> variable .)
+    MODULE          reduce using rule 142 (factor -> variable .)
+    PLUS            reduce using rule 142 (factor -> variable .)
+    MINUS           reduce using rule 142 (factor -> variable .)
+    EQUAL           reduce using rule 142 (factor -> variable .)
+    NOTEQUAL        reduce using rule 142 (factor -> variable .)
+    LTHAN           reduce using rule 142 (factor -> variable .)
+    GTHAN           reduce using rule 142 (factor -> variable .)
+    AND             reduce using rule 142 (factor -> variable .)
+    OR              reduce using rule 142 (factor -> variable .)
+    SEMICOLON       reduce using rule 142 (factor -> variable .)
+    RPAREN          reduce using rule 142 (factor -> variable .)
+    COMMA           reduce using rule 142 (factor -> variable .)
+    RSQBRACKET      reduce using rule 142 (factor -> variable .)
 
 
 state 123
@@ -1990,17 +1994,19 @@ state 126
 state 127
 
     (110) exp -> t_exp . exp_or
-    (111) exp_or -> . OR exp
+    (111) exp_or -> . exp_keep_or exp
     (112) exp_or -> . empty
+    (113) exp_keep_or -> . OR
     (3) empty -> .
 
-    OR              shift and go to state 172
+    OR              shift and go to state 174
     SEMICOLON       reduce using rule 3 (empty -> .)
     RPAREN          reduce using rule 3 (empty -> .)
     COMMA           reduce using rule 3 (empty -> .)
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
     exp_or                         shift and go to state 171
+    exp_keep_or                    shift and go to state 172
     empty                          shift and go to state 173
 
 state 128
@@ -2049,26 +2055,26 @@ state 134
 
     (72) read -> READ . LPAREN variable RPAREN
 
-    LPAREN          shift and go to state 174
+    LPAREN          shift and go to state 175
 
 
 state 135
 
-    (142) factor_exp -> LPAREN . exp RPAREN
+    (144) factor_exp -> LPAREN . exp RPAREN
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -2080,7 +2086,7 @@ state 135
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    exp                            shift and go to state 175
+    exp                            shift and go to state 176
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
     m_exp                          shift and go to state 143
@@ -2096,78 +2102,78 @@ state 135
 
 state 136
 
-    (113) t_exp -> expression . t_exp_and
-    (114) t_exp_and -> . AND t_exp
-    (115) t_exp_and -> . empty
+    (114) t_exp -> expression . t_exp_and
+    (115) t_exp_and -> . AND keep_and t_exp
+    (116) t_exp_and -> . empty
     (3) empty -> .
 
-    AND             shift and go to state 177
+    AND             shift and go to state 178
     OR              reduce using rule 3 (empty -> .)
     SEMICOLON       reduce using rule 3 (empty -> .)
     RPAREN          reduce using rule 3 (empty -> .)
     COMMA           reduce using rule 3 (empty -> .)
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    t_exp_and                      shift and go to state 176
-    empty                          shift and go to state 178
+    t_exp_and                      shift and go to state 177
+    empty                          shift and go to state 179
 
 state 137
 
     (94) exploration -> EXPLORATION . LPAREN variable explore_var explor_cte RPAREN
 
-    LPAREN          shift and go to state 179
+    LPAREN          shift and go to state 180
 
 
 state 138
 
     (99) financial_state -> FINANCIAL_STATE . LPAREN variable COMMA variable COMMA variable COMMA variable RPAREN
 
-    LPAREN          shift and go to state 180
+    LPAREN          shift and go to state 181
 
 
 state 139
 
     (102) dummi_regression -> DUMMI_REGRESSION . LPAREN variable COMMA variable dr_array dr_int RPAREN
 
-    LPAREN          shift and go to state 181
+    LPAREN          shift and go to state 182
 
 
 state 140
 
     (100) season_analysis -> SEASON_ANALYSIS . LPAREN variable RPAREN
 
-    LPAREN          shift and go to state 182
+    LPAREN          shift and go to state 183
 
 
 state 141
 
     (101) trend_prediction -> TREND_PREDICTION . LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN
 
-    LPAREN          shift and go to state 183
+    LPAREN          shift and go to state 184
 
 
 state 142
 
     (109) model_predict -> MODEL_PREDICT . LPAREN variable COMMA variable COMMA RPAREN
 
-    LPAREN          shift and go to state 184
+    LPAREN          shift and go to state 185
 
 
 state 143
 
-    (116) expression -> m_exp . expression_comp
-    (117) expression_comp -> . expression_comp_2 m_exp
-    (118) expression_comp -> . empty
-    (119) expression_comp_2 -> . EQUAL
-    (120) expression_comp_2 -> . NOTEQUAL
-    (121) expression_comp_2 -> . LTHAN
-    (122) expression_comp_2 -> . GTHAN
+    (118) expression -> m_exp . expression_comp
+    (119) expression_comp -> . expression_comp_2 m_exp
+    (120) expression_comp -> . empty
+    (121) expression_comp_2 -> . EQUAL
+    (122) expression_comp_2 -> . NOTEQUAL
+    (123) expression_comp_2 -> . LTHAN
+    (124) expression_comp_2 -> . GTHAN
     (3) empty -> .
 
-    EQUAL           shift and go to state 188
-    NOTEQUAL        shift and go to state 189
-    LTHAN           shift and go to state 190
-    GTHAN           shift and go to state 191
+    EQUAL           shift and go to state 189
+    NOTEQUAL        shift and go to state 190
+    LTHAN           shift and go to state 191
+    GTHAN           shift and go to state 192
     AND             reduce using rule 3 (empty -> .)
     OR              reduce using rule 3 (empty -> .)
     SEMICOLON       reduce using rule 3 (empty -> .)
@@ -2175,21 +2181,21 @@ state 143
     COMMA           reduce using rule 3 (empty -> .)
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    expression_comp                shift and go to state 185
-    expression_comp_2              shift and go to state 186
-    empty                          shift and go to state 187
+    expression_comp                shift and go to state 186
+    expression_comp_2              shift and go to state 187
+    empty                          shift and go to state 188
 
 state 144
 
-    (123) m_exp -> term . m_exp_sr
-    (124) m_exp_sr -> . m_exp_sr_2 m_exp
-    (125) m_exp_sr -> . empty
-    (126) m_exp_sr_2 -> . PLUS
-    (127) m_exp_sr_2 -> . MINUS
+    (125) m_exp -> term . m_exp_sr
+    (126) m_exp_sr -> . m_exp_sr_2 m_exp
+    (127) m_exp_sr -> . empty
+    (128) m_exp_sr_2 -> . PLUS
+    (129) m_exp_sr_2 -> . MINUS
     (3) empty -> .
 
-    PLUS            shift and go to state 195
-    MINUS           shift and go to state 196
+    PLUS            shift and go to state 196
+    MINUS           shift and go to state 197
     EQUAL           reduce using rule 3 (empty -> .)
     NOTEQUAL        reduce using rule 3 (empty -> .)
     LTHAN           reduce using rule 3 (empty -> .)
@@ -2201,23 +2207,23 @@ state 144
     COMMA           reduce using rule 3 (empty -> .)
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    m_exp_sr                       shift and go to state 192
-    m_exp_sr_2                     shift and go to state 193
-    empty                          shift and go to state 194
+    m_exp_sr                       shift and go to state 193
+    m_exp_sr_2                     shift and go to state 194
+    empty                          shift and go to state 195
 
 state 145
 
-    (128) term -> sub_factor . term_pc
-    (129) term_pc -> . term_pc_2 term
-    (130) term_pc -> . empty
-    (131) term_pc_2 -> . MULTIPLY
-    (132) term_pc_2 -> . DIVIDE
-    (133) term_pc_2 -> . MODULE
+    (130) term -> sub_factor . term_pc
+    (131) term_pc -> . term_pc_2 term
+    (132) term_pc -> . empty
+    (133) term_pc_2 -> . MULTIPLY
+    (134) term_pc_2 -> . DIVIDE
+    (135) term_pc_2 -> . MODULE
     (3) empty -> .
 
-    MULTIPLY        shift and go to state 200
-    DIVIDE          shift and go to state 201
-    MODULE          shift and go to state 202
+    MULTIPLY        shift and go to state 201
+    DIVIDE          shift and go to state 202
+    MODULE          shift and go to state 203
     PLUS            reduce using rule 3 (empty -> .)
     MINUS           reduce using rule 3 (empty -> .)
     EQUAL           reduce using rule 3 (empty -> .)
@@ -2231,19 +2237,19 @@ state 145
     COMMA           reduce using rule 3 (empty -> .)
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    term_pc                        shift and go to state 197
-    term_pc_2                      shift and go to state 198
-    empty                          shift and go to state 199
+    term_pc                        shift and go to state 198
+    term_pc_2                      shift and go to state 199
+    empty                          shift and go to state 200
 
 state 146
 
-    (134) sub_factor -> factor . sub_factor_pc
-    (135) sub_factor_pc -> . sub_factor_pc_2 sub_factor
-    (136) sub_factor_pc -> . empty
-    (137) sub_factor_pc_2 -> . POWER empty
+    (136) sub_factor -> factor . sub_factor_pc
+    (137) sub_factor_pc -> . sub_factor_pc_2 sub_factor
+    (138) sub_factor_pc -> . empty
+    (139) sub_factor_pc_2 -> . POWER empty
     (3) empty -> .
 
-    POWER           shift and go to state 206
+    POWER           shift and go to state 207
     MULTIPLY        reduce using rule 3 (empty -> .)
     DIVIDE          reduce using rule 3 (empty -> .)
     MODULE          reduce using rule 3 (empty -> .)
@@ -2260,140 +2266,140 @@ state 146
     COMMA           reduce using rule 3 (empty -> .)
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    sub_factor_pc                  shift and go to state 203
-    sub_factor_pc_2                shift and go to state 204
-    empty                          shift and go to state 205
+    sub_factor_pc                  shift and go to state 204
+    sub_factor_pc_2                shift and go to state 205
+    empty                          shift and go to state 206
 
 state 147
 
-    (138) factor -> factor_exp .
+    (140) factor -> factor_exp .
 
-    POWER           reduce using rule 138 (factor -> factor_exp .)
-    MULTIPLY        reduce using rule 138 (factor -> factor_exp .)
-    DIVIDE          reduce using rule 138 (factor -> factor_exp .)
-    MODULE          reduce using rule 138 (factor -> factor_exp .)
-    PLUS            reduce using rule 138 (factor -> factor_exp .)
-    MINUS           reduce using rule 138 (factor -> factor_exp .)
-    EQUAL           reduce using rule 138 (factor -> factor_exp .)
-    NOTEQUAL        reduce using rule 138 (factor -> factor_exp .)
-    LTHAN           reduce using rule 138 (factor -> factor_exp .)
-    GTHAN           reduce using rule 138 (factor -> factor_exp .)
-    AND             reduce using rule 138 (factor -> factor_exp .)
-    OR              reduce using rule 138 (factor -> factor_exp .)
-    SEMICOLON       reduce using rule 138 (factor -> factor_exp .)
-    RPAREN          reduce using rule 138 (factor -> factor_exp .)
-    COMMA           reduce using rule 138 (factor -> factor_exp .)
-    RSQBRACKET      reduce using rule 138 (factor -> factor_exp .)
+    POWER           reduce using rule 140 (factor -> factor_exp .)
+    MULTIPLY        reduce using rule 140 (factor -> factor_exp .)
+    DIVIDE          reduce using rule 140 (factor -> factor_exp .)
+    MODULE          reduce using rule 140 (factor -> factor_exp .)
+    PLUS            reduce using rule 140 (factor -> factor_exp .)
+    MINUS           reduce using rule 140 (factor -> factor_exp .)
+    EQUAL           reduce using rule 140 (factor -> factor_exp .)
+    NOTEQUAL        reduce using rule 140 (factor -> factor_exp .)
+    LTHAN           reduce using rule 140 (factor -> factor_exp .)
+    GTHAN           reduce using rule 140 (factor -> factor_exp .)
+    AND             reduce using rule 140 (factor -> factor_exp .)
+    OR              reduce using rule 140 (factor -> factor_exp .)
+    SEMICOLON       reduce using rule 140 (factor -> factor_exp .)
+    RPAREN          reduce using rule 140 (factor -> factor_exp .)
+    COMMA           reduce using rule 140 (factor -> factor_exp .)
+    RSQBRACKET      reduce using rule 140 (factor -> factor_exp .)
 
 
 state 148
 
-    (139) factor -> factor_cte .
+    (141) factor -> factor_cte .
 
-    POWER           reduce using rule 139 (factor -> factor_cte .)
-    MULTIPLY        reduce using rule 139 (factor -> factor_cte .)
-    DIVIDE          reduce using rule 139 (factor -> factor_cte .)
-    MODULE          reduce using rule 139 (factor -> factor_cte .)
-    PLUS            reduce using rule 139 (factor -> factor_cte .)
-    MINUS           reduce using rule 139 (factor -> factor_cte .)
-    EQUAL           reduce using rule 139 (factor -> factor_cte .)
-    NOTEQUAL        reduce using rule 139 (factor -> factor_cte .)
-    LTHAN           reduce using rule 139 (factor -> factor_cte .)
-    GTHAN           reduce using rule 139 (factor -> factor_cte .)
-    AND             reduce using rule 139 (factor -> factor_cte .)
-    OR              reduce using rule 139 (factor -> factor_cte .)
-    SEMICOLON       reduce using rule 139 (factor -> factor_cte .)
-    RPAREN          reduce using rule 139 (factor -> factor_cte .)
-    COMMA           reduce using rule 139 (factor -> factor_cte .)
-    RSQBRACKET      reduce using rule 139 (factor -> factor_cte .)
+    POWER           reduce using rule 141 (factor -> factor_cte .)
+    MULTIPLY        reduce using rule 141 (factor -> factor_cte .)
+    DIVIDE          reduce using rule 141 (factor -> factor_cte .)
+    MODULE          reduce using rule 141 (factor -> factor_cte .)
+    PLUS            reduce using rule 141 (factor -> factor_cte .)
+    MINUS           reduce using rule 141 (factor -> factor_cte .)
+    EQUAL           reduce using rule 141 (factor -> factor_cte .)
+    NOTEQUAL        reduce using rule 141 (factor -> factor_cte .)
+    LTHAN           reduce using rule 141 (factor -> factor_cte .)
+    GTHAN           reduce using rule 141 (factor -> factor_cte .)
+    AND             reduce using rule 141 (factor -> factor_cte .)
+    OR              reduce using rule 141 (factor -> factor_cte .)
+    SEMICOLON       reduce using rule 141 (factor -> factor_cte .)
+    RPAREN          reduce using rule 141 (factor -> factor_cte .)
+    COMMA           reduce using rule 141 (factor -> factor_cte .)
+    RSQBRACKET      reduce using rule 141 (factor -> factor_cte .)
 
 
 state 149
 
-    (141) factor -> call_function .
+    (143) factor -> call_function .
 
-    POWER           reduce using rule 141 (factor -> call_function .)
-    MULTIPLY        reduce using rule 141 (factor -> call_function .)
-    DIVIDE          reduce using rule 141 (factor -> call_function .)
-    MODULE          reduce using rule 141 (factor -> call_function .)
-    PLUS            reduce using rule 141 (factor -> call_function .)
-    MINUS           reduce using rule 141 (factor -> call_function .)
-    EQUAL           reduce using rule 141 (factor -> call_function .)
-    NOTEQUAL        reduce using rule 141 (factor -> call_function .)
-    LTHAN           reduce using rule 141 (factor -> call_function .)
-    GTHAN           reduce using rule 141 (factor -> call_function .)
-    AND             reduce using rule 141 (factor -> call_function .)
-    OR              reduce using rule 141 (factor -> call_function .)
-    SEMICOLON       reduce using rule 141 (factor -> call_function .)
-    RPAREN          reduce using rule 141 (factor -> call_function .)
-    COMMA           reduce using rule 141 (factor -> call_function .)
-    RSQBRACKET      reduce using rule 141 (factor -> call_function .)
+    POWER           reduce using rule 143 (factor -> call_function .)
+    MULTIPLY        reduce using rule 143 (factor -> call_function .)
+    DIVIDE          reduce using rule 143 (factor -> call_function .)
+    MODULE          reduce using rule 143 (factor -> call_function .)
+    PLUS            reduce using rule 143 (factor -> call_function .)
+    MINUS           reduce using rule 143 (factor -> call_function .)
+    EQUAL           reduce using rule 143 (factor -> call_function .)
+    NOTEQUAL        reduce using rule 143 (factor -> call_function .)
+    LTHAN           reduce using rule 143 (factor -> call_function .)
+    GTHAN           reduce using rule 143 (factor -> call_function .)
+    AND             reduce using rule 143 (factor -> call_function .)
+    OR              reduce using rule 143 (factor -> call_function .)
+    SEMICOLON       reduce using rule 143 (factor -> call_function .)
+    RPAREN          reduce using rule 143 (factor -> call_function .)
+    COMMA           reduce using rule 143 (factor -> call_function .)
+    RSQBRACKET      reduce using rule 143 (factor -> call_function .)
 
 
 state 150
 
-    (143) factor_cte -> CTE_FLOAT .
+    (145) factor_cte -> CTE_FLOAT .
 
-    POWER           reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    MULTIPLY        reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    DIVIDE          reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    MODULE          reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    PLUS            reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    MINUS           reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    EQUAL           reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    NOTEQUAL        reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    LTHAN           reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    GTHAN           reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    AND             reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    OR              reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    SEMICOLON       reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    RPAREN          reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    COMMA           reduce using rule 143 (factor_cte -> CTE_FLOAT .)
-    RSQBRACKET      reduce using rule 143 (factor_cte -> CTE_FLOAT .)
+    POWER           reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    MULTIPLY        reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    DIVIDE          reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    MODULE          reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    PLUS            reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    MINUS           reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    EQUAL           reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    NOTEQUAL        reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    LTHAN           reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    GTHAN           reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    AND             reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    OR              reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    SEMICOLON       reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    RPAREN          reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    COMMA           reduce using rule 145 (factor_cte -> CTE_FLOAT .)
+    RSQBRACKET      reduce using rule 145 (factor_cte -> CTE_FLOAT .)
 
 
 state 151
 
-    (144) factor_cte -> CTE_INT .
+    (146) factor_cte -> CTE_INT .
 
-    POWER           reduce using rule 144 (factor_cte -> CTE_INT .)
-    MULTIPLY        reduce using rule 144 (factor_cte -> CTE_INT .)
-    DIVIDE          reduce using rule 144 (factor_cte -> CTE_INT .)
-    MODULE          reduce using rule 144 (factor_cte -> CTE_INT .)
-    PLUS            reduce using rule 144 (factor_cte -> CTE_INT .)
-    MINUS           reduce using rule 144 (factor_cte -> CTE_INT .)
-    EQUAL           reduce using rule 144 (factor_cte -> CTE_INT .)
-    NOTEQUAL        reduce using rule 144 (factor_cte -> CTE_INT .)
-    LTHAN           reduce using rule 144 (factor_cte -> CTE_INT .)
-    GTHAN           reduce using rule 144 (factor_cte -> CTE_INT .)
-    AND             reduce using rule 144 (factor_cte -> CTE_INT .)
-    OR              reduce using rule 144 (factor_cte -> CTE_INT .)
-    SEMICOLON       reduce using rule 144 (factor_cte -> CTE_INT .)
-    RPAREN          reduce using rule 144 (factor_cte -> CTE_INT .)
-    COMMA           reduce using rule 144 (factor_cte -> CTE_INT .)
-    RSQBRACKET      reduce using rule 144 (factor_cte -> CTE_INT .)
+    POWER           reduce using rule 146 (factor_cte -> CTE_INT .)
+    MULTIPLY        reduce using rule 146 (factor_cte -> CTE_INT .)
+    DIVIDE          reduce using rule 146 (factor_cte -> CTE_INT .)
+    MODULE          reduce using rule 146 (factor_cte -> CTE_INT .)
+    PLUS            reduce using rule 146 (factor_cte -> CTE_INT .)
+    MINUS           reduce using rule 146 (factor_cte -> CTE_INT .)
+    EQUAL           reduce using rule 146 (factor_cte -> CTE_INT .)
+    NOTEQUAL        reduce using rule 146 (factor_cte -> CTE_INT .)
+    LTHAN           reduce using rule 146 (factor_cte -> CTE_INT .)
+    GTHAN           reduce using rule 146 (factor_cte -> CTE_INT .)
+    AND             reduce using rule 146 (factor_cte -> CTE_INT .)
+    OR              reduce using rule 146 (factor_cte -> CTE_INT .)
+    SEMICOLON       reduce using rule 146 (factor_cte -> CTE_INT .)
+    RPAREN          reduce using rule 146 (factor_cte -> CTE_INT .)
+    COMMA           reduce using rule 146 (factor_cte -> CTE_INT .)
+    RSQBRACKET      reduce using rule 146 (factor_cte -> CTE_INT .)
 
 
 state 152
 
-    (145) factor_cte -> CTE_CHAR .
+    (147) factor_cte -> CTE_CHAR .
 
-    POWER           reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    MULTIPLY        reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    DIVIDE          reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    MODULE          reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    PLUS            reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    MINUS           reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    EQUAL           reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    NOTEQUAL        reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    LTHAN           reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    GTHAN           reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    AND             reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    OR              reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    SEMICOLON       reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    RPAREN          reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    COMMA           reduce using rule 145 (factor_cte -> CTE_CHAR .)
-    RSQBRACKET      reduce using rule 145 (factor_cte -> CTE_CHAR .)
+    POWER           reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    MULTIPLY        reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    DIVIDE          reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    MODULE          reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    PLUS            reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    MINUS           reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    EQUAL           reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    NOTEQUAL        reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    LTHAN           reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    GTHAN           reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    AND             reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    OR              reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    SEMICOLON       reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    RPAREN          reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    COMMA           reduce using rule 147 (factor_cte -> CTE_CHAR .)
+    RSQBRACKET      reduce using rule 147 (factor_cte -> CTE_CHAR .)
 
 
 state 153
@@ -2421,7 +2427,7 @@ state 153
     COMMA           reduce using rule 3 (empty -> .)
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    empty                          shift and go to state 207
+    empty                          shift and go to state 208
 
 state 154
 
@@ -2445,14 +2451,14 @@ state 155
 
     (64) condition -> IF LPAREN exp . RPAREN body condition2 SEMICOLON
 
-    RPAREN          shift and go to state 208
+    RPAREN          shift and go to state 209
 
 
 state 156
 
     (67) print -> PRINT LPAREN print_many . RPAREN SEMICOLON
 
-    RPAREN          shift and go to state 209
+    RPAREN          shift and go to state 210
 
 
 state 157
@@ -2462,11 +2468,11 @@ state 157
     (71) print_many2 -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 211
+    COMMA           shift and go to state 212
     RPAREN          reduce using rule 3 (empty -> .)
 
-    print_many2                    shift and go to state 210
-    empty                          shift and go to state 212
+    print_many2                    shift and go to state 211
+    empty                          shift and go to state 213
 
 state 158
 
@@ -2483,38 +2489,38 @@ state 159
     (82) exp_many -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 214
+    COMMA           shift and go to state 215
     RPAREN          reduce using rule 3 (empty -> .)
 
-    exp_many                       shift and go to state 213
-    empty                          shift and go to state 215
+    exp_many                       shift and go to state 214
+    empty                          shift and go to state 216
 
 state 160
 
     (36) variable_array -> LSQBRACKET exp . RSQBRACKET variable_matrix
 
-    RSQBRACKET      shift and go to state 216
+    RSQBRACKET      shift and go to state 217
 
 
 state 161
 
     (76) for -> FOR LPAREN ID . TO for_end RPAREN body SEMICOLON
 
-    TO              shift and go to state 217
+    TO              shift and go to state 218
 
 
 state 162
 
     (75) while -> DO body WHILE . LPAREN exp RPAREN SEMICOLON
 
-    LPAREN          shift and go to state 218
+    LPAREN          shift and go to state 219
 
 
 state 163
 
     (55) body -> LBRACKET inner_body . RBRACKET
 
-    RBRACKET        shift and go to state 219
+    RBRACKET        shift and go to state 220
 
 
 state 164
@@ -2533,7 +2539,7 @@ state 164
     RETURN          reduce using rule 3 (empty -> .)
     RBRACKET        reduce using rule 3 (empty -> .)
 
-    program_vars                   shift and go to state 220
+    program_vars                   shift and go to state 221
     empty                          shift and go to state 11
 
 state 165
@@ -2543,11 +2549,11 @@ state 165
     (49) param2 -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 222
+    COMMA           shift and go to state 223
     RPAREN          reduce using rule 3 (empty -> .)
 
-    param2                         shift and go to state 221
-    empty                          shift and go to state 223
+    param2                         shift and go to state 222
+    empty                          shift and go to state 224
 
 state 166
 
@@ -2567,7 +2573,7 @@ state 167
     COMMA           shift and go to state 69
     SEMICOLON       reduce using rule 3 (empty -> .)
 
-    var_s_type2                    shift and go to state 224
+    var_s_type2                    shift and go to state 225
     empty                          shift and go to state 70
 
 state 168
@@ -2604,7 +2610,7 @@ state 170
     RBRACKET        reduce using rule 3 (empty -> .)
     RETURN          reduce using rule 3 (empty -> .)
 
-    empty                          shift and go to state 225
+    empty                          shift and go to state 226
 
 state 171
 
@@ -2618,21 +2624,21 @@ state 171
 
 state 172
 
-    (111) exp_or -> OR . exp
+    (111) exp_or -> exp_keep_or . exp
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -2644,7 +2650,7 @@ state 172
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    exp                            shift and go to state 226
+    exp                            shift and go to state 227
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
     m_exp                          shift and go to state 143
@@ -2670,524 +2676,48 @@ state 173
 
 state 174
 
+    (113) exp_keep_or -> OR .
+
+    LPAREN          reduce using rule 113 (exp_keep_or -> OR .)
+    CTE_FLOAT       reduce using rule 113 (exp_keep_or -> OR .)
+    CTE_INT         reduce using rule 113 (exp_keep_or -> OR .)
+    CTE_CHAR        reduce using rule 113 (exp_keep_or -> OR .)
+    ID              reduce using rule 113 (exp_keep_or -> OR .)
+
+
+state 175
+
     (72) read -> READ LPAREN . variable RPAREN
     (35) variable -> . id_saver variable_array
     (4) id_saver -> . ID empty
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 227
+    variable                       shift and go to state 228
     id_saver                       shift and go to state 87
-
-state 175
-
-    (142) factor_exp -> LPAREN exp . RPAREN
-
-    RPAREN          shift and go to state 228
-
 
 state 176
 
-    (113) t_exp -> expression t_exp_and .
+    (144) factor_exp -> LPAREN exp . RPAREN
 
-    OR              reduce using rule 113 (t_exp -> expression t_exp_and .)
-    SEMICOLON       reduce using rule 113 (t_exp -> expression t_exp_and .)
-    RPAREN          reduce using rule 113 (t_exp -> expression t_exp_and .)
-    COMMA           reduce using rule 113 (t_exp -> expression t_exp_and .)
-    RSQBRACKET      reduce using rule 113 (t_exp -> expression t_exp_and .)
+    RPAREN          shift and go to state 229
 
 
 state 177
 
-    (114) t_exp_and -> AND . t_exp
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
-    (35) variable -> . id_saver variable_array
-    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
-    (4) id_saver -> . ID empty
-    (80) function_saver -> . ID empty
+    (114) t_exp -> expression t_exp_and .
 
-    LPAREN          shift and go to state 135
-    CTE_FLOAT       shift and go to state 150
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 152
-    ID              shift and go to state 153
+    OR              reduce using rule 114 (t_exp -> expression t_exp_and .)
+    SEMICOLON       reduce using rule 114 (t_exp -> expression t_exp_and .)
+    RPAREN          reduce using rule 114 (t_exp -> expression t_exp_and .)
+    COMMA           reduce using rule 114 (t_exp -> expression t_exp_and .)
+    RSQBRACKET      reduce using rule 114 (t_exp -> expression t_exp_and .)
 
-    t_exp                          shift and go to state 229
-    expression                     shift and go to state 136
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
-    variable                       shift and go to state 122
-    call_function                  shift and go to state 149
-    id_saver                       shift and go to state 87
-    function_saver                 shift and go to state 86
 
 state 178
 
-    (115) t_exp_and -> empty .
-
-    OR              reduce using rule 115 (t_exp_and -> empty .)
-    SEMICOLON       reduce using rule 115 (t_exp_and -> empty .)
-    RPAREN          reduce using rule 115 (t_exp_and -> empty .)
-    COMMA           reduce using rule 115 (t_exp_and -> empty .)
-    RSQBRACKET      reduce using rule 115 (t_exp_and -> empty .)
-
-
-state 179
-
-    (94) exploration -> EXPLORATION LPAREN . variable explore_var explor_cte RPAREN
-    (35) variable -> . id_saver variable_array
-    (4) id_saver -> . ID empty
-
-    ID              shift and go to state 37
-
-    variable                       shift and go to state 230
-    id_saver                       shift and go to state 87
-
-state 180
-
-    (99) financial_state -> FINANCIAL_STATE LPAREN . variable COMMA variable COMMA variable COMMA variable RPAREN
-    (35) variable -> . id_saver variable_array
-    (4) id_saver -> . ID empty
-
-    ID              shift and go to state 37
-
-    variable                       shift and go to state 231
-    id_saver                       shift and go to state 87
-
-state 181
-
-    (102) dummi_regression -> DUMMI_REGRESSION LPAREN . variable COMMA variable dr_array dr_int RPAREN
-    (35) variable -> . id_saver variable_array
-    (4) id_saver -> . ID empty
-
-    ID              shift and go to state 37
-
-    variable                       shift and go to state 232
-    id_saver                       shift and go to state 87
-
-state 182
-
-    (100) season_analysis -> SEASON_ANALYSIS LPAREN . variable RPAREN
-    (35) variable -> . id_saver variable_array
-    (4) id_saver -> . ID empty
-
-    ID              shift and go to state 37
-
-    variable                       shift and go to state 233
-    id_saver                       shift and go to state 87
-
-state 183
-
-    (101) trend_prediction -> TREND_PREDICTION LPAREN . variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN
-    (35) variable -> . id_saver variable_array
-    (4) id_saver -> . ID empty
-
-    ID              shift and go to state 37
-
-    variable                       shift and go to state 234
-    id_saver                       shift and go to state 87
-
-state 184
-
-    (109) model_predict -> MODEL_PREDICT LPAREN . variable COMMA variable COMMA RPAREN
-    (35) variable -> . id_saver variable_array
-    (4) id_saver -> . ID empty
-
-    ID              shift and go to state 37
-
-    variable                       shift and go to state 235
-    id_saver                       shift and go to state 87
-
-state 185
-
-    (116) expression -> m_exp expression_comp .
-
-    AND             reduce using rule 116 (expression -> m_exp expression_comp .)
-    OR              reduce using rule 116 (expression -> m_exp expression_comp .)
-    SEMICOLON       reduce using rule 116 (expression -> m_exp expression_comp .)
-    RPAREN          reduce using rule 116 (expression -> m_exp expression_comp .)
-    COMMA           reduce using rule 116 (expression -> m_exp expression_comp .)
-    RSQBRACKET      reduce using rule 116 (expression -> m_exp expression_comp .)
-
-
-state 186
-
-    (117) expression_comp -> expression_comp_2 . m_exp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
-    (35) variable -> . id_saver variable_array
-    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
-    (4) id_saver -> . ID empty
-    (80) function_saver -> . ID empty
-
-    LPAREN          shift and go to state 135
-    CTE_FLOAT       shift and go to state 150
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 152
-    ID              shift and go to state 153
-
-    m_exp                          shift and go to state 236
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
-    variable                       shift and go to state 122
-    call_function                  shift and go to state 149
-    id_saver                       shift and go to state 87
-    function_saver                 shift and go to state 86
-
-state 187
-
-    (118) expression_comp -> empty .
-
-    AND             reduce using rule 118 (expression_comp -> empty .)
-    OR              reduce using rule 118 (expression_comp -> empty .)
-    SEMICOLON       reduce using rule 118 (expression_comp -> empty .)
-    RPAREN          reduce using rule 118 (expression_comp -> empty .)
-    COMMA           reduce using rule 118 (expression_comp -> empty .)
-    RSQBRACKET      reduce using rule 118 (expression_comp -> empty .)
-
-
-state 188
-
-    (119) expression_comp_2 -> EQUAL .
-
-    LPAREN          reduce using rule 119 (expression_comp_2 -> EQUAL .)
-    CTE_FLOAT       reduce using rule 119 (expression_comp_2 -> EQUAL .)
-    CTE_INT         reduce using rule 119 (expression_comp_2 -> EQUAL .)
-    CTE_CHAR        reduce using rule 119 (expression_comp_2 -> EQUAL .)
-    ID              reduce using rule 119 (expression_comp_2 -> EQUAL .)
-
-
-state 189
-
-    (120) expression_comp_2 -> NOTEQUAL .
-
-    LPAREN          reduce using rule 120 (expression_comp_2 -> NOTEQUAL .)
-    CTE_FLOAT       reduce using rule 120 (expression_comp_2 -> NOTEQUAL .)
-    CTE_INT         reduce using rule 120 (expression_comp_2 -> NOTEQUAL .)
-    CTE_CHAR        reduce using rule 120 (expression_comp_2 -> NOTEQUAL .)
-    ID              reduce using rule 120 (expression_comp_2 -> NOTEQUAL .)
-
-
-state 190
-
-    (121) expression_comp_2 -> LTHAN .
-
-    LPAREN          reduce using rule 121 (expression_comp_2 -> LTHAN .)
-    CTE_FLOAT       reduce using rule 121 (expression_comp_2 -> LTHAN .)
-    CTE_INT         reduce using rule 121 (expression_comp_2 -> LTHAN .)
-    CTE_CHAR        reduce using rule 121 (expression_comp_2 -> LTHAN .)
-    ID              reduce using rule 121 (expression_comp_2 -> LTHAN .)
-
-
-state 191
-
-    (122) expression_comp_2 -> GTHAN .
-
-    LPAREN          reduce using rule 122 (expression_comp_2 -> GTHAN .)
-    CTE_FLOAT       reduce using rule 122 (expression_comp_2 -> GTHAN .)
-    CTE_INT         reduce using rule 122 (expression_comp_2 -> GTHAN .)
-    CTE_CHAR        reduce using rule 122 (expression_comp_2 -> GTHAN .)
-    ID              reduce using rule 122 (expression_comp_2 -> GTHAN .)
-
-
-state 192
-
-    (123) m_exp -> term m_exp_sr .
-
-    EQUAL           reduce using rule 123 (m_exp -> term m_exp_sr .)
-    NOTEQUAL        reduce using rule 123 (m_exp -> term m_exp_sr .)
-    LTHAN           reduce using rule 123 (m_exp -> term m_exp_sr .)
-    GTHAN           reduce using rule 123 (m_exp -> term m_exp_sr .)
-    AND             reduce using rule 123 (m_exp -> term m_exp_sr .)
-    OR              reduce using rule 123 (m_exp -> term m_exp_sr .)
-    SEMICOLON       reduce using rule 123 (m_exp -> term m_exp_sr .)
-    RPAREN          reduce using rule 123 (m_exp -> term m_exp_sr .)
-    COMMA           reduce using rule 123 (m_exp -> term m_exp_sr .)
-    RSQBRACKET      reduce using rule 123 (m_exp -> term m_exp_sr .)
-
-
-state 193
-
-    (124) m_exp_sr -> m_exp_sr_2 . m_exp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
-    (35) variable -> . id_saver variable_array
-    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
-    (4) id_saver -> . ID empty
-    (80) function_saver -> . ID empty
-
-    LPAREN          shift and go to state 135
-    CTE_FLOAT       shift and go to state 150
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 152
-    ID              shift and go to state 153
-
-    m_exp                          shift and go to state 237
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
-    variable                       shift and go to state 122
-    call_function                  shift and go to state 149
-    id_saver                       shift and go to state 87
-    function_saver                 shift and go to state 86
-
-state 194
-
-    (125) m_exp_sr -> empty .
-
-    EQUAL           reduce using rule 125 (m_exp_sr -> empty .)
-    NOTEQUAL        reduce using rule 125 (m_exp_sr -> empty .)
-    LTHAN           reduce using rule 125 (m_exp_sr -> empty .)
-    GTHAN           reduce using rule 125 (m_exp_sr -> empty .)
-    AND             reduce using rule 125 (m_exp_sr -> empty .)
-    OR              reduce using rule 125 (m_exp_sr -> empty .)
-    SEMICOLON       reduce using rule 125 (m_exp_sr -> empty .)
-    RPAREN          reduce using rule 125 (m_exp_sr -> empty .)
-    COMMA           reduce using rule 125 (m_exp_sr -> empty .)
-    RSQBRACKET      reduce using rule 125 (m_exp_sr -> empty .)
-
-
-state 195
-
-    (126) m_exp_sr_2 -> PLUS .
-
-    LPAREN          reduce using rule 126 (m_exp_sr_2 -> PLUS .)
-    CTE_FLOAT       reduce using rule 126 (m_exp_sr_2 -> PLUS .)
-    CTE_INT         reduce using rule 126 (m_exp_sr_2 -> PLUS .)
-    CTE_CHAR        reduce using rule 126 (m_exp_sr_2 -> PLUS .)
-    ID              reduce using rule 126 (m_exp_sr_2 -> PLUS .)
-
-
-state 196
-
-    (127) m_exp_sr_2 -> MINUS .
-
-    LPAREN          reduce using rule 127 (m_exp_sr_2 -> MINUS .)
-    CTE_FLOAT       reduce using rule 127 (m_exp_sr_2 -> MINUS .)
-    CTE_INT         reduce using rule 127 (m_exp_sr_2 -> MINUS .)
-    CTE_CHAR        reduce using rule 127 (m_exp_sr_2 -> MINUS .)
-    ID              reduce using rule 127 (m_exp_sr_2 -> MINUS .)
-
-
-state 197
-
-    (128) term -> sub_factor term_pc .
-
-    PLUS            reduce using rule 128 (term -> sub_factor term_pc .)
-    MINUS           reduce using rule 128 (term -> sub_factor term_pc .)
-    EQUAL           reduce using rule 128 (term -> sub_factor term_pc .)
-    NOTEQUAL        reduce using rule 128 (term -> sub_factor term_pc .)
-    LTHAN           reduce using rule 128 (term -> sub_factor term_pc .)
-    GTHAN           reduce using rule 128 (term -> sub_factor term_pc .)
-    AND             reduce using rule 128 (term -> sub_factor term_pc .)
-    OR              reduce using rule 128 (term -> sub_factor term_pc .)
-    SEMICOLON       reduce using rule 128 (term -> sub_factor term_pc .)
-    RPAREN          reduce using rule 128 (term -> sub_factor term_pc .)
-    COMMA           reduce using rule 128 (term -> sub_factor term_pc .)
-    RSQBRACKET      reduce using rule 128 (term -> sub_factor term_pc .)
-
-
-state 198
-
-    (129) term_pc -> term_pc_2 . term
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
-    (35) variable -> . id_saver variable_array
-    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
-    (4) id_saver -> . ID empty
-    (80) function_saver -> . ID empty
-
-    LPAREN          shift and go to state 135
-    CTE_FLOAT       shift and go to state 150
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 152
-    ID              shift and go to state 153
-
-    term                           shift and go to state 238
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
-    variable                       shift and go to state 122
-    call_function                  shift and go to state 149
-    id_saver                       shift and go to state 87
-    function_saver                 shift and go to state 86
-
-state 199
-
-    (130) term_pc -> empty .
-
-    PLUS            reduce using rule 130 (term_pc -> empty .)
-    MINUS           reduce using rule 130 (term_pc -> empty .)
-    EQUAL           reduce using rule 130 (term_pc -> empty .)
-    NOTEQUAL        reduce using rule 130 (term_pc -> empty .)
-    LTHAN           reduce using rule 130 (term_pc -> empty .)
-    GTHAN           reduce using rule 130 (term_pc -> empty .)
-    AND             reduce using rule 130 (term_pc -> empty .)
-    OR              reduce using rule 130 (term_pc -> empty .)
-    SEMICOLON       reduce using rule 130 (term_pc -> empty .)
-    RPAREN          reduce using rule 130 (term_pc -> empty .)
-    COMMA           reduce using rule 130 (term_pc -> empty .)
-    RSQBRACKET      reduce using rule 130 (term_pc -> empty .)
-
-
-state 200
-
-    (131) term_pc_2 -> MULTIPLY .
-
-    LPAREN          reduce using rule 131 (term_pc_2 -> MULTIPLY .)
-    CTE_FLOAT       reduce using rule 131 (term_pc_2 -> MULTIPLY .)
-    CTE_INT         reduce using rule 131 (term_pc_2 -> MULTIPLY .)
-    CTE_CHAR        reduce using rule 131 (term_pc_2 -> MULTIPLY .)
-    ID              reduce using rule 131 (term_pc_2 -> MULTIPLY .)
-
-
-state 201
-
-    (132) term_pc_2 -> DIVIDE .
-
-    LPAREN          reduce using rule 132 (term_pc_2 -> DIVIDE .)
-    CTE_FLOAT       reduce using rule 132 (term_pc_2 -> DIVIDE .)
-    CTE_INT         reduce using rule 132 (term_pc_2 -> DIVIDE .)
-    CTE_CHAR        reduce using rule 132 (term_pc_2 -> DIVIDE .)
-    ID              reduce using rule 132 (term_pc_2 -> DIVIDE .)
-
-
-state 202
-
-    (133) term_pc_2 -> MODULE .
-
-    LPAREN          reduce using rule 133 (term_pc_2 -> MODULE .)
-    CTE_FLOAT       reduce using rule 133 (term_pc_2 -> MODULE .)
-    CTE_INT         reduce using rule 133 (term_pc_2 -> MODULE .)
-    CTE_CHAR        reduce using rule 133 (term_pc_2 -> MODULE .)
-    ID              reduce using rule 133 (term_pc_2 -> MODULE .)
-
-
-state 203
-
-    (134) sub_factor -> factor sub_factor_pc .
-
-    MULTIPLY        reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    DIVIDE          reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    MODULE          reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    PLUS            reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    MINUS           reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    EQUAL           reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    NOTEQUAL        reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    LTHAN           reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    GTHAN           reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    AND             reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    OR              reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    SEMICOLON       reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    RPAREN          reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    COMMA           reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-    RSQBRACKET      reduce using rule 134 (sub_factor -> factor sub_factor_pc .)
-
-
-state 204
-
-    (135) sub_factor_pc -> sub_factor_pc_2 . sub_factor
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
-    (35) variable -> . id_saver variable_array
-    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
-    (4) id_saver -> . ID empty
-    (80) function_saver -> . ID empty
-
-    LPAREN          shift and go to state 135
-    CTE_FLOAT       shift and go to state 150
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 152
-    ID              shift and go to state 153
-
-    sub_factor                     shift and go to state 239
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
-    variable                       shift and go to state 122
-    call_function                  shift and go to state 149
-    id_saver                       shift and go to state 87
-    function_saver                 shift and go to state 86
-
-state 205
-
-    (136) sub_factor_pc -> empty .
-
-    MULTIPLY        reduce using rule 136 (sub_factor_pc -> empty .)
-    DIVIDE          reduce using rule 136 (sub_factor_pc -> empty .)
-    MODULE          reduce using rule 136 (sub_factor_pc -> empty .)
-    PLUS            reduce using rule 136 (sub_factor_pc -> empty .)
-    MINUS           reduce using rule 136 (sub_factor_pc -> empty .)
-    EQUAL           reduce using rule 136 (sub_factor_pc -> empty .)
-    NOTEQUAL        reduce using rule 136 (sub_factor_pc -> empty .)
-    LTHAN           reduce using rule 136 (sub_factor_pc -> empty .)
-    GTHAN           reduce using rule 136 (sub_factor_pc -> empty .)
-    AND             reduce using rule 136 (sub_factor_pc -> empty .)
-    OR              reduce using rule 136 (sub_factor_pc -> empty .)
-    SEMICOLON       reduce using rule 136 (sub_factor_pc -> empty .)
-    RPAREN          reduce using rule 136 (sub_factor_pc -> empty .)
-    COMMA           reduce using rule 136 (sub_factor_pc -> empty .)
-    RSQBRACKET      reduce using rule 136 (sub_factor_pc -> empty .)
-
-
-state 206
-
-    (137) sub_factor_pc_2 -> POWER . empty
+    (115) t_exp_and -> AND . keep_and t_exp
+    (117) keep_and -> . empty
     (3) empty -> .
 
     LPAREN          reduce using rule 3 (empty -> .)
@@ -3196,9 +2726,471 @@ state 206
     CTE_CHAR        reduce using rule 3 (empty -> .)
     ID              reduce using rule 3 (empty -> .)
 
-    empty                          shift and go to state 240
+    keep_and                       shift and go to state 230
+    empty                          shift and go to state 231
+
+state 179
+
+    (116) t_exp_and -> empty .
+
+    OR              reduce using rule 116 (t_exp_and -> empty .)
+    SEMICOLON       reduce using rule 116 (t_exp_and -> empty .)
+    RPAREN          reduce using rule 116 (t_exp_and -> empty .)
+    COMMA           reduce using rule 116 (t_exp_and -> empty .)
+    RSQBRACKET      reduce using rule 116 (t_exp_and -> empty .)
+
+
+state 180
+
+    (94) exploration -> EXPLORATION LPAREN . variable explore_var explor_cte RPAREN
+    (35) variable -> . id_saver variable_array
+    (4) id_saver -> . ID empty
+
+    ID              shift and go to state 37
+
+    variable                       shift and go to state 232
+    id_saver                       shift and go to state 87
+
+state 181
+
+    (99) financial_state -> FINANCIAL_STATE LPAREN . variable COMMA variable COMMA variable COMMA variable RPAREN
+    (35) variable -> . id_saver variable_array
+    (4) id_saver -> . ID empty
+
+    ID              shift and go to state 37
+
+    variable                       shift and go to state 233
+    id_saver                       shift and go to state 87
+
+state 182
+
+    (102) dummi_regression -> DUMMI_REGRESSION LPAREN . variable COMMA variable dr_array dr_int RPAREN
+    (35) variable -> . id_saver variable_array
+    (4) id_saver -> . ID empty
+
+    ID              shift and go to state 37
+
+    variable                       shift and go to state 234
+    id_saver                       shift and go to state 87
+
+state 183
+
+    (100) season_analysis -> SEASON_ANALYSIS LPAREN . variable RPAREN
+    (35) variable -> . id_saver variable_array
+    (4) id_saver -> . ID empty
+
+    ID              shift and go to state 37
+
+    variable                       shift and go to state 235
+    id_saver                       shift and go to state 87
+
+state 184
+
+    (101) trend_prediction -> TREND_PREDICTION LPAREN . variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN
+    (35) variable -> . id_saver variable_array
+    (4) id_saver -> . ID empty
+
+    ID              shift and go to state 37
+
+    variable                       shift and go to state 236
+    id_saver                       shift and go to state 87
+
+state 185
+
+    (109) model_predict -> MODEL_PREDICT LPAREN . variable COMMA variable COMMA RPAREN
+    (35) variable -> . id_saver variable_array
+    (4) id_saver -> . ID empty
+
+    ID              shift and go to state 37
+
+    variable                       shift and go to state 237
+    id_saver                       shift and go to state 87
+
+state 186
+
+    (118) expression -> m_exp expression_comp .
+
+    AND             reduce using rule 118 (expression -> m_exp expression_comp .)
+    OR              reduce using rule 118 (expression -> m_exp expression_comp .)
+    SEMICOLON       reduce using rule 118 (expression -> m_exp expression_comp .)
+    RPAREN          reduce using rule 118 (expression -> m_exp expression_comp .)
+    COMMA           reduce using rule 118 (expression -> m_exp expression_comp .)
+    RSQBRACKET      reduce using rule 118 (expression -> m_exp expression_comp .)
+
+
+state 187
+
+    (119) expression_comp -> expression_comp_2 . m_exp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
+    (35) variable -> . id_saver variable_array
+    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
+    (4) id_saver -> . ID empty
+    (80) function_saver -> . ID empty
+
+    LPAREN          shift and go to state 135
+    CTE_FLOAT       shift and go to state 150
+    CTE_INT         shift and go to state 151
+    CTE_CHAR        shift and go to state 152
+    ID              shift and go to state 153
+
+    m_exp                          shift and go to state 238
+    term                           shift and go to state 144
+    sub_factor                     shift and go to state 145
+    factor                         shift and go to state 146
+    factor_exp                     shift and go to state 147
+    factor_cte                     shift and go to state 148
+    variable                       shift and go to state 122
+    call_function                  shift and go to state 149
+    id_saver                       shift and go to state 87
+    function_saver                 shift and go to state 86
+
+state 188
+
+    (120) expression_comp -> empty .
+
+    AND             reduce using rule 120 (expression_comp -> empty .)
+    OR              reduce using rule 120 (expression_comp -> empty .)
+    SEMICOLON       reduce using rule 120 (expression_comp -> empty .)
+    RPAREN          reduce using rule 120 (expression_comp -> empty .)
+    COMMA           reduce using rule 120 (expression_comp -> empty .)
+    RSQBRACKET      reduce using rule 120 (expression_comp -> empty .)
+
+
+state 189
+
+    (121) expression_comp_2 -> EQUAL .
+
+    LPAREN          reduce using rule 121 (expression_comp_2 -> EQUAL .)
+    CTE_FLOAT       reduce using rule 121 (expression_comp_2 -> EQUAL .)
+    CTE_INT         reduce using rule 121 (expression_comp_2 -> EQUAL .)
+    CTE_CHAR        reduce using rule 121 (expression_comp_2 -> EQUAL .)
+    ID              reduce using rule 121 (expression_comp_2 -> EQUAL .)
+
+
+state 190
+
+    (122) expression_comp_2 -> NOTEQUAL .
+
+    LPAREN          reduce using rule 122 (expression_comp_2 -> NOTEQUAL .)
+    CTE_FLOAT       reduce using rule 122 (expression_comp_2 -> NOTEQUAL .)
+    CTE_INT         reduce using rule 122 (expression_comp_2 -> NOTEQUAL .)
+    CTE_CHAR        reduce using rule 122 (expression_comp_2 -> NOTEQUAL .)
+    ID              reduce using rule 122 (expression_comp_2 -> NOTEQUAL .)
+
+
+state 191
+
+    (123) expression_comp_2 -> LTHAN .
+
+    LPAREN          reduce using rule 123 (expression_comp_2 -> LTHAN .)
+    CTE_FLOAT       reduce using rule 123 (expression_comp_2 -> LTHAN .)
+    CTE_INT         reduce using rule 123 (expression_comp_2 -> LTHAN .)
+    CTE_CHAR        reduce using rule 123 (expression_comp_2 -> LTHAN .)
+    ID              reduce using rule 123 (expression_comp_2 -> LTHAN .)
+
+
+state 192
+
+    (124) expression_comp_2 -> GTHAN .
+
+    LPAREN          reduce using rule 124 (expression_comp_2 -> GTHAN .)
+    CTE_FLOAT       reduce using rule 124 (expression_comp_2 -> GTHAN .)
+    CTE_INT         reduce using rule 124 (expression_comp_2 -> GTHAN .)
+    CTE_CHAR        reduce using rule 124 (expression_comp_2 -> GTHAN .)
+    ID              reduce using rule 124 (expression_comp_2 -> GTHAN .)
+
+
+state 193
+
+    (125) m_exp -> term m_exp_sr .
+
+    EQUAL           reduce using rule 125 (m_exp -> term m_exp_sr .)
+    NOTEQUAL        reduce using rule 125 (m_exp -> term m_exp_sr .)
+    LTHAN           reduce using rule 125 (m_exp -> term m_exp_sr .)
+    GTHAN           reduce using rule 125 (m_exp -> term m_exp_sr .)
+    AND             reduce using rule 125 (m_exp -> term m_exp_sr .)
+    OR              reduce using rule 125 (m_exp -> term m_exp_sr .)
+    SEMICOLON       reduce using rule 125 (m_exp -> term m_exp_sr .)
+    RPAREN          reduce using rule 125 (m_exp -> term m_exp_sr .)
+    COMMA           reduce using rule 125 (m_exp -> term m_exp_sr .)
+    RSQBRACKET      reduce using rule 125 (m_exp -> term m_exp_sr .)
+
+
+state 194
+
+    (126) m_exp_sr -> m_exp_sr_2 . m_exp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
+    (35) variable -> . id_saver variable_array
+    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
+    (4) id_saver -> . ID empty
+    (80) function_saver -> . ID empty
+
+    LPAREN          shift and go to state 135
+    CTE_FLOAT       shift and go to state 150
+    CTE_INT         shift and go to state 151
+    CTE_CHAR        shift and go to state 152
+    ID              shift and go to state 153
+
+    m_exp                          shift and go to state 239
+    term                           shift and go to state 144
+    sub_factor                     shift and go to state 145
+    factor                         shift and go to state 146
+    factor_exp                     shift and go to state 147
+    factor_cte                     shift and go to state 148
+    variable                       shift and go to state 122
+    call_function                  shift and go to state 149
+    id_saver                       shift and go to state 87
+    function_saver                 shift and go to state 86
+
+state 195
+
+    (127) m_exp_sr -> empty .
+
+    EQUAL           reduce using rule 127 (m_exp_sr -> empty .)
+    NOTEQUAL        reduce using rule 127 (m_exp_sr -> empty .)
+    LTHAN           reduce using rule 127 (m_exp_sr -> empty .)
+    GTHAN           reduce using rule 127 (m_exp_sr -> empty .)
+    AND             reduce using rule 127 (m_exp_sr -> empty .)
+    OR              reduce using rule 127 (m_exp_sr -> empty .)
+    SEMICOLON       reduce using rule 127 (m_exp_sr -> empty .)
+    RPAREN          reduce using rule 127 (m_exp_sr -> empty .)
+    COMMA           reduce using rule 127 (m_exp_sr -> empty .)
+    RSQBRACKET      reduce using rule 127 (m_exp_sr -> empty .)
+
+
+state 196
+
+    (128) m_exp_sr_2 -> PLUS .
+
+    LPAREN          reduce using rule 128 (m_exp_sr_2 -> PLUS .)
+    CTE_FLOAT       reduce using rule 128 (m_exp_sr_2 -> PLUS .)
+    CTE_INT         reduce using rule 128 (m_exp_sr_2 -> PLUS .)
+    CTE_CHAR        reduce using rule 128 (m_exp_sr_2 -> PLUS .)
+    ID              reduce using rule 128 (m_exp_sr_2 -> PLUS .)
+
+
+state 197
+
+    (129) m_exp_sr_2 -> MINUS .
+
+    LPAREN          reduce using rule 129 (m_exp_sr_2 -> MINUS .)
+    CTE_FLOAT       reduce using rule 129 (m_exp_sr_2 -> MINUS .)
+    CTE_INT         reduce using rule 129 (m_exp_sr_2 -> MINUS .)
+    CTE_CHAR        reduce using rule 129 (m_exp_sr_2 -> MINUS .)
+    ID              reduce using rule 129 (m_exp_sr_2 -> MINUS .)
+
+
+state 198
+
+    (130) term -> sub_factor term_pc .
+
+    PLUS            reduce using rule 130 (term -> sub_factor term_pc .)
+    MINUS           reduce using rule 130 (term -> sub_factor term_pc .)
+    EQUAL           reduce using rule 130 (term -> sub_factor term_pc .)
+    NOTEQUAL        reduce using rule 130 (term -> sub_factor term_pc .)
+    LTHAN           reduce using rule 130 (term -> sub_factor term_pc .)
+    GTHAN           reduce using rule 130 (term -> sub_factor term_pc .)
+    AND             reduce using rule 130 (term -> sub_factor term_pc .)
+    OR              reduce using rule 130 (term -> sub_factor term_pc .)
+    SEMICOLON       reduce using rule 130 (term -> sub_factor term_pc .)
+    RPAREN          reduce using rule 130 (term -> sub_factor term_pc .)
+    COMMA           reduce using rule 130 (term -> sub_factor term_pc .)
+    RSQBRACKET      reduce using rule 130 (term -> sub_factor term_pc .)
+
+
+state 199
+
+    (131) term_pc -> term_pc_2 . term
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
+    (35) variable -> . id_saver variable_array
+    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
+    (4) id_saver -> . ID empty
+    (80) function_saver -> . ID empty
+
+    LPAREN          shift and go to state 135
+    CTE_FLOAT       shift and go to state 150
+    CTE_INT         shift and go to state 151
+    CTE_CHAR        shift and go to state 152
+    ID              shift and go to state 153
+
+    term                           shift and go to state 240
+    sub_factor                     shift and go to state 145
+    factor                         shift and go to state 146
+    factor_exp                     shift and go to state 147
+    factor_cte                     shift and go to state 148
+    variable                       shift and go to state 122
+    call_function                  shift and go to state 149
+    id_saver                       shift and go to state 87
+    function_saver                 shift and go to state 86
+
+state 200
+
+    (132) term_pc -> empty .
+
+    PLUS            reduce using rule 132 (term_pc -> empty .)
+    MINUS           reduce using rule 132 (term_pc -> empty .)
+    EQUAL           reduce using rule 132 (term_pc -> empty .)
+    NOTEQUAL        reduce using rule 132 (term_pc -> empty .)
+    LTHAN           reduce using rule 132 (term_pc -> empty .)
+    GTHAN           reduce using rule 132 (term_pc -> empty .)
+    AND             reduce using rule 132 (term_pc -> empty .)
+    OR              reduce using rule 132 (term_pc -> empty .)
+    SEMICOLON       reduce using rule 132 (term_pc -> empty .)
+    RPAREN          reduce using rule 132 (term_pc -> empty .)
+    COMMA           reduce using rule 132 (term_pc -> empty .)
+    RSQBRACKET      reduce using rule 132 (term_pc -> empty .)
+
+
+state 201
+
+    (133) term_pc_2 -> MULTIPLY .
+
+    LPAREN          reduce using rule 133 (term_pc_2 -> MULTIPLY .)
+    CTE_FLOAT       reduce using rule 133 (term_pc_2 -> MULTIPLY .)
+    CTE_INT         reduce using rule 133 (term_pc_2 -> MULTIPLY .)
+    CTE_CHAR        reduce using rule 133 (term_pc_2 -> MULTIPLY .)
+    ID              reduce using rule 133 (term_pc_2 -> MULTIPLY .)
+
+
+state 202
+
+    (134) term_pc_2 -> DIVIDE .
+
+    LPAREN          reduce using rule 134 (term_pc_2 -> DIVIDE .)
+    CTE_FLOAT       reduce using rule 134 (term_pc_2 -> DIVIDE .)
+    CTE_INT         reduce using rule 134 (term_pc_2 -> DIVIDE .)
+    CTE_CHAR        reduce using rule 134 (term_pc_2 -> DIVIDE .)
+    ID              reduce using rule 134 (term_pc_2 -> DIVIDE .)
+
+
+state 203
+
+    (135) term_pc_2 -> MODULE .
+
+    LPAREN          reduce using rule 135 (term_pc_2 -> MODULE .)
+    CTE_FLOAT       reduce using rule 135 (term_pc_2 -> MODULE .)
+    CTE_INT         reduce using rule 135 (term_pc_2 -> MODULE .)
+    CTE_CHAR        reduce using rule 135 (term_pc_2 -> MODULE .)
+    ID              reduce using rule 135 (term_pc_2 -> MODULE .)
+
+
+state 204
+
+    (136) sub_factor -> factor sub_factor_pc .
+
+    MULTIPLY        reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    DIVIDE          reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    MODULE          reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    PLUS            reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    MINUS           reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    EQUAL           reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    NOTEQUAL        reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    LTHAN           reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    GTHAN           reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    AND             reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    OR              reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    SEMICOLON       reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    RPAREN          reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    COMMA           reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+    RSQBRACKET      reduce using rule 136 (sub_factor -> factor sub_factor_pc .)
+
+
+state 205
+
+    (137) sub_factor_pc -> sub_factor_pc_2 . sub_factor
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
+    (35) variable -> . id_saver variable_array
+    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
+    (4) id_saver -> . ID empty
+    (80) function_saver -> . ID empty
+
+    LPAREN          shift and go to state 135
+    CTE_FLOAT       shift and go to state 150
+    CTE_INT         shift and go to state 151
+    CTE_CHAR        shift and go to state 152
+    ID              shift and go to state 153
+
+    sub_factor                     shift and go to state 241
+    factor                         shift and go to state 146
+    factor_exp                     shift and go to state 147
+    factor_cte                     shift and go to state 148
+    variable                       shift and go to state 122
+    call_function                  shift and go to state 149
+    id_saver                       shift and go to state 87
+    function_saver                 shift and go to state 86
+
+state 206
+
+    (138) sub_factor_pc -> empty .
+
+    MULTIPLY        reduce using rule 138 (sub_factor_pc -> empty .)
+    DIVIDE          reduce using rule 138 (sub_factor_pc -> empty .)
+    MODULE          reduce using rule 138 (sub_factor_pc -> empty .)
+    PLUS            reduce using rule 138 (sub_factor_pc -> empty .)
+    MINUS           reduce using rule 138 (sub_factor_pc -> empty .)
+    EQUAL           reduce using rule 138 (sub_factor_pc -> empty .)
+    NOTEQUAL        reduce using rule 138 (sub_factor_pc -> empty .)
+    LTHAN           reduce using rule 138 (sub_factor_pc -> empty .)
+    GTHAN           reduce using rule 138 (sub_factor_pc -> empty .)
+    AND             reduce using rule 138 (sub_factor_pc -> empty .)
+    OR              reduce using rule 138 (sub_factor_pc -> empty .)
+    SEMICOLON       reduce using rule 138 (sub_factor_pc -> empty .)
+    RPAREN          reduce using rule 138 (sub_factor_pc -> empty .)
+    COMMA           reduce using rule 138 (sub_factor_pc -> empty .)
+    RSQBRACKET      reduce using rule 138 (sub_factor_pc -> empty .)
+
 
 state 207
+
+    (139) sub_factor_pc_2 -> POWER . empty
+    (3) empty -> .
+
+    LPAREN          reduce using rule 3 (empty -> .)
+    CTE_FLOAT       reduce using rule 3 (empty -> .)
+    CTE_INT         reduce using rule 3 (empty -> .)
+    CTE_CHAR        reduce using rule 3 (empty -> .)
+    ID              reduce using rule 3 (empty -> .)
+
+    empty                          shift and go to state 242
+
+state 208
 
     (4) id_saver -> ID empty .
     (80) function_saver -> ID empty .
@@ -3223,48 +3215,48 @@ state 207
     LPAREN          reduce using rule 80 (function_saver -> ID empty .)
 
 
-state 208
+state 209
 
     (64) condition -> IF LPAREN exp RPAREN . body condition2 SEMICOLON
     (55) body -> . LBRACKET inner_body RBRACKET
 
     LBRACKET        shift and go to state 115
 
-    body                           shift and go to state 241
+    body                           shift and go to state 243
 
-state 209
+state 210
 
     (67) print -> PRINT LPAREN print_many RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 242
+    SEMICOLON       shift and go to state 244
 
 
-state 210
+state 211
 
     (69) print_many -> print_type print_many2 .
 
     RPAREN          reduce using rule 69 (print_many -> print_type print_many2 .)
 
 
-state 211
+state 212
 
     (70) print_many2 -> COMMA . print_many
     (69) print_many -> . print_type print_many2
     (68) print_type -> . exp
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -3276,7 +3268,7 @@ state 211
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    print_many                     shift and go to state 243
+    print_many                     shift and go to state 245
     print_type                     shift and go to state 157
     exp                            shift and go to state 158
     t_exp                          shift and go to state 127
@@ -3292,37 +3284,37 @@ state 211
     id_saver                       shift and go to state 87
     function_saver                 shift and go to state 86
 
-state 212
+state 213
 
     (71) print_many2 -> empty .
 
     RPAREN          reduce using rule 71 (print_many2 -> empty .)
 
 
-state 213
+state 214
 
     (79) call_function -> function_saver LPAREN exp exp_many . RPAREN
 
-    RPAREN          shift and go to state 244
+    RPAREN          shift and go to state 246
 
 
-state 214
+state 215
 
     (81) exp_many -> COMMA . exp exp_many
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -3334,7 +3326,7 @@ state 214
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    exp                            shift and go to state 245
+    exp                            shift and go to state 247
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
     m_exp                          shift and go to state 143
@@ -3348,21 +3340,21 @@ state 214
     id_saver                       shift and go to state 87
     function_saver                 shift and go to state 86
 
-state 215
+state 216
 
     (82) exp_many -> empty .
 
     RPAREN          reduce using rule 82 (exp_many -> empty .)
 
 
-state 216
+state 217
 
     (36) variable_array -> LSQBRACKET exp RSQBRACKET . variable_matrix
     (38) variable_matrix -> . LSQBRACKET exp RSQBRACKET
     (39) variable_matrix -> . empty
     (3) empty -> .
 
-    LSQBRACKET      shift and go to state 246
+    LSQBRACKET      shift and go to state 248
     ASSIGN          reduce using rule 3 (empty -> .)
     POWER           reduce using rule 3 (empty -> .)
     MULTIPLY        reduce using rule 3 (empty -> .)
@@ -3381,39 +3373,39 @@ state 216
     COMMA           reduce using rule 3 (empty -> .)
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    variable_matrix                shift and go to state 247
-    empty                          shift and go to state 248
+    variable_matrix                shift and go to state 249
+    empty                          shift and go to state 250
 
-state 217
+state 218
 
     (76) for -> FOR LPAREN ID TO . for_end RPAREN body SEMICOLON
     (77) for_end -> . int_const_saver
     (78) for_end -> . ID
     (5) int_const_saver -> . CTE_INT empty
 
-    ID              shift and go to state 249
-    CTE_INT         shift and go to state 252
+    ID              shift and go to state 251
+    CTE_INT         shift and go to state 254
 
-    for_end                        shift and go to state 250
-    int_const_saver                shift and go to state 251
+    for_end                        shift and go to state 252
+    int_const_saver                shift and go to state 253
 
-state 218
+state 219
 
     (75) while -> DO body WHILE LPAREN . exp RPAREN SEMICOLON
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -3425,7 +3417,7 @@ state 218
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    exp                            shift and go to state 253
+    exp                            shift and go to state 255
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
     m_exp                          shift and go to state 143
@@ -3439,7 +3431,7 @@ state 218
     id_saver                       shift and go to state 87
     function_saver                 shift and go to state 86
 
-state 219
+state 220
 
     (55) body -> LBRACKET inner_body RBRACKET .
 
@@ -3448,7 +3440,7 @@ state 219
     SEMICOLON       reduce using rule 55 (body -> LBRACKET inner_body RBRACKET .)
 
 
-state 220
+state 221
 
     (40) program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars . inner_body return RBRACKET program_function
     (56) inner_body -> . statement inner_body
@@ -3480,7 +3472,7 @@ state 220
     ID              shift and go to state 89
 
     id_saver                       shift and go to state 87
-    inner_body                     shift and go to state 254
+    inner_body                     shift and go to state 256
     statement                      shift and go to state 74
     empty                          shift and go to state 75
     assign                         shift and go to state 76
@@ -3493,14 +3485,14 @@ state 220
     while                          shift and go to state 85
     function_saver                 shift and go to state 86
 
-state 221
+state 222
 
     (47) param -> s_type id_saver add_params param2 .
 
     RPAREN          reduce using rule 47 (param -> s_type id_saver add_params param2 .)
 
 
-state 222
+state 223
 
     (48) param2 -> COMMA . s_type id_saver add_params param2
     (15) s_type -> . INT
@@ -3511,23 +3503,23 @@ state 222
     FLOAT           shift and go to state 26
     CHAR            shift and go to state 27
 
-    s_type                         shift and go to state 255
+    s_type                         shift and go to state 257
 
-state 223
+state 224
 
     (49) param2 -> empty .
 
     RPAREN          reduce using rule 49 (param2 -> empty .)
 
 
-state 224
+state 225
 
     (27) var_s_type2 -> COMMA id_saver var_s_array add_s_var var_s_type2 .
 
     SEMICOLON       reduce using rule 27 (var_s_type2 -> COMMA id_saver var_s_array add_s_var var_s_type2 .)
 
 
-state 225
+state 226
 
     (63) end_assign -> SEMICOLON empty .
 
@@ -3540,57 +3532,97 @@ state 225
     RETURN          reduce using rule 63 (end_assign -> SEMICOLON empty .)
 
 
-state 226
-
-    (111) exp_or -> OR exp .
-
-    SEMICOLON       reduce using rule 111 (exp_or -> OR exp .)
-    RPAREN          reduce using rule 111 (exp_or -> OR exp .)
-    COMMA           reduce using rule 111 (exp_or -> OR exp .)
-    RSQBRACKET      reduce using rule 111 (exp_or -> OR exp .)
-
-
 state 227
 
-    (72) read -> READ LPAREN variable . RPAREN
+    (111) exp_or -> exp_keep_or exp .
 
-    RPAREN          shift and go to state 256
+    SEMICOLON       reduce using rule 111 (exp_or -> exp_keep_or exp .)
+    RPAREN          reduce using rule 111 (exp_or -> exp_keep_or exp .)
+    COMMA           reduce using rule 111 (exp_or -> exp_keep_or exp .)
+    RSQBRACKET      reduce using rule 111 (exp_or -> exp_keep_or exp .)
 
 
 state 228
 
-    (142) factor_exp -> LPAREN exp RPAREN .
+    (72) read -> READ LPAREN variable . RPAREN
 
-    POWER           reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    MULTIPLY        reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    DIVIDE          reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    MODULE          reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    PLUS            reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    MINUS           reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    EQUAL           reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    NOTEQUAL        reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    LTHAN           reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    GTHAN           reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    AND             reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    OR              reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    SEMICOLON       reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    RPAREN          reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    COMMA           reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
-    RSQBRACKET      reduce using rule 142 (factor_exp -> LPAREN exp RPAREN .)
+    RPAREN          shift and go to state 258
 
 
 state 229
 
-    (114) t_exp_and -> AND t_exp .
+    (144) factor_exp -> LPAREN exp RPAREN .
 
-    OR              reduce using rule 114 (t_exp_and -> AND t_exp .)
-    SEMICOLON       reduce using rule 114 (t_exp_and -> AND t_exp .)
-    RPAREN          reduce using rule 114 (t_exp_and -> AND t_exp .)
-    COMMA           reduce using rule 114 (t_exp_and -> AND t_exp .)
-    RSQBRACKET      reduce using rule 114 (t_exp_and -> AND t_exp .)
+    POWER           reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    MULTIPLY        reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    DIVIDE          reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    MODULE          reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    PLUS            reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    MINUS           reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    EQUAL           reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    NOTEQUAL        reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    LTHAN           reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    GTHAN           reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    AND             reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    OR              reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    SEMICOLON       reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    RPAREN          reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    COMMA           reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
+    RSQBRACKET      reduce using rule 144 (factor_exp -> LPAREN exp RPAREN .)
 
 
 state 230
+
+    (115) t_exp_and -> AND keep_and . t_exp
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
+    (35) variable -> . id_saver variable_array
+    (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
+    (4) id_saver -> . ID empty
+    (80) function_saver -> . ID empty
+
+    LPAREN          shift and go to state 135
+    CTE_FLOAT       shift and go to state 150
+    CTE_INT         shift and go to state 151
+    CTE_CHAR        shift and go to state 152
+    ID              shift and go to state 153
+
+    t_exp                          shift and go to state 259
+    expression                     shift and go to state 136
+    m_exp                          shift and go to state 143
+    term                           shift and go to state 144
+    sub_factor                     shift and go to state 145
+    factor                         shift and go to state 146
+    factor_exp                     shift and go to state 147
+    factor_cte                     shift and go to state 148
+    variable                       shift and go to state 122
+    call_function                  shift and go to state 149
+    id_saver                       shift and go to state 87
+    function_saver                 shift and go to state 86
+
+state 231
+
+    (117) keep_and -> empty .
+
+    LPAREN          reduce using rule 117 (keep_and -> empty .)
+    CTE_FLOAT       reduce using rule 117 (keep_and -> empty .)
+    CTE_INT         reduce using rule 117 (keep_and -> empty .)
+    CTE_CHAR        reduce using rule 117 (keep_and -> empty .)
+    ID              reduce using rule 117 (keep_and -> empty .)
+
+
+state 232
 
     (94) exploration -> EXPLORATION LPAREN variable . explore_var explor_cte RPAREN
     (95) explore_var -> . COMMA variable
@@ -3598,141 +3630,141 @@ state 230
     (3) empty -> .
 
   ! shift/reduce conflict for COMMA resolved as shift
-    COMMA           shift and go to state 258
+    COMMA           shift and go to state 261
     RPAREN          reduce using rule 3 (empty -> .)
 
   ! COMMA           [ reduce using rule 3 (empty -> .) ]
 
-    explore_var                    shift and go to state 257
-    empty                          shift and go to state 259
-
-state 231
-
-    (99) financial_state -> FINANCIAL_STATE LPAREN variable . COMMA variable COMMA variable COMMA variable RPAREN
-
-    COMMA           shift and go to state 260
-
-
-state 232
-
-    (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable . COMMA variable dr_array dr_int RPAREN
-
-    COMMA           shift and go to state 261
-
+    explore_var                    shift and go to state 260
+    empty                          shift and go to state 262
 
 state 233
 
-    (100) season_analysis -> SEASON_ANALYSIS LPAREN variable . RPAREN
-
-    RPAREN          shift and go to state 262
-
-
-state 234
-
-    (101) trend_prediction -> TREND_PREDICTION LPAREN variable . COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN
+    (99) financial_state -> FINANCIAL_STATE LPAREN variable . COMMA variable COMMA variable COMMA variable RPAREN
 
     COMMA           shift and go to state 263
 
 
-state 235
+state 234
 
-    (109) model_predict -> MODEL_PREDICT LPAREN variable . COMMA variable COMMA RPAREN
+    (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable . COMMA variable dr_array dr_int RPAREN
 
     COMMA           shift and go to state 264
 
 
+state 235
+
+    (100) season_analysis -> SEASON_ANALYSIS LPAREN variable . RPAREN
+
+    RPAREN          shift and go to state 265
+
+
 state 236
 
-    (117) expression_comp -> expression_comp_2 m_exp .
+    (101) trend_prediction -> TREND_PREDICTION LPAREN variable . COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN
 
-    AND             reduce using rule 117 (expression_comp -> expression_comp_2 m_exp .)
-    OR              reduce using rule 117 (expression_comp -> expression_comp_2 m_exp .)
-    SEMICOLON       reduce using rule 117 (expression_comp -> expression_comp_2 m_exp .)
-    RPAREN          reduce using rule 117 (expression_comp -> expression_comp_2 m_exp .)
-    COMMA           reduce using rule 117 (expression_comp -> expression_comp_2 m_exp .)
-    RSQBRACKET      reduce using rule 117 (expression_comp -> expression_comp_2 m_exp .)
+    COMMA           shift and go to state 266
 
 
 state 237
 
-    (124) m_exp_sr -> m_exp_sr_2 m_exp .
+    (109) model_predict -> MODEL_PREDICT LPAREN variable . COMMA variable COMMA RPAREN
 
-    EQUAL           reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    NOTEQUAL        reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    LTHAN           reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    GTHAN           reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    AND             reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    OR              reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    SEMICOLON       reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    RPAREN          reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    COMMA           reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
-    RSQBRACKET      reduce using rule 124 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    COMMA           shift and go to state 267
 
 
 state 238
 
-    (129) term_pc -> term_pc_2 term .
+    (119) expression_comp -> expression_comp_2 m_exp .
 
-    PLUS            reduce using rule 129 (term_pc -> term_pc_2 term .)
-    MINUS           reduce using rule 129 (term_pc -> term_pc_2 term .)
-    EQUAL           reduce using rule 129 (term_pc -> term_pc_2 term .)
-    NOTEQUAL        reduce using rule 129 (term_pc -> term_pc_2 term .)
-    LTHAN           reduce using rule 129 (term_pc -> term_pc_2 term .)
-    GTHAN           reduce using rule 129 (term_pc -> term_pc_2 term .)
-    AND             reduce using rule 129 (term_pc -> term_pc_2 term .)
-    OR              reduce using rule 129 (term_pc -> term_pc_2 term .)
-    SEMICOLON       reduce using rule 129 (term_pc -> term_pc_2 term .)
-    RPAREN          reduce using rule 129 (term_pc -> term_pc_2 term .)
-    COMMA           reduce using rule 129 (term_pc -> term_pc_2 term .)
-    RSQBRACKET      reduce using rule 129 (term_pc -> term_pc_2 term .)
+    AND             reduce using rule 119 (expression_comp -> expression_comp_2 m_exp .)
+    OR              reduce using rule 119 (expression_comp -> expression_comp_2 m_exp .)
+    SEMICOLON       reduce using rule 119 (expression_comp -> expression_comp_2 m_exp .)
+    RPAREN          reduce using rule 119 (expression_comp -> expression_comp_2 m_exp .)
+    COMMA           reduce using rule 119 (expression_comp -> expression_comp_2 m_exp .)
+    RSQBRACKET      reduce using rule 119 (expression_comp -> expression_comp_2 m_exp .)
 
 
 state 239
 
-    (135) sub_factor_pc -> sub_factor_pc_2 sub_factor .
+    (126) m_exp_sr -> m_exp_sr_2 m_exp .
 
-    MULTIPLY        reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    DIVIDE          reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    MODULE          reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    PLUS            reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    MINUS           reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    EQUAL           reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    NOTEQUAL        reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    LTHAN           reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    GTHAN           reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    AND             reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    OR              reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    SEMICOLON       reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    RPAREN          reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    COMMA           reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
-    RSQBRACKET      reduce using rule 135 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    EQUAL           reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    NOTEQUAL        reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    LTHAN           reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    GTHAN           reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    AND             reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    OR              reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    SEMICOLON       reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    RPAREN          reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    COMMA           reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
+    RSQBRACKET      reduce using rule 126 (m_exp_sr -> m_exp_sr_2 m_exp .)
 
 
 state 240
 
-    (137) sub_factor_pc_2 -> POWER empty .
+    (131) term_pc -> term_pc_2 term .
 
-    LPAREN          reduce using rule 137 (sub_factor_pc_2 -> POWER empty .)
-    CTE_FLOAT       reduce using rule 137 (sub_factor_pc_2 -> POWER empty .)
-    CTE_INT         reduce using rule 137 (sub_factor_pc_2 -> POWER empty .)
-    CTE_CHAR        reduce using rule 137 (sub_factor_pc_2 -> POWER empty .)
-    ID              reduce using rule 137 (sub_factor_pc_2 -> POWER empty .)
+    PLUS            reduce using rule 131 (term_pc -> term_pc_2 term .)
+    MINUS           reduce using rule 131 (term_pc -> term_pc_2 term .)
+    EQUAL           reduce using rule 131 (term_pc -> term_pc_2 term .)
+    NOTEQUAL        reduce using rule 131 (term_pc -> term_pc_2 term .)
+    LTHAN           reduce using rule 131 (term_pc -> term_pc_2 term .)
+    GTHAN           reduce using rule 131 (term_pc -> term_pc_2 term .)
+    AND             reduce using rule 131 (term_pc -> term_pc_2 term .)
+    OR              reduce using rule 131 (term_pc -> term_pc_2 term .)
+    SEMICOLON       reduce using rule 131 (term_pc -> term_pc_2 term .)
+    RPAREN          reduce using rule 131 (term_pc -> term_pc_2 term .)
+    COMMA           reduce using rule 131 (term_pc -> term_pc_2 term .)
+    RSQBRACKET      reduce using rule 131 (term_pc -> term_pc_2 term .)
 
 
 state 241
+
+    (137) sub_factor_pc -> sub_factor_pc_2 sub_factor .
+
+    MULTIPLY        reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    DIVIDE          reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    MODULE          reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    PLUS            reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    MINUS           reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    EQUAL           reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    NOTEQUAL        reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    LTHAN           reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    GTHAN           reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    AND             reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    OR              reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    SEMICOLON       reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    RPAREN          reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    COMMA           reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+    RSQBRACKET      reduce using rule 137 (sub_factor_pc -> sub_factor_pc_2 sub_factor .)
+
+
+state 242
+
+    (139) sub_factor_pc_2 -> POWER empty .
+
+    LPAREN          reduce using rule 139 (sub_factor_pc_2 -> POWER empty .)
+    CTE_FLOAT       reduce using rule 139 (sub_factor_pc_2 -> POWER empty .)
+    CTE_INT         reduce using rule 139 (sub_factor_pc_2 -> POWER empty .)
+    CTE_CHAR        reduce using rule 139 (sub_factor_pc_2 -> POWER empty .)
+    ID              reduce using rule 139 (sub_factor_pc_2 -> POWER empty .)
+
+
+state 243
 
     (64) condition -> IF LPAREN exp RPAREN body . condition2 SEMICOLON
     (65) condition2 -> . ELSE body
     (66) condition2 -> . empty
     (3) empty -> .
 
-    ELSE            shift and go to state 266
+    ELSE            shift and go to state 269
     SEMICOLON       reduce using rule 3 (empty -> .)
 
-    condition2                     shift and go to state 265
-    empty                          shift and go to state 267
+    condition2                     shift and go to state 268
+    empty                          shift and go to state 270
 
-state 242
+state 244
 
     (67) print -> PRINT LPAREN print_many RPAREN SEMICOLON .
 
@@ -3745,14 +3777,14 @@ state 242
     RETURN          reduce using rule 67 (print -> PRINT LPAREN print_many RPAREN SEMICOLON .)
 
 
-state 243
+state 245
 
     (70) print_many2 -> COMMA print_many .
 
     RPAREN          reduce using rule 70 (print_many2 -> COMMA print_many .)
 
 
-state 244
+state 246
 
     (79) call_function -> function_saver LPAREN exp exp_many RPAREN .
 
@@ -3781,36 +3813,36 @@ state 244
     RSQBRACKET      reduce using rule 79 (call_function -> function_saver LPAREN exp exp_many RPAREN .)
 
 
-state 245
+state 247
 
     (81) exp_many -> COMMA exp . exp_many
     (81) exp_many -> . COMMA exp exp_many
     (82) exp_many -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 214
+    COMMA           shift and go to state 215
     RPAREN          reduce using rule 3 (empty -> .)
 
-    exp_many                       shift and go to state 268
-    empty                          shift and go to state 215
+    exp_many                       shift and go to state 271
+    empty                          shift and go to state 216
 
-state 246
+state 248
 
     (38) variable_matrix -> LSQBRACKET . exp RSQBRACKET
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -3822,7 +3854,7 @@ state 246
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    exp                            shift and go to state 269
+    exp                            shift and go to state 272
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
     m_exp                          shift and go to state 143
@@ -3836,7 +3868,7 @@ state 246
     id_saver                       shift and go to state 87
     function_saver                 shift and go to state 86
 
-state 247
+state 249
 
     (36) variable_array -> LSQBRACKET exp RSQBRACKET variable_matrix .
 
@@ -3859,7 +3891,7 @@ state 247
     RSQBRACKET      reduce using rule 36 (variable_array -> LSQBRACKET exp RSQBRACKET variable_matrix .)
 
 
-state 248
+state 250
 
     (39) variable_matrix -> empty .
 
@@ -3882,28 +3914,28 @@ state 248
     RSQBRACKET      reduce using rule 39 (variable_matrix -> empty .)
 
 
-state 249
+state 251
 
     (78) for_end -> ID .
 
     RPAREN          reduce using rule 78 (for_end -> ID .)
 
 
-state 250
+state 252
 
     (76) for -> FOR LPAREN ID TO for_end . RPAREN body SEMICOLON
 
-    RPAREN          shift and go to state 270
+    RPAREN          shift and go to state 273
 
 
-state 251
+state 253
 
     (77) for_end -> int_const_saver .
 
     RPAREN          reduce using rule 77 (for_end -> int_const_saver .)
 
 
-state 252
+state 254
 
     (5) int_const_saver -> CTE_INT . empty
     (3) empty -> .
@@ -3911,58 +3943,69 @@ state 252
     RPAREN          reduce using rule 3 (empty -> .)
     COMMA           reduce using rule 3 (empty -> .)
 
-    empty                          shift and go to state 271
+    empty                          shift and go to state 274
 
-state 253
+state 255
 
     (75) while -> DO body WHILE LPAREN exp . RPAREN SEMICOLON
 
-    RPAREN          shift and go to state 272
+    RPAREN          shift and go to state 275
 
 
-state 254
+state 256
 
     (40) program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body . return RBRACKET program_function
     (51) return -> . RETURN exp SEMICOLON
     (52) return -> . empty
     (3) empty -> .
 
-    RETURN          shift and go to state 274
+    RETURN          shift and go to state 277
     RBRACKET        reduce using rule 3 (empty -> .)
 
-    return                         shift and go to state 273
-    empty                          shift and go to state 275
+    return                         shift and go to state 276
+    empty                          shift and go to state 278
 
-state 255
+state 257
 
     (48) param2 -> COMMA s_type . id_saver add_params param2
     (4) id_saver -> . ID empty
 
     ID              shift and go to state 37
 
-    id_saver                       shift and go to state 276
+    id_saver                       shift and go to state 279
 
-state 256
+state 258
 
     (72) read -> READ LPAREN variable RPAREN .
 
     SEMICOLON       reduce using rule 72 (read -> READ LPAREN variable RPAREN .)
 
 
-state 257
+state 259
+
+    (115) t_exp_and -> AND keep_and t_exp .
+
+    OR              reduce using rule 115 (t_exp_and -> AND keep_and t_exp .)
+    SEMICOLON       reduce using rule 115 (t_exp_and -> AND keep_and t_exp .)
+    RPAREN          reduce using rule 115 (t_exp_and -> AND keep_and t_exp .)
+    COMMA           reduce using rule 115 (t_exp_and -> AND keep_and t_exp .)
+    RSQBRACKET      reduce using rule 115 (t_exp_and -> AND keep_and t_exp .)
+
+
+state 260
 
     (94) exploration -> EXPLORATION LPAREN variable explore_var . explor_cte RPAREN
     (97) explor_cte -> . COMMA int_const_saver
     (98) explor_cte -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 278
+    COMMA           shift and go to state 281
     RPAREN          reduce using rule 3 (empty -> .)
 
-    explor_cte                     shift and go to state 277
-    empty                          shift and go to state 279
+    explor_cte                     shift and go to state 280
+    empty                          shift and go to state 282
 
-state 258
+state 261
 
     (95) explore_var -> COMMA . variable
     (35) variable -> . id_saver variable_array
@@ -3970,10 +4013,10 @@ state 258
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 280
+    variable                       shift and go to state 283
     id_saver                       shift and go to state 87
 
-state 259
+state 262
 
     (96) explore_var -> empty .
 
@@ -3981,47 +4024,9 @@ state 259
     RPAREN          reduce using rule 96 (explore_var -> empty .)
 
 
-state 260
-
-    (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA . variable COMMA variable COMMA variable RPAREN
-    (35) variable -> . id_saver variable_array
-    (4) id_saver -> . ID empty
-
-    ID              shift and go to state 37
-
-    variable                       shift and go to state 281
-    id_saver                       shift and go to state 87
-
-state 261
-
-    (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA . variable dr_array dr_int RPAREN
-    (35) variable -> . id_saver variable_array
-    (4) id_saver -> . ID empty
-
-    ID              shift and go to state 37
-
-    variable                       shift and go to state 282
-    id_saver                       shift and go to state 87
-
-state 262
-
-    (100) season_analysis -> SEASON_ANALYSIS LPAREN variable RPAREN .
-
-    SEMICOLON       reduce using rule 100 (season_analysis -> SEASON_ANALYSIS LPAREN variable RPAREN .)
-
-
 state 263
 
-    (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA . int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN
-    (5) int_const_saver -> . CTE_INT empty
-
-    CTE_INT         shift and go to state 252
-
-    int_const_saver                shift and go to state 283
-
-state 264
-
-    (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA . variable COMMA RPAREN
+    (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA . variable COMMA variable COMMA variable RPAREN
     (35) variable -> . id_saver variable_array
     (4) id_saver -> . ID empty
 
@@ -4030,53 +4035,91 @@ state 264
     variable                       shift and go to state 284
     id_saver                       shift and go to state 87
 
+state 264
+
+    (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA . variable dr_array dr_int RPAREN
+    (35) variable -> . id_saver variable_array
+    (4) id_saver -> . ID empty
+
+    ID              shift and go to state 37
+
+    variable                       shift and go to state 285
+    id_saver                       shift and go to state 87
+
 state 265
 
-    (64) condition -> IF LPAREN exp RPAREN body condition2 . SEMICOLON
+    (100) season_analysis -> SEASON_ANALYSIS LPAREN variable RPAREN .
 
-    SEMICOLON       shift and go to state 285
+    SEMICOLON       reduce using rule 100 (season_analysis -> SEASON_ANALYSIS LPAREN variable RPAREN .)
 
 
 state 266
+
+    (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA . int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN
+    (5) int_const_saver -> . CTE_INT empty
+
+    CTE_INT         shift and go to state 254
+
+    int_const_saver                shift and go to state 286
+
+state 267
+
+    (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA . variable COMMA RPAREN
+    (35) variable -> . id_saver variable_array
+    (4) id_saver -> . ID empty
+
+    ID              shift and go to state 37
+
+    variable                       shift and go to state 287
+    id_saver                       shift and go to state 87
+
+state 268
+
+    (64) condition -> IF LPAREN exp RPAREN body condition2 . SEMICOLON
+
+    SEMICOLON       shift and go to state 288
+
+
+state 269
 
     (65) condition2 -> ELSE . body
     (55) body -> . LBRACKET inner_body RBRACKET
 
     LBRACKET        shift and go to state 115
 
-    body                           shift and go to state 286
+    body                           shift and go to state 289
 
-state 267
+state 270
 
     (66) condition2 -> empty .
 
     SEMICOLON       reduce using rule 66 (condition2 -> empty .)
 
 
-state 268
+state 271
 
     (81) exp_many -> COMMA exp exp_many .
 
     RPAREN          reduce using rule 81 (exp_many -> COMMA exp exp_many .)
 
 
-state 269
+state 272
 
     (38) variable_matrix -> LSQBRACKET exp . RSQBRACKET
 
-    RSQBRACKET      shift and go to state 287
+    RSQBRACKET      shift and go to state 290
 
 
-state 270
+state 273
 
     (76) for -> FOR LPAREN ID TO for_end RPAREN . body SEMICOLON
     (55) body -> . LBRACKET inner_body RBRACKET
 
     LBRACKET        shift and go to state 115
 
-    body                           shift and go to state 288
+    body                           shift and go to state 291
 
-state 271
+state 274
 
     (5) int_const_saver -> CTE_INT empty .
 
@@ -4084,37 +4127,37 @@ state 271
     COMMA           reduce using rule 5 (int_const_saver -> CTE_INT empty .)
 
 
-state 272
+state 275
 
     (75) while -> DO body WHILE LPAREN exp RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 289
+    SEMICOLON       shift and go to state 292
 
 
-state 273
+state 276
 
     (40) program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return . RBRACKET program_function
 
-    RBRACKET        shift and go to state 290
+    RBRACKET        shift and go to state 293
 
 
-state 274
+state 277
 
     (51) return -> RETURN . exp SEMICOLON
     (110) exp -> . t_exp exp_or
-    (113) t_exp -> . expression t_exp_and
-    (116) expression -> . m_exp expression_comp
-    (123) m_exp -> . term m_exp_sr
-    (128) term -> . sub_factor term_pc
-    (134) sub_factor -> . factor sub_factor_pc
-    (138) factor -> . factor_exp
-    (139) factor -> . factor_cte
-    (140) factor -> . variable
-    (141) factor -> . call_function
-    (142) factor_exp -> . LPAREN exp RPAREN
-    (143) factor_cte -> . CTE_FLOAT
-    (144) factor_cte -> . CTE_INT
-    (145) factor_cte -> . CTE_CHAR
+    (114) t_exp -> . expression t_exp_and
+    (118) expression -> . m_exp expression_comp
+    (125) m_exp -> . term m_exp_sr
+    (130) term -> . sub_factor term_pc
+    (136) sub_factor -> . factor sub_factor_pc
+    (140) factor -> . factor_exp
+    (141) factor -> . factor_cte
+    (142) factor -> . variable
+    (143) factor -> . call_function
+    (144) factor_exp -> . LPAREN exp RPAREN
+    (145) factor_cte -> . CTE_FLOAT
+    (146) factor_cte -> . CTE_INT
+    (147) factor_cte -> . CTE_CHAR
     (35) variable -> . id_saver variable_array
     (79) call_function -> . function_saver LPAREN exp exp_many RPAREN
     (4) id_saver -> . ID empty
@@ -4126,7 +4169,7 @@ state 274
     CTE_CHAR        shift and go to state 152
     ID              shift and go to state 153
 
-    exp                            shift and go to state 291
+    exp                            shift and go to state 294
     t_exp                          shift and go to state 127
     expression                     shift and go to state 136
     m_exp                          shift and go to state 143
@@ -4140,14 +4183,14 @@ state 274
     id_saver                       shift and go to state 87
     function_saver                 shift and go to state 86
 
-state 275
+state 278
 
     (52) return -> empty .
 
     RBRACKET        reduce using rule 52 (return -> empty .)
 
 
-state 276
+state 279
 
     (48) param2 -> COMMA s_type id_saver . add_params param2
     (50) add_params -> . empty
@@ -4156,33 +4199,33 @@ state 276
     COMMA           reduce using rule 3 (empty -> .)
     RPAREN          reduce using rule 3 (empty -> .)
 
-    add_params                     shift and go to state 292
+    add_params                     shift and go to state 295
     empty                          shift and go to state 166
 
-state 277
+state 280
 
     (94) exploration -> EXPLORATION LPAREN variable explore_var explor_cte . RPAREN
 
-    RPAREN          shift and go to state 293
+    RPAREN          shift and go to state 296
 
 
-state 278
+state 281
 
     (97) explor_cte -> COMMA . int_const_saver
     (5) int_const_saver -> . CTE_INT empty
 
-    CTE_INT         shift and go to state 252
+    CTE_INT         shift and go to state 254
 
-    int_const_saver                shift and go to state 294
+    int_const_saver                shift and go to state 297
 
-state 279
+state 282
 
     (98) explor_cte -> empty .
 
     RPAREN          reduce using rule 98 (explor_cte -> empty .)
 
 
-state 280
+state 283
 
     (95) explore_var -> COMMA variable .
 
@@ -4190,14 +4233,14 @@ state 280
     RPAREN          reduce using rule 95 (explore_var -> COMMA variable .)
 
 
-state 281
+state 284
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable . COMMA variable COMMA variable RPAREN
 
-    COMMA           shift and go to state 295
+    COMMA           shift and go to state 298
 
 
-state 282
+state 285
 
     (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable . dr_array dr_int RPAREN
     (103) dr_array -> . COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET
@@ -4205,29 +4248,29 @@ state 282
     (3) empty -> .
 
   ! shift/reduce conflict for COMMA resolved as shift
-    COMMA           shift and go to state 296
+    COMMA           shift and go to state 299
     RPAREN          reduce using rule 3 (empty -> .)
 
   ! COMMA           [ reduce using rule 3 (empty -> .) ]
 
-    dr_array                       shift and go to state 297
-    empty                          shift and go to state 298
+    dr_array                       shift and go to state 300
+    empty                          shift and go to state 301
 
-state 283
+state 286
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver . COMMA int_const_saver COMMA int_const_saver RPAREN
 
-    COMMA           shift and go to state 299
+    COMMA           shift and go to state 302
 
 
-state 284
+state 287
 
     (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA variable . COMMA RPAREN
 
-    COMMA           shift and go to state 300
+    COMMA           shift and go to state 303
 
 
-state 285
+state 288
 
     (64) condition -> IF LPAREN exp RPAREN body condition2 SEMICOLON .
 
@@ -4240,14 +4283,14 @@ state 285
     RETURN          reduce using rule 64 (condition -> IF LPAREN exp RPAREN body condition2 SEMICOLON .)
 
 
-state 286
+state 289
 
     (65) condition2 -> ELSE body .
 
     SEMICOLON       reduce using rule 65 (condition2 -> ELSE body .)
 
 
-state 287
+state 290
 
     (38) variable_matrix -> LSQBRACKET exp RSQBRACKET .
 
@@ -4270,14 +4313,14 @@ state 287
     RSQBRACKET      reduce using rule 38 (variable_matrix -> LSQBRACKET exp RSQBRACKET .)
 
 
-state 288
+state 291
 
     (76) for -> FOR LPAREN ID TO for_end RPAREN body . SEMICOLON
 
-    SEMICOLON       shift and go to state 301
+    SEMICOLON       shift and go to state 304
 
 
-state 289
+state 292
 
     (75) while -> DO body WHILE LPAREN exp RPAREN SEMICOLON .
 
@@ -4290,7 +4333,7 @@ state 289
     RETURN          reduce using rule 75 (while -> DO body WHILE LPAREN exp RPAREN SEMICOLON .)
 
 
-state 290
+state 293
 
     (40) program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET . program_function
     (40) program_function -> . FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
@@ -4300,44 +4343,44 @@ state 290
     FUNCTION        shift and go to state 16
     MAIN            reduce using rule 3 (empty -> .)
 
-    program_function               shift and go to state 302
+    program_function               shift and go to state 305
     empty                          shift and go to state 17
 
-state 291
+state 294
 
     (51) return -> RETURN exp . SEMICOLON
 
-    SEMICOLON       shift and go to state 303
+    SEMICOLON       shift and go to state 306
 
 
-state 292
+state 295
 
     (48) param2 -> COMMA s_type id_saver add_params . param2
     (48) param2 -> . COMMA s_type id_saver add_params param2
     (49) param2 -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 222
+    COMMA           shift and go to state 223
     RPAREN          reduce using rule 3 (empty -> .)
 
-    param2                         shift and go to state 304
-    empty                          shift and go to state 223
+    param2                         shift and go to state 307
+    empty                          shift and go to state 224
 
-state 293
+state 296
 
     (94) exploration -> EXPLORATION LPAREN variable explore_var explor_cte RPAREN .
 
     SEMICOLON       reduce using rule 94 (exploration -> EXPLORATION LPAREN variable explore_var explor_cte RPAREN .)
 
 
-state 294
+state 297
 
     (97) explor_cte -> COMMA int_const_saver .
 
     RPAREN          reduce using rule 97 (explor_cte -> COMMA int_const_saver .)
 
 
-state 295
+state 298
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA . variable COMMA variable RPAREN
     (35) variable -> . id_saver variable_array
@@ -4345,30 +4388,30 @@ state 295
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 305
+    variable                       shift and go to state 308
     id_saver                       shift and go to state 87
 
-state 296
+state 299
 
     (103) dr_array -> COMMA . LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET
 
-    LSQBRACKET      shift and go to state 306
+    LSQBRACKET      shift and go to state 309
 
 
-state 297
+state 300
 
     (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable dr_array . dr_int RPAREN
     (107) dr_int -> . COMMA int_const_saver
     (108) dr_int -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 307
+    COMMA           shift and go to state 310
     RPAREN          reduce using rule 3 (empty -> .)
 
-    dr_int                         shift and go to state 308
-    empty                          shift and go to state 309
+    dr_int                         shift and go to state 311
+    empty                          shift and go to state 312
 
-state 298
+state 301
 
     (104) dr_array -> empty .
 
@@ -4376,23 +4419,23 @@ state 298
     RPAREN          reduce using rule 104 (dr_array -> empty .)
 
 
-state 299
+state 302
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA . int_const_saver COMMA int_const_saver RPAREN
     (5) int_const_saver -> . CTE_INT empty
 
-    CTE_INT         shift and go to state 252
+    CTE_INT         shift and go to state 254
 
-    int_const_saver                shift and go to state 310
+    int_const_saver                shift and go to state 313
 
-state 300
+state 303
 
     (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA variable COMMA . RPAREN
 
-    RPAREN          shift and go to state 311
+    RPAREN          shift and go to state 314
 
 
-state 301
+state 304
 
     (76) for -> FOR LPAREN ID TO for_end RPAREN body SEMICOLON .
 
@@ -4405,79 +4448,79 @@ state 301
     RETURN          reduce using rule 76 (for -> FOR LPAREN ID TO for_end RPAREN body SEMICOLON .)
 
 
-state 302
+state 305
 
     (40) program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function .
 
     MAIN            reduce using rule 40 (program_function -> FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function .)
 
 
-state 303
+state 306
 
     (51) return -> RETURN exp SEMICOLON .
 
     RBRACKET        reduce using rule 51 (return -> RETURN exp SEMICOLON .)
 
 
-state 304
+state 307
 
     (48) param2 -> COMMA s_type id_saver add_params param2 .
 
     RPAREN          reduce using rule 48 (param2 -> COMMA s_type id_saver add_params param2 .)
 
 
-state 305
+state 308
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable . COMMA variable RPAREN
 
-    COMMA           shift and go to state 312
+    COMMA           shift and go to state 315
 
 
-state 306
+state 309
 
     (103) dr_array -> COMMA LSQBRACKET . CTE_CHAR dr_array_mp RSQBRACKET
 
-    CTE_CHAR        shift and go to state 313
+    CTE_CHAR        shift and go to state 316
 
 
-state 307
+state 310
 
     (107) dr_int -> COMMA . int_const_saver
     (5) int_const_saver -> . CTE_INT empty
 
-    CTE_INT         shift and go to state 252
+    CTE_INT         shift and go to state 254
 
-    int_const_saver                shift and go to state 314
+    int_const_saver                shift and go to state 317
 
-state 308
+state 311
 
     (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable dr_array dr_int . RPAREN
 
-    RPAREN          shift and go to state 315
+    RPAREN          shift and go to state 318
 
 
-state 309
+state 312
 
     (108) dr_int -> empty .
 
     RPAREN          reduce using rule 108 (dr_int -> empty .)
 
 
-state 310
+state 313
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver . COMMA int_const_saver RPAREN
 
-    COMMA           shift and go to state 316
+    COMMA           shift and go to state 319
 
 
-state 311
+state 314
 
     (109) model_predict -> MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN .
 
     SEMICOLON       reduce using rule 109 (model_predict -> MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN .)
 
 
-state 312
+state 315
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA . variable RPAREN
     (35) variable -> . id_saver variable_array
@@ -4485,101 +4528,101 @@ state 312
 
     ID              shift and go to state 37
 
-    variable                       shift and go to state 317
+    variable                       shift and go to state 320
     id_saver                       shift and go to state 87
 
-state 313
+state 316
 
     (103) dr_array -> COMMA LSQBRACKET CTE_CHAR . dr_array_mp RSQBRACKET
     (105) dr_array_mp -> . COMMA CTE_CHAR dr_array_mp
     (106) dr_array_mp -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 318
+    COMMA           shift and go to state 321
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    dr_array_mp                    shift and go to state 319
-    empty                          shift and go to state 320
+    dr_array_mp                    shift and go to state 322
+    empty                          shift and go to state 323
 
-state 314
+state 317
 
     (107) dr_int -> COMMA int_const_saver .
 
     RPAREN          reduce using rule 107 (dr_int -> COMMA int_const_saver .)
 
 
-state 315
+state 318
 
     (102) dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable dr_array dr_int RPAREN .
 
     SEMICOLON       reduce using rule 102 (dummi_regression -> DUMMI_REGRESSION LPAREN variable COMMA variable dr_array dr_int RPAREN .)
 
 
-state 316
+state 319
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA . int_const_saver RPAREN
     (5) int_const_saver -> . CTE_INT empty
 
-    CTE_INT         shift and go to state 252
+    CTE_INT         shift and go to state 254
 
-    int_const_saver                shift and go to state 321
+    int_const_saver                shift and go to state 324
 
-state 317
+state 320
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA variable . RPAREN
 
-    RPAREN          shift and go to state 322
+    RPAREN          shift and go to state 325
 
 
-state 318
+state 321
 
     (105) dr_array_mp -> COMMA . CTE_CHAR dr_array_mp
 
-    CTE_CHAR        shift and go to state 323
+    CTE_CHAR        shift and go to state 326
 
 
-state 319
+state 322
 
     (103) dr_array -> COMMA LSQBRACKET CTE_CHAR dr_array_mp . RSQBRACKET
 
-    RSQBRACKET      shift and go to state 324
+    RSQBRACKET      shift and go to state 327
 
 
-state 320
+state 323
 
     (106) dr_array_mp -> empty .
 
     RSQBRACKET      reduce using rule 106 (dr_array_mp -> empty .)
 
 
-state 321
+state 324
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver . RPAREN
 
-    RPAREN          shift and go to state 325
+    RPAREN          shift and go to state 328
 
 
-state 322
+state 325
 
     (99) financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA variable RPAREN .
 
     SEMICOLON       reduce using rule 99 (financial_state -> FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA variable RPAREN .)
 
 
-state 323
+state 326
 
     (105) dr_array_mp -> COMMA CTE_CHAR . dr_array_mp
     (105) dr_array_mp -> . COMMA CTE_CHAR dr_array_mp
     (106) dr_array_mp -> . empty
     (3) empty -> .
 
-    COMMA           shift and go to state 318
+    COMMA           shift and go to state 321
     RSQBRACKET      reduce using rule 3 (empty -> .)
 
-    dr_array_mp                    shift and go to state 326
-    empty                          shift and go to state 320
+    dr_array_mp                    shift and go to state 329
+    empty                          shift and go to state 323
 
-state 324
+state 327
 
     (103) dr_array -> COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET .
 
@@ -4587,14 +4630,14 @@ state 324
     RPAREN          reduce using rule 103 (dr_array -> COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET .)
 
 
-state 325
+state 328
 
     (101) trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN .
 
     SEMICOLON       reduce using rule 101 (trend_prediction -> TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN .)
 
 
-state 326
+state 329
 
     (105) dr_array_mp -> COMMA CTE_CHAR dr_array_mp .
 
@@ -4603,5 +4646,5 @@ state 326
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for COMMA in state 230 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 282 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 232 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 285 resolved as shift

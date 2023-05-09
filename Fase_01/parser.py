@@ -256,11 +256,11 @@ def p_specialf_assign(p):
 #keep the assign -> STACK
 def p_keep_assign(p):
     '''keep_assign : ASSIGN empty'''
-    #print('factor = ', p[1])
+   # print('ASSIGN ', p[1])
     global curr_name, scope
     #PUSH operators and operanas to the stakc
     quad.operands_stack_push(curr_name)
-    quad.operators_stack_push('21')
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
     #save the type 
     # var_type = tables.search_variable_existance(curr_name, scope)
     # quad.type_stack_push(var_type)
@@ -404,28 +404,34 @@ def p_model_predict(p):
     '''model_predict : MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN'''
 
 
-#_____________________<EXP>___________________________
+#__________________________________<EXP>___________________________
 def p_exp(p):
     '''exp : t_exp exp_or'''
 
 def p_exp_or(p):
-    '''exp_or : OR exp
+    '''exp_or : exp_keep_or exp
               | empty'''
-    global curr_name
-    curr_name = p[1]
-    quad.operators_stack_push(curr_name)
-    print("entro al OR", curr_name)
+    
+def p_exp_keep_or(p):
+    '''exp_keep_or : OR'''
+     #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
-
-#___________________<T_EXP>___________________________
+#_________________________________<T_EXP>_____________________________________
 def p_t_exp(p):
     '''t_exp : expression t_exp_and'''
 
 def p_t_exp_and(p):
-    '''t_exp_and : AND t_exp
+    '''t_exp_and : AND keep_and t_exp
                  | empty'''
+
+def p_keep_and(p):
+    '''keep_and : empty '''
+    #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
+
     
-#<EXPRESSION>
+#____________________________________<EXPRESSION>___________________________________
 def p_expression(p):
     '''expression : m_exp expression_comp'''
 
@@ -438,9 +444,11 @@ def p_expression_comp_2(p):
                          | NOTEQUAL
                          | LTHAN
                          | GTHAN'''
+     #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 
-#<M_EXP>
+#__________________________________<M_EXP>_________________________________________
 def p_m_exp(p):
     '''m_exp : term m_exp_sr'''
     
@@ -452,10 +460,10 @@ def p_m_exp_sr(p):
 def p_m_exp_sr_2(p):
     '''m_exp_sr_2 : PLUS
                   | MINUS'''
-    #Punto neuralgico 2
-    #("factor (+/-) ",p[1])
+     #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
     
-#<TERM>
+#____________________________________<TERM>__________________________________
 def p_term(p):
     '''term : sub_factor term_pc'''
 
@@ -467,9 +475,10 @@ def p_term_pc_2(p):
     '''term_pc_2 : MULTIPLY
                  | DIVIDE
                  | MODULE'''
-    #print("factor (* / %)",p[1])
+    #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
-#<SUB_FACTOR>
+#____________________________________<SUB_FACTOR>____________________________________
 def p_sub_factor(p):
     '''sub_factor : factor sub_factor_pc'''
 
@@ -479,7 +488,8 @@ def p_sub_factor_pc(p):
 
 def p_sub_factor_pc_2(p):
     '''sub_factor_pc_2 : POWER empty'''
-    #print("factor (^)",p[1])
+    #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 #<FACTOR>
 
