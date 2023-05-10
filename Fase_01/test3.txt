@@ -21,10 +21,6 @@ char csvcostos, csvventas, taquitos, pesos;
 
 b = 2 * 3 + 2;
 c = 3.5;
-
-if( 2 > 2.5) {
-	a = 3;
-};
-
+a = 3;
 }
 end

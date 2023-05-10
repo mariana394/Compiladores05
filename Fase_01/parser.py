@@ -21,6 +21,7 @@ curr_rows = 0
 curr_columns = 0
 curr_dim = 0 #por si las moscas
 curr_temp = 0
+g_test = 10
 
 #Objects
 tables = DirFunc()
@@ -53,6 +54,13 @@ def p_id_saver(p):
 def p_int_const_saver(p):
     '''int_const_saver : CTE_INT empty'''
     tables.add_const(p[1], type (p[1]))
+
+#Neuralgic point number 1 for all expressions where we check first if we have a pending operator
+def p_release_exp(p):
+    '''release_exp : empty'''
+    global g_test
+    print (g_test)
+    quad.create_exp_quadruple(g_test)
 
 #_________________________<LIBRERIES>_____________________________#
 #Uso de las librerias en el programa  
@@ -411,7 +419,7 @@ def p_exp(p):
     '''exp : t_exp exp_or'''
 
 def p_exp_or(p):
-    '''exp_or : exp_keep_or exp
+    '''exp_or : exp_keep_or release_exp exp
               | empty'''
     
 def p_exp_keep_or(p):
@@ -421,7 +429,9 @@ def p_exp_keep_or(p):
 
 #_________________________________<T_EXP>_____________________________________
 def p_t_exp(p):
-    '''t_exp : expression t_exp_and'''
+    '''t_exp : expression release_exp t_exp_and'''
+    global g_test
+    g_test = 10
 
 def p_t_exp_and(p):
     '''t_exp_and : AND keep_and t_exp
@@ -435,7 +445,10 @@ def p_keep_and(p):
     
 #____________________________________<EXPRESSION>___________________________________
 def p_expression(p):
-    '''expression : m_exp expression_comp'''
+    '''expression : m_exp release_exp expression_comp'''
+    global g_test
+    g_test = 9
+    print("expression")
 
 def p_expression_comp(p):
     '''expression_comp : expression_comp_2 m_exp
@@ -452,8 +465,11 @@ def p_expression_comp_2(p):
 
 #__________________________________<M_EXP>_________________________________________
 def p_m_exp(p):
-    '''m_exp : term m_exp_sr'''
-    
+    '''m_exp : term release_exp m_exp_sr'''
+    global g_test
+    #Valor de not equal
+    g_test = 24
+    print("m_exp")
 
 def p_m_exp_sr(p): 
     '''m_exp_sr : m_exp_sr_2 m_exp
@@ -466,8 +482,12 @@ def p_m_exp_sr_2(p):
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
     
 #____________________________________<TERM>__________________________________
+#PC -> PRODUCTO - COCIENTE
 def p_term(p):
-    '''term : sub_factor term_pc'''
+    '''term : sub_factor release_exp term_pc'''
+    global g_test
+    g_test = 11
+    print("term")
 
 def p_term_pc(p):
     '''term_pc : term_pc_2 term
@@ -479,10 +499,12 @@ def p_term_pc_2(p):
                  | MODULE'''
     #NEURALGIC POINT 2
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-    quad.power_quadruple()
 #____________________________________<SUB_FACTOR>____________________________________
 def p_sub_factor(p):
-    '''sub_factor : factor sub_factor_pc'''
+    '''sub_factor : factor release_exp sub_factor_pc'''
+    global g_test
+    #Valor de Multiplicativo
+    g_test = 15
 
 def p_sub_factor_pc(p):
     '''sub_factor_pc : sub_factor_pc_2 sub_factor
@@ -492,14 +514,18 @@ def p_sub_factor_pc_2(p):
     '''sub_factor_pc_2 : POWER empty'''
     #NEURALGIC POINT 2
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
+    
 
-#<FACTOR>
+#_____________________________<FACTOR>______________________________
 
 def p_factor(p):
     '''factor : factor_exp
               | factor_cte
               | variable
               | call_function'''
+    global g_test
+    #Valor de la potencia
+    g_test = 16
 
 def p_factor_exp(p):
     '''factor_exp : LPAREN exp RPAREN'''
