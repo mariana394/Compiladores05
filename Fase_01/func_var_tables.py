@@ -36,10 +36,16 @@ class DirFunc:
 	# Function for adding functions to function directory
 	def add_function(self, name, scope, type):
 		#SEARCHING IF THE FUNCTION ALREADY EXISTS
+
 		if(name in self.dir_func.keys()):
-			print("Function " + name + " already declared")
+			print("Function " + name + " already declared", scope)
 			exit()
 		else:
+			# PUNTO NEURALGICO PARA RESETEAR LAS LOCALES - CAMBIAR AL PUNTO DONDE TERMINA
+			# LA FUNCIÓN UNA VEZ QUE ESTE PUNTO ESTE CREADO
+			memory.reset_local_temporal()
+
+
 			self.dir_func[name] = {}
 			self.dir_func[name]["return_type"] = type
 			self.dir_func[name]["scope"] = scope
@@ -52,19 +58,37 @@ class DirFunc:
 
 			#print(self.dir_func.keys(), self.dir_func.values())
 		
-	#VARIABLES
-	# CHECK IF THE VARIABLE ALREADY EXISTS IN THE SCOPE 
-	def search_variable(self, name,scope):
+	#__________________VARIABLES________________________________
+	
+	#VARIABLES VALIDATION
+
+	# CHECK IF THE VARIABLE ALREADY EXISTS IN THE SCOPE
+	# You can declare another varibale with the same name in a specific scope different than global 
+	def search_variable_declaration(self, name,scope):
 		if (name in self.vars[scope]['vars'].keys()):
 			return True
 		else:
 			return False
+		
+	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
+	def search_variable_existance(self, name, scope):
+		if (name in self.vars[scope]['vars'].keys()):
+			return self.vars[scope]['vars'][name]['type']
+		else:
+			if (name in self.vars[0]['vars'].keys()):
+				return self.vars[0]['vars'][name]['type']
+			else:
+			#CHECK VAR AND SCOPE
+				print('Variable not declared ', name, scope)
+				exit()
+		
 	
+	#_________________CREATING VARIABLES_________________
 	#ADD VARIABLES
 	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
 		type = type.upper()
-		if(self.search_variable(name, scope)):
+		if(self.search_variable_declaration(name, scope)):
 			print("Variable already declared",name)
 			exit()
 		else:
@@ -136,6 +160,8 @@ class DirFunc:
 			
 			# print(self.constants.keys())
 			# print(self.constants.values())
+
+	
 	def print(self):
 		#print(tabulate(self.vars,headers='keys'))
 		print("\n____________________TABLA DE FUNCIONES________________\n")
@@ -151,8 +177,17 @@ class DirFunc:
 			df = pd.DataFrame.from_dict(self.vars[keys]['vars'], orient='index')
 			print(df)
 		print("\n")
+
+		print("____________________TABLA DE CONSTANTES_______________")
+		
+		df = pd.DataFrame.from_dict(self.constants, orient='index')
+		print(df)
+		
+		print("\n")
 	#GET ADDRESS FOR CREATING QUADRUPLE
 	#def get_address(self, item, scope):
+
+	
 
 
 

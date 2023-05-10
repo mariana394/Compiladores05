@@ -1,0 +1,26 @@
+program TESTCORRECTO;
+
+import pandas as pd
+import numpy as np
+
+var dataframe costos, ventas, test2, test3;
+char inicio, fin;
+
+function void message (char name, int size, char test){
+	var 
+	int test2, a;
+    a = 3;
+}
+
+main {
+var
+int b,a;
+float c;
+
+char csvcostos, csvventas, taquitos, pesos;
+
+b = 2 * 3 + 2;
+c = 3.5;
+a = 3;
+}
+end

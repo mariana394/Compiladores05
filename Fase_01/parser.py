@@ -8,18 +8,25 @@ import ply.yacc as yacc
 from lexer import tokens
 import sys
 from func_var_tables import DirFunc
+from quadruples import Quadruples
+from dictionary import Dictionary
 
 #Global variables
 curr_type = ''
 scope = 0 
 curr_name = ''
 curr_function = ''
+# GB for arrays and Matrix
 curr_rows = 0
 curr_columns = 0
 curr_dim = 0 #por si las moscas
+curr_temp = 0
+g_test = 10
 
+#Objects
 tables = DirFunc()
-
+quad = Quadruples()
+oracle = Dictionary()
 #<PROGRAM>
 def p_program(p):
     '''program : PROGRAM ID SEMICOLON program_libraries program_vars program_function program_main end'''
@@ -48,6 +55,13 @@ def p_int_const_saver(p):
     '''int_const_saver : CTE_INT empty'''
     tables.add_const(p[1], type (p[1]))
 
+#Neuralgic point number 1 for all expressions where we check first if we have a pending operator
+def p_release_exp(p):
+    '''release_exp : empty'''
+    global g_test
+    print (g_test)
+    quad.create_exp_quadruple(g_test)
+
 #_________________________<LIBRERIES>_____________________________#
 #Uso de las librerias en el programa  
   
@@ -62,7 +76,7 @@ def p_from_library(p):
 def p_import_library(p):
     '''import_library : IMPORT ID AS ID  program_libraries'''   
 
-#VARIABLES
+#__________________________VARIABLES____________________
 #Uso de las variables en el programa
 def p_var_type(p):
     '''var_type : var_c_type
@@ -157,8 +171,12 @@ def p_var_s_dimesions(p):
 
 def p_variable(p):
     '''variable : id_saver variable_array'''
-    global curr_name
-    #print('factor variable ', curr_name)
+    global curr_name, scope
+    type = tables.search_variable_existance(curr_name, scope)
+    quad.type_stack_push(type)
+    quad.operands_stack_push(curr_name)
+
+    print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
@@ -174,6 +192,8 @@ def p_variable_matrix(p):
 def p_program_function(p):
     '''program_function : FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
                         | empty'''
+
+
 #type of funtion return
 def p_f_type(p):
     '''f_type : INT 
@@ -233,9 +253,9 @@ def p_inner_body(p):
                   | empty'''
 
 
-#<ASSIGN>
+#__________________________<ASSIGN>____________________________________
 def p_assign(p):
-    '''assign : variable keep_assign specialf_assign SEMICOLON'''
+    '''assign : variable keep_assign specialf_assign end_assign'''
 
 
 def p_specialf_assign(p):
@@ -243,12 +263,28 @@ def p_specialf_assign(p):
                        | special_function
                        | read'''
     
-#keep the assign 
+#keep the assign -> STACK
 def p_keep_assign(p):
     '''keep_assign : ASSIGN empty'''
-    #print('factor = ', p[1])
+   # print('ASSIGN ', p[1])
+    global curr_name, scope
+    #PUSH operators and operanas to the stakc
+    quad.operands_stack_push(curr_name)
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
+    #save the type 
+    # var_type = tables.search_variable_existance(curr_name, scope)
+    # quad.type_stack_push(var_type)
 
-#<CONDITION>
+   
+    #quad.type_stack_push(curr_type)
+
+
+#END-> Quadruple
+def p_end_assign(p):
+    '''end_assign : SEMICOLON empty'''
+    quad.assign_quadruple()
+
+#_________________________<CONDITION>___________________________________
 def p_condition(p):
     '''condition : IF LPAREN exp RPAREN body condition2 SEMICOLON'''
 
@@ -268,7 +304,7 @@ def p_print_many(p):
     '''print_many : print_type print_many2 '''
 
 def p_print_many2(p):
-    '''print_many2 : COMMA print_type print_many2
+    '''print_many2 : COMMA print_many
                    | empty'''
 
 
@@ -378,25 +414,41 @@ def p_model_predict(p):
     '''model_predict : MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN'''
 
 
-#<EXP>
+#__________________________________<EXP>___________________________
 def p_exp(p):
     '''exp : t_exp exp_or'''
 
 def p_exp_or(p):
-    '''exp_or : OR exp
+    '''exp_or : exp_keep_or release_exp exp
               | empty'''
+    
+def p_exp_keep_or(p):
+    '''exp_keep_or : OR'''
+     #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
-#<T_EXP>
+#_________________________________<T_EXP>_____________________________________
 def p_t_exp(p):
-    '''t_exp : expression t_exp_and'''
+    '''t_exp : expression release_exp t_exp_and'''
+    global g_test
+    g_test = 10
 
 def p_t_exp_and(p):
-    '''t_exp_and : AND t_exp
+    '''t_exp_and : AND keep_and t_exp
                  | empty'''
+
+def p_keep_and(p):
+    '''keep_and : empty '''
+    #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
+
     
-#<EXPRESSION>
+#____________________________________<EXPRESSION>___________________________________
 def p_expression(p):
-    '''expression : m_exp expression_comp'''
+    '''expression : m_exp release_exp expression_comp'''
+    global g_test
+    g_test = 9
+    print("expression")
 
 def p_expression_comp(p):
     '''expression_comp : expression_comp_2 m_exp
@@ -407,12 +459,17 @@ def p_expression_comp_2(p):
                          | NOTEQUAL
                          | LTHAN
                          | GTHAN'''
+     #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 
-#<M_EXP>
+#__________________________________<M_EXP>_________________________________________
 def p_m_exp(p):
-    '''m_exp : term m_exp_sr'''
-    
+    '''m_exp : term release_exp m_exp_sr'''
+    global g_test
+    #Valor de not equal
+    g_test = 24
+    print("m_exp")
 
 def p_m_exp_sr(p): 
     '''m_exp_sr : m_exp_sr_2 m_exp
@@ -421,12 +478,16 @@ def p_m_exp_sr(p):
 def p_m_exp_sr_2(p):
     '''m_exp_sr_2 : PLUS
                   | MINUS'''
-    #Punto neuralgico 2
-    #("factor (+/-) ",p[1])
+     #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
     
-#<TERM>
+#____________________________________<TERM>__________________________________
+#PC -> PRODUCTO - COCIENTE
 def p_term(p):
-    '''term : sub_factor term_pc'''
+    '''term : sub_factor release_exp term_pc'''
+    global g_test
+    g_test = 11
+    print("term")
 
 def p_term_pc(p):
     '''term_pc : term_pc_2 term
@@ -436,11 +497,14 @@ def p_term_pc_2(p):
     '''term_pc_2 : MULTIPLY
                  | DIVIDE
                  | MODULE'''
-    #print("factor (* / %)",p[1])
-
-#<SUB_FACTOR>
+    #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
+#____________________________________<SUB_FACTOR>____________________________________
 def p_sub_factor(p):
-    '''sub_factor : factor sub_factor_pc'''
+    '''sub_factor : factor release_exp sub_factor_pc'''
+    global g_test
+    #Valor de Multiplicativo
+    g_test = 15
 
 def p_sub_factor_pc(p):
     '''sub_factor_pc : sub_factor_pc_2 sub_factor
@@ -448,15 +512,20 @@ def p_sub_factor_pc(p):
 
 def p_sub_factor_pc_2(p):
     '''sub_factor_pc_2 : POWER empty'''
-    #print("factor (^)",p[1])
+    #NEURALGIC POINT 2
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
+    
 
-#<FACTOR>
+#_____________________________<FACTOR>______________________________
 
 def p_factor(p):
     '''factor : factor_exp
               | factor_cte
               | variable
               | call_function'''
+    global g_test
+    #Valor de la potencia
+    g_test = 16
 
 def p_factor_exp(p):
     '''factor_exp : LPAREN exp RPAREN'''
@@ -465,8 +534,16 @@ def p_factor_cte(p):
     '''factor_cte : CTE_FLOAT
                   | CTE_INT
                   | CTE_CHAR'''
+    global  curr_name
+    curr_name = p[1]
     tables.add_const(p[1], type (p[1]))
-    #print("factor constante",p[1])
+    type_test = type(p[1]).__name__
+    if(type_test == 'str'):
+        type_test = 'char'
+    const_type = oracle.datalor_translator(type_test.upper())
+    quad.type_stack_push(const_type)
+    quad.operands_stack_push(curr_name)
+    print('Const ',curr_name , type_test, const_type)
 
 # Build the parser
 parser = yacc.yacc()

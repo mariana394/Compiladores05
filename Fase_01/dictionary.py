@@ -55,6 +55,26 @@ class Dictionary:
             'CTE_FLOAT': 29,
             'CTE_CHAR': 30 
         }
+        self.datalor_symbol_dictionary = {
+            
+            #OPERADORES LOGICOS
+            '&&':9,
+            '||':10,
+
+            #OPERADORES
+            '+':11,
+            '-':12,
+            '*':13,
+            '/':14,
+            '%':15,
+            '^':16,
+            #EXPRESSIONS
+            '==': 20, #==
+            '=': 21, #=
+            '>': 22,
+            '<': 23,
+            '!=': 24, #!=
+        }
 
         self.semantics = {
             '1': {
@@ -64,12 +84,14 @@ class Dictionary:
                     '13': '1',
                     '14': '1',
                     '15': '2',
-                    '23': '4',
-                    '22': '4',
+                    '16': '1',
                     '20': '4',
-                    '24': '4',
                     '21': '1',
-                    '16': '1'
+                    '22': '4',
+                    '23': '4',
+                    '24': '4',
+                    
+                    
                     },
                 '2': {
                     '11': '2',
@@ -77,12 +99,13 @@ class Dictionary:
                     '13': '2',
                     '14': '2',
                     '15': '2',
-                    '23': '4',
-                    '22': '4',
+                    '16': '2',
                     '20': '4',
-                    '24': '4',
                     '21': '2',
-                    '16': '2'
+                    '22': '4',
+                    '23': '4',
+                    '24': '4'   
+                    
                 }
             },
             '2': {
@@ -92,18 +115,18 @@ class Dictionary:
                     '13': '2',
                     '14': '2',
                     '15': '2',
-                    '23': '4',
-                    '22': '4',
+                    '16': '2',
                     '20': '4',
-                    '24': '4',
                     '21': '2',
-                    '16': '2'
+                    '22': '4',
+                    '23': '4',
+                    '24': '4'
+                    
+                   
                     }
             },
             '3': {
                 '3': {
-                    '23': '4',
-                    '22': '4',
                     '20': '4',
                     '24': '4'
                 }
@@ -112,18 +135,49 @@ class Dictionary:
                 '4': {
                     '9': '4',
                     '10': '4',
-                    '23': '4',
-                    '22': '4',
                     '20': '4',
+                    '22': '4',
+                    '23': '4',
                     '24': '4'
                 }
             }
         }
 
 
+    #TRANSLATOR TOKEN->Number
     def datalor_translator(self, token):
         if token in self.datalor_dictionary.keys():
             return self.datalor_dictionary[token]
         else:
             print("UNDEFINED TOKEN", token)
             exit()
+    # 
+    # 
+    # ##
+
+    #TRANSLATOR SYMBOL->NUMBER
+    def datalor_translator_symbols(self, symbol):
+        if symbol in self.datalor_symbol_dictionary.keys():
+            return self.datalor_symbol_dictionary[symbol]
+        else:
+            print("UNDEFINED SYMBOL", symbol)
+            exit()
+
+    #CHECK SEMANTICS
+    def oracle_cmddwtm(self, left, right, operator ):
+
+        if(left in self.semantics.keys()):
+            if(right in self.semantics[left]):
+                if(operator in self.semantics[left][right]):
+                    return self.semantics[left][right][operator]
+                else:
+                    print("Type mistmatch")
+                    exit()
+
+            else:
+                print("Type mismatch")
+                exit()
+        
+        
+
+
