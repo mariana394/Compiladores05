@@ -528,7 +528,22 @@ def p_factor(p):
     g_test = 16
 
 def p_factor_exp(p):
-    '''factor_exp : LPAREN exp RPAREN'''
+    '''factor_exp : false_button exp release_false_button'''
+
+#_______NEURALGIC POINT_____ PARENTESIS
+
+def p_false_button(p):
+    '''false_button : LPAREN'''
+    #NEURALGIC POINT 1
+    print("false_button")
+    quad.false_button()
+
+def p_release_false_button(p):
+    '''release_false_button : RPAREN'''
+    #NEURALGIC POINT 1
+    quad.release_false_button()
+
+#_______NEURALGIC POINT_____ END PARENTESIS
 
 def p_factor_cte(p):
     '''factor_cte : CTE_FLOAT

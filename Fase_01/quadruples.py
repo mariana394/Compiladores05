@@ -65,6 +65,14 @@ class Quadruples:
 
     def type_stack_pop(self):
         return self.pTypes.pop()
+    
+    def false_button(self):
+        self.pOperators.append('(')
+        print('fondo falso',self.pOperators)
+    
+    def release_false_button(self):
+        self.pOperators.pop()
+
 
     #Function for creating quadruples
     def create_quadruple(self, operator, operandR, result = None, operandL = None):
@@ -153,6 +161,7 @@ class Quadruples:
         operator = self.operators_stack_pop()
         
         #ASK TO THE ORACLE
+        print('operator', operator)
         type_result = oracle.oracle_cmddwtm(str(typeL),str(typeR),str(operator))
         self.pTypes.append(type_result)
         match type_result:
@@ -245,7 +254,8 @@ class Quadruples:
                     print('< > == !=')
                     self.inner_quad_exp()
             
-        
+    
+
             
 
           
