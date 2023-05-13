@@ -59,7 +59,7 @@ def p_int_const_saver(p):
 def p_release_exp(p):
     '''release_exp : empty'''
     global g_test
-    print (g_test)
+    #print ("aqui", g_test)
     quad.create_exp_quadruple(g_test)
 
 #_________________________<LIBRERIES>_____________________________#
@@ -176,7 +176,7 @@ def p_variable(p):
     quad.type_stack_push(type)
     quad.operands_stack_push(curr_name)
 
-    print(scope, ' factor variable ', curr_name, type )
+    #print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
@@ -256,7 +256,7 @@ def p_inner_body(p):
 #__________________________<ASSIGN>____________________________________
 def p_assign(p):
     '''assign : variable keep_assign specialf_assign end_assign'''
-
+    quad.print_poperands()
 
 def p_specialf_assign(p):
     '''specialf_assign : exp
@@ -269,7 +269,7 @@ def p_keep_assign(p):
    # print('ASSIGN ', p[1])
     global curr_name, scope
     #PUSH operators and operanas to the stakc
-    quad.operands_stack_push(curr_name)
+    #quad.operands_stack_push(curr_name)
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
     #save the type 
     # var_type = tables.search_variable_existance(curr_name, scope)
@@ -286,11 +286,19 @@ def p_end_assign(p):
 
 #_________________________<CONDITION>___________________________________
 def p_condition(p):
-    '''condition : IF LPAREN exp RPAREN body condition2 SEMICOLON'''
+    '''condition : IF LPAREN exp RPAREN condition_GOTOF body condition2 SEMICOLON'''
 
 def p_condition2(p):
     '''condition2 : ELSE body
                  | empty'''
+    
+# Neuralgic point
+def p_condition_GOTOF(p):   
+    '''condition_GOTOF : empty'''
+    print('\t\tcondition_GOTOF\n')
+    quad.jump_stack_push()
+    quad.insert_goto(19)
+
     
 #<PRINT>
 def p_print(p):
@@ -442,34 +450,13 @@ def p_keep_and(p):
     #NEURALGIC POINT 2
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
-    
-#____________________________________<EXPRESSION>___________________________________
-def p_expression(p):
-    '''expression : m_exp release_exp expression_comp'''
-    global g_test
-    g_test = 9
-    print("expression")
-
-def p_expression_comp(p):
-    '''expression_comp : expression_comp_2 m_exp
-                       | empty'''
-
-def p_expression_comp_2(p):
-    '''expression_comp_2 : EQUAL
-                         | NOTEQUAL
-                         | LTHAN
-                         | GTHAN'''
-     #NEURALGIC POINT 2
-    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-
-
 #__________________________________<M_EXP>_________________________________________
 def p_m_exp(p):
     '''m_exp : term release_exp m_exp_sr'''
     global g_test
     #Valor de not equal
     g_test = 24
-    print("m_exp")
+    #print("m_exp")
 
 def p_m_exp_sr(p): 
     '''m_exp_sr : m_exp_sr_2 m_exp
@@ -487,7 +474,7 @@ def p_term(p):
     '''term : sub_factor release_exp term_pc'''
     global g_test
     g_test = 11
-    print("term")
+    #print("term")
 
 def p_term_pc(p):
     '''term_pc : term_pc_2 term
@@ -515,6 +502,27 @@ def p_sub_factor_pc_2(p):
     #NEURALGIC POINT 2
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
     
+#____________________________________<EXPRESSION>___________________________________
+def p_expression(p):
+    '''expression : m_exp release_exp expression_comp'''
+    global g_test
+    g_test = 9
+    print("expression")
+
+def p_expression_comp(p):
+    '''expression_comp : expression_comp_2 m_exp
+                       | empty'''
+
+def p_expression_comp_2(p):
+    '''expression_comp_2 : GTHAN
+                         | EQUAL
+                         | NOTEQUAL
+                         | LTHAN
+                         '''
+     #NEURALGIC POINT 2
+    
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
+
 
 #_____________________________<FACTOR>______________________________
 

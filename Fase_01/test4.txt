@@ -14,13 +14,15 @@ function void message (char name, int size, char test){
 
 main {
 var
-int d;
+int d, a;
 float c;
-
-char csvcostos, csvventas, taquitos, pesos;
 
 d = 2 * 3 + (2 - 5) * 3 + (3-2);
 c = 3.5;
+
+if (a > b){
+    a = 2;
+};
 
 }
 end

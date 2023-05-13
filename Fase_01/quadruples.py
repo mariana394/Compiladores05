@@ -30,10 +30,10 @@ class Quadruples:
         self.t_b_size = 1999
 
         #START TEMPORALES
-        self.t_i_init = 15000
-        self.t_f_init = 17000
-        self.t_c_init = 19000
-        self.t_b_init = 21000
+        self.t_i_init = 17000
+        self.t_f_init = 19000
+        self.t_c_init = 21000
+        self.t_b_init = 23000
 
         #COUNTER TEMPORALES
         self.t_i_cont = 0
@@ -66,12 +66,23 @@ class Quadruples:
     def type_stack_pop(self):
         return self.pTypes.pop()
     
+    #JUMP STACK
+    def jump_stack_push(self):
+        self.pJumps.append(self.cont - 1)
+    
+    def jump_stack_pop(self):
+        return self.pJumps.pop()
+
+    #FONDO FALSO 
     def false_button(self):
         self.pOperators.append('(')
         print('fondo falso',self.pOperators)
     
     def release_false_button(self):
-        self.pOperators.pop()
+        print('release fondo falso',self.pOperators)
+        if (len(self.pOperators) != 0):
+            if(self.pOperators[-1] == '('):
+                self.pOperators.pop()
 
 
     #Function for creating quadruples
@@ -168,7 +179,7 @@ class Quadruples:
             #INTEGER
             case '1':
                 if (self.t_i_cont > self.t_i_size):
-                    print("ERROR: STACK OVERFLOW")
+                    #print("ERROR: STACK OVERFLOW")
                     exit()
                 else:
                     result = self.t_i_init + self.t_i_cont
@@ -176,7 +187,7 @@ class Quadruples:
                     self.quadruple.append([operator, operandL, operandR, result])
                     self.cont += 1
                     self.operands_stack_push(result)
-                    print ('OPERANDOS',self.pOperands)
+                    #print ('OPERANDOS',self.pOperands)
             #FLOAT
             case '2':
                 self.t_f_cont += 1
@@ -189,7 +200,7 @@ class Quadruples:
                     self.quadruple.append([operator, operandL, operandR, result])
                     self.cont += 1
                     self.operands_stack_push(result)
-                    print ('OPERANDOS',self.pOperands)
+                    #print ('OPERANDOS',self.pOperands)
             #CHAR
             case '3':
                 self.t_c_cont += 1
@@ -202,7 +213,7 @@ class Quadruples:
                     self.quadruple.append([operator, operandL, operandR, result])
                     self.cont += 1
                     self.operands_stack_push(result)
-                    print ('OPERANDOS',self.pOperands)
+                    #print ('OPERANDOS',self.pOperands)
             #BOOLEAN
             case '4':
                 self.t_b_cont += 1
@@ -215,11 +226,15 @@ class Quadruples:
                     self.quadruple.append([operator, operandL, operandR, result])
                     self.cont += 1
                     self.operands_stack_push(result)
-                    print ('OPERANDOS',self.pOperands)
+                    #print ('OPERANDOS',self.pOperands)
 
 
     def create_exp_quadruple(self, type_exp):
+        print(self.pOperands, "operando")
+        print(self.pOperators, "operador")
+
         operator = self.pOperators[-1]
+
         #print("OPERATOR",type_exp)
         match type_exp:
             #AND
@@ -246,6 +261,7 @@ class Quadruples:
             # ^
             case 16:
                 if (operator == 16):
+                    
                     print('^')
                     self.inner_quad_exp()
             # < > == !=
@@ -254,9 +270,29 @@ class Quadruples:
                     print('< > == !=')
                     self.inner_quad_exp()
             
-    
-
+    def check_bool(self):
+        if(self.pTypes[- 1] != 4):
+            print('Bool type was expected')
+            exit()
             
+
+    def insert_goto(self, goto_Type):
+        # 1 -> gotofalso 18 | 2 -> gotverdadero  19| 3 -> GOTO 17
+
+        self.check_bool()
+        match goto_Type:
+
+            case 17:
+                self.quadruple.append([17,'','' , ''])
+                self.cont += 1
+
+            case 18:
+                self.quadruple.append([18,'','' , ''])
+                self.cont += 1
+
+            case 19:
+                self.quadruple.append([19,'','' , ''])
+                self.cont += 1
 
           
                     
@@ -277,3 +313,6 @@ class Quadruples:
     #     #       crea el cuadruplo
     #     #           darle la address temporal a la variable temp 
     #     #     type mistmatch
+
+    def print_poperands(self):
+        print ('OPERANDOS',self.pOperands)
