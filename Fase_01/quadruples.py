@@ -72,6 +72,10 @@ class Quadruples:
     
     def jump_stack_pop(self):
         return self.pJumps.pop()
+    
+    #CONT PLACE
+    def cont_place(self):
+        return self.cont
 
     #FONDO FALSO 
     def false_button(self):
@@ -84,6 +88,11 @@ class Quadruples:
             if(self.pOperators[-1] == '('):
                 self.pOperators.pop()
 
+    #CORRECCION: SE AGRUGO LA FUNCION DE FILL
+    def fill(self, jump, place):
+        print("FILL", jump, place)
+        self.quadruple[jump][3] = place
+        print(self.quadruple)
 
     #Function for creating quadruples
     def create_quadruple(self, operator, operandR, result = None, operandL = None):
@@ -123,7 +132,9 @@ class Quadruples:
        #CREATING THE CUADRUPLE
         self.quadruple.append([operator, operandR,'',result])
         self.cont += 1
+        print("\t\tCONTADOR\t", self.cont)
         print(self.quadruple)
+        
 
     #__________________EXPRESSIONS QUADRUPLES________________________
      
@@ -165,6 +176,8 @@ class Quadruples:
 
     #FUNCTION FOR ASSIGNING THE VARIABLES THAT ARE GOING TO BE PASSED TO THE QUADRUPLE 
     def inner_quad_exp(self):
+        print('Lista de operandos', self.pOperands)
+        print('Lista de Tipos', self.pTypes)
         operandR = self.operands_stack_pop()
         typeR = self.type_stack_pop()
         operandL = self.operands_stack_pop()
@@ -175,6 +188,7 @@ class Quadruples:
         print('operator', operator)
         type_result = oracle.oracle_cmddwtm(str(typeL),str(typeR),str(operator))
         self.pTypes.append(type_result)
+        #print('type_result', type(type_result))
         match type_result:
             #INTEGER
             case '1':
@@ -187,10 +201,12 @@ class Quadruples:
                     self.quadruple.append([operator, operandL, operandR, result])
                     self.cont += 1
                     self.operands_stack_push(result)
+                    print("\t\tCONTADOR\t", self.cont)
+                    print(self.quadruple)
+
                     #print ('OPERANDOS',self.pOperands)
             #FLOAT
             case '2':
-                self.t_f_cont += 1
                 if (self.t_f_cont > self.t_f_size):
                     print("ERROR: STACK OVERFLOW")
                     exit()
@@ -200,10 +216,12 @@ class Quadruples:
                     self.quadruple.append([operator, operandL, operandR, result])
                     self.cont += 1
                     self.operands_stack_push(result)
+                    print("\t\tCONTADOR\t", self.cont)
+                    print(self.quadruple)
+
                     #print ('OPERANDOS',self.pOperands)
             #CHAR
             case '3':
-                self.t_c_cont += 1
                 if (self.t_c_cont > self.t_c_size):
                     print("ERROR: STACK OVERFLOW")
                     exit()
@@ -213,10 +231,13 @@ class Quadruples:
                     self.quadruple.append([operator, operandL, operandR, result])
                     self.cont += 1
                     self.operands_stack_push(result)
+                    print("\t\tCONTADOR\t", self.cont)
+                    print(self.quadruple)
+
                     #print ('OPERANDOS',self.pOperands)
             #BOOLEAN
             case '4':
-                self.t_b_cont += 1
+                print('entro a boolean')
                 if (self.t_b_cont > self.t_b_size):
                     print("ERROR: STACK OVERFLOW")
                     exit()
@@ -226,19 +247,30 @@ class Quadruples:
                     self.quadruple.append([operator, operandL, operandR, result])
                     self.cont += 1
                     self.operands_stack_push(result)
-                    #print ('OPERANDOS',self.pOperands)
+                    print("\t\tCONTADOR\t", self.cont)
+                    print(self.quadruple)
 
 
     def create_exp_quadruple(self, type_exp):
-        print(self.pOperands, "operando")
-        print(self.pOperators, "operador")
+        # print(self.pOperands, "operando")
+        # print(self.pOperators, "operador")
+        # print(self.pTypes, "tipo")
+        # print(self.pJumps, "salto")
 
-        operator = self.pOperators[-1]
-
-        #print("OPERATOR",type_exp)
+        #CORRECCION Se checa si se tienen operandos en la pila, esto solo sirve para 
+        #resolver los operandos de comparacion 
+        if (len(self.pOperators) != 0):
+            print("TAMA;O ES DIFERENTE DE 0")
+            operator = self.pOperators[-1]
+        else:
+            print("TAMA;O ES IGUAL A 0")
+            operator = 0
+        print("OPERATOR",type_exp)
         match type_exp:
             #AND
+            
             case 9:
+                print("ENTRO AL AND")
                 if (operator == 9):
                     #LLAMAR LA FUNCIÓN PARA CREAR EL CUADRUPLO
                     print('&&')
@@ -271,28 +303,47 @@ class Quadruples:
                     self.inner_quad_exp()
             
     def check_bool(self):
-        if(self.pTypes[- 1] != 4):
+        if(self.pTypes[-1] != '4'):
             print('Bool type was expected')
             exit()
             
 
     def insert_goto(self, goto_Type):
         # 1 -> gotofalso 18 | 2 -> gotverdadero  19| 3 -> GOTO 17
-
         self.check_bool()
+        #CORRECCION: SE AGREGO "CONDITION" PARA QUE LOS CUADRUPLOS DE GOTO TENGAN UNA CONDICION
+        #EN EL CASO DE GOTO SIMPLE NO SE TIENE UNA CONDICION POR LO CUAL NO SE AGREGA NADA
+        
         match goto_Type:
 
             case 17:
+                #ANOTACIONES: POR EL MOMENTO SOLO ESTA PENSADO PARA EL IF
+                print("ENTRO AL GOTO", self.cont)
+                false = self.pJumps.pop()
+                self.pJumps.append(self.cont-1)
                 self.quadruple.append([17,'','' , ''])
                 self.cont += 1
+                self.fill(false, self.cont)
+
+                print("\t\tCONTADOR\t", self.cont)
+                print(self.quadruple)
+
 
             case 18:
-                self.quadruple.append([18,'','' , ''])
+                condition = self.operands_stack_pop()
+                self.quadruple.append([18,condition,'' , ''])
                 self.cont += 1
+                print("\t\tCONTADOR\t", self.cont)
+                print(self.quadruple)
+
 
             case 19:
-                self.quadruple.append([19,'','' , ''])
+                condition = self.operands_stack_pop()
+                self.quadruple.append([19,condition,'' , ''])
                 self.cont += 1
+                print("\t\tCONTADOR\t", self.cont)
+                print(self.quadruple)
+
 
           
                     

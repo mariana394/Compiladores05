@@ -59,7 +59,7 @@ def p_int_const_saver(p):
 def p_release_exp(p):
     '''release_exp : empty'''
     global g_test
-    #print ("aqui", g_test)
+    print ("Tipo de Operacion", g_test)
     quad.create_exp_quadruple(g_test)
 
 #_________________________<LIBRERIES>_____________________________#
@@ -286,12 +286,23 @@ def p_end_assign(p):
 
 #_________________________<CONDITION>___________________________________
 def p_condition(p):
-    '''condition : IF LPAREN exp RPAREN condition_GOTOF body condition2 SEMICOLON'''
+    '''condition : IF LPAREN exp RPAREN condition_GOTOF body condition2 SEMICOLON end_condition'''
 
 def p_condition2(p):
-    '''condition2 : ELSE body
+    '''condition2 : ELSE condition_GOTO body
                  | empty'''
     
+def p_condition_GOTO(p):   
+    '''condition_GOTO : empty'''
+    print('\t\tcondition_GOTO\n')
+    quad.insert_goto(17)
+
+def p_end_condition(p):
+    '''end_condition : empty'''
+    jump = quad.jump_stack_pop()
+    where = quad.cont_place()
+    quad.fill(jump, where)
+
 # Neuralgic point
 def p_condition_GOTOF(p):   
     '''condition_GOTOF : empty'''
@@ -424,15 +435,18 @@ def p_model_predict(p):
 
 #__________________________________<EXP>___________________________
 def p_exp(p):
-    '''exp : t_exp exp_or'''
-
+    '''exp : t_exp release_exp exp_or'''
+#CORRECCION :  SE CAMBIO DE LUGAR release_exp
+#ANTERIORMENTE ESTABA ABAJO \/
 def p_exp_or(p):
-    '''exp_or : exp_keep_or release_exp exp
+    '''exp_or : exp_keep_or  exp
               | empty'''
     
 def p_exp_keep_or(p):
     '''exp_keep_or : OR'''
      #NEURALGIC POINT 2
+     #Se coloca p[-1] para que s 
+    print("exp_keep_or\n\n" , p[1])
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 #_________________________________<T_EXP>_____________________________________
@@ -442,12 +456,39 @@ def p_t_exp(p):
     g_test = 10
 
 def p_t_exp_and(p):
-    '''t_exp_and : AND keep_and t_exp
+    '''t_exp_and : keep_and t_exp
                  | empty'''
 
 def p_keep_and(p):
-    '''keep_and : empty '''
+    '''keep_and : AND '''
     #NEURALGIC POINT 2
+    #CORRECCION : SE CAMBIO EL EMPTY POR AND PARA QUE FUERA MAS FACIL
+    #ENVIAR LOS DATOS, EN LUGAR DE MANDAR P[-1] SE MANDA P[1]
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
+  
+#____________________________________<EXPRESSION>___________________________________
+def p_expression(p):
+    '''expression : m_exp release_exp expression_comp'''
+    global g_test
+    g_test = 9
+    print("expression")
+
+def p_expression_comp(p):
+    '''expression_comp :  expression_comp_2  m_exp release_exp
+                       | empty'''
+    print("expression_comp", p[1])
+    
+
+def p_expression_comp_2(p):
+    '''expression_comp_2 : GTHAN
+                         | EQUAL
+                         | NOTEQUAL
+                         | LTHAN
+                         '''
+     #NEURALGIC POINT 2
+    
+    print("expression_comp_2", p[1])
+    
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 #__________________________________<M_EXP>_________________________________________
@@ -501,29 +542,7 @@ def p_sub_factor_pc_2(p):
     '''sub_factor_pc_2 : POWER empty'''
     #NEURALGIC POINT 2
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-    
-#____________________________________<EXPRESSION>___________________________________
-def p_expression(p):
-    '''expression : m_exp release_exp expression_comp'''
-    global g_test
-    g_test = 9
-    print("expression")
-
-def p_expression_comp(p):
-    '''expression_comp : expression_comp_2 m_exp
-                       | empty'''
-
-def p_expression_comp_2(p):
-    '''expression_comp_2 : GTHAN
-                         | EQUAL
-                         | NOTEQUAL
-                         | LTHAN
-                         '''
-     #NEURALGIC POINT 2
-    
-    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-
-
+  
 #_____________________________<FACTOR>______________________________
 
 def p_factor(p):
