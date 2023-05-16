@@ -14,18 +14,30 @@ function void message (char name, int size, char test){
 
 main {
 var
-int d, a;
+int d, a,z;
 float c;
 
-d = 2 * 3 + (2 - 5) * 3 + (3-2);
-c = 3.5;
+d = 2 * 3 ;
+c = 6 % 2;
 
-if ( a >= d + (3 - 2)  || a < 3.5  && d == 2 ) {
+if ( a > d) {
     a = 2;
 }else{
-    a = 3;
+    d = 3;
 };
 
+do {
+z = 1;
+if ( a > d) {
+    a = 2;
+}else{
+    d = 3;
+};
+}while (a > d);
+
+print('hola',2);
 
 }
 end
+
+

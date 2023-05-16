@@ -69,9 +69,13 @@ class Quadruples:
     #JUMP STACK
     def jump_stack_push(self):
         self.pJumps.append(self.cont - 1)
+        print("")
     
     def jump_stack_pop(self):
         return self.pJumps.pop()
+    
+    def jump_seed(self):
+        self.pJumps.append(self.cont)
     
     #CONT PLACE
     def cont_place(self):
@@ -88,7 +92,7 @@ class Quadruples:
             if(self.pOperators[-1] == '('):
                 self.pOperators.pop()
 
-    #CORRECCION: SE AGRUGO LA FUNCION DE FILL
+    #CORRECCION: SE AGREGO LA FUNCION DE FILL
     def fill(self, jump, place):
         print("FILL", jump, place)
         self.quadruple[jump][3] = place
@@ -135,44 +139,6 @@ class Quadruples:
         print("\t\tCONTADOR\t", self.cont)
         print(self.quadruple)
         
-
-    #__________________EXPRESSIONS QUADRUPLES________________________
-     
-    # def power_quadruple(self):
-    #     operator = self.pOperators[-1]
-    #     if(operator == 16):
-    #         operandR = self.operands_stack_pop()
-    #         typeR = self.type_stack_pop()
-    #         operandL = self.operands_stack_pop()
-    #         typeL = self.type_stack_pop()
-    #         operator = self.operators_stack_pop()
-            
-    #         #ASK TO THE ORACLE
-    #         type_result = oracle.oracle_cmddwtm(str(typeL)),str(typeR,str(operator))
-    #         self.pTypes.append(type_result)
-    #         match type_result:
-    #             #INTEGER
-    #             case 1:
-    #                 if (self.t_i_cont > self.t_i_size):
-    #                     print("ERROR: STACK OVERFLOW")
-    #                     exit()
-    #                 else:
-    #                     result = self.t_i_init + self.t_i_cont
-    #                     self.quadruple.append([operator, operandL, operandR, result])
-    #                     self.cont += 1
-    #                     self.operands_stack_push(result)
-    #             #FLOAT
-    #             case 2:
-    #                 self.t_f_cont += 1
-    #                 if (self.t_f_cont > self.t_f_size):
-    #                     print("ERROR: STACK OVERFLOW")
-    #                     exit()
-    #                 else:
-    #                     result = self.t_f_init + self.t_f_cont
-    #                     self.quadruple.append([operator, operandL, operandR, result])
-    #                     self.cont += 1
-    #
-    #                      self.operands_stack_push(result)
 
     #FUNCTION FOR ASSIGNING THE VARIABLES THAT ARE GOING TO BE PASSED TO THE QUADRUPLE 
     def inner_quad_exp(self):
@@ -297,9 +263,9 @@ class Quadruples:
                     print('^')
                     self.inner_quad_exp()
             # < > == !=
-            case 20 | 22 | 23 | 24:
-                if (operator == 20 or operator == 22 or operator == 23 or operator == 24):
-                    print('< > == !=')
+            case 20 | 22 | 23 | 24 | 31 | 32:
+                if (operator == 20 or operator == 22 or operator == 23 or operator == 24 or operator == 31 or operator == 32):
+                    print('< > == != <= >=')
                     self.inner_quad_exp()
             
     def check_bool(self):
@@ -310,42 +276,75 @@ class Quadruples:
 
     def insert_goto(self, goto_Type):
         # 1 -> gotofalso 18 | 2 -> gotverdadero  19| 3 -> GOTO 17
-        self.check_bool()
+        print("PILA DE OPERANDOS", self.pOperands)
+        print("PILA DE TIPOS", self.pTypes)
+        
         #CORRECCION: SE AGREGO "CONDITION" PARA QUE LOS CUADRUPLOS DE GOTO TENGAN UNA CONDICION
         #EN EL CASO DE GOTO SIMPLE NO SE TIENE UNA CONDICION POR LO CUAL NO SE AGREGA NADA
         
         match goto_Type:
 
+            #GOTO
             case 17:
                 #ANOTACIONES: POR EL MOMENTO SOLO ESTA PENSADO PARA EL IF
                 print("ENTRO AL GOTO", self.cont)
-                false = self.pJumps.pop()
+                print ("PILA DE JUMPS", self.pJumps)
+                false = self.jump_stack_pop()
+                # save where i am for got to
                 self.pJumps.append(self.cont-1)
                 self.quadruple.append([17,'','' , ''])
                 self.cont += 1
                 self.fill(false, self.cont)
+                
 
                 print("\t\tCONTADOR\t", self.cont)
                 print(self.quadruple)
 
-
+            #GOTOF
             case 18:
+                self.check_bool()
                 condition = self.operands_stack_pop()
+                self.type_stack_pop()
                 self.quadruple.append([18,condition,'' , ''])
                 self.cont += 1
                 print("\t\tCONTADOR\t", self.cont)
                 print(self.quadruple)
+               
 
-
+            #GOTOV
             case 19:
+                self.check_bool()
+                print("semilla", self.pJumps)
+                gotoVerdadero = self.pJumps.pop()
                 condition = self.operands_stack_pop()
+                self.type_stack_pop()
                 self.quadruple.append([19,condition,'' , ''])
+                print("\tCONTADOR ", self.cont, "\nSIZE QUAD", len(self.quadruple))
+                self.fill(self.cont - 1 , gotoVerdadero)
                 self.cont += 1
                 print("\t\tCONTADOR\t", self.cont)
-                print(self.quadruple)
+                print('A DONDE RELLENAR', gotoVerdadero )
+                
+                
+                
+                #print("\t\tCONTADOR\t", self.cont)
+                #print("semilla", self.pJumps)
+                print("semilla", self.pJumps)
 
+    def print_quadruple(self):
+        printvalue = self.operands_stack_pop()
+        self.type_stack_pop()
+        self.quadruple.append([7, '','', printvalue])
+        self.cont+=1
+        print("PILA DE OPERANDOS", self.pOperands)
+        print("PILA DE TIPOS", self.pTypes)
+        self.print_quadruples()
 
-          
+        #self.quadruple.append([])
+        
+
+    def read_quadruple(self):
+        self.quadruple.append()      
                     
     #         #SBER QUE TIPO ES EL RESULTANTE
     #         #INCREMENTAR EL CONTADOR ADECUADO
@@ -367,3 +366,7 @@ class Quadruples:
 
     def print_poperands(self):
         print ('OPERANDOS',self.pOperands)
+
+    def print_quadruples(self):
+        for i in range(len(self.quadruple)):
+            print(i + 1 , " - ",self.quadruple[i])

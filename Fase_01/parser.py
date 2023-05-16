@@ -2,7 +2,7 @@
 # DATALOR: PARSER
 # Mariana Favarony Avila -A01704671
 # Mario Juarez - A01411049
-# PASER.... 
+# PARSER.... 
 # ------------------------------------------------------------
 import ply.yacc as yacc
 from lexer import tokens
@@ -291,7 +291,15 @@ def p_condition(p):
 def p_condition2(p):
     '''condition2 : ELSE condition_GOTO body
                  | empty'''
-    
+
+# Neuralgic point 1
+def p_condition_GOTOF(p):   
+    '''condition_GOTOF : empty'''
+    print('\t\tcondition_GOTOF\n')
+    quad.jump_stack_push()
+    quad.insert_goto(18)
+
+#Neuralgic point 2
 def p_condition_GOTO(p):   
     '''condition_GOTO : empty'''
     print('\t\tcondition_GOTO\n')
@@ -303,19 +311,12 @@ def p_end_condition(p):
     where = quad.cont_place()
     quad.fill(jump, where)
 
-# Neuralgic point
-def p_condition_GOTOF(p):   
-    '''condition_GOTOF : empty'''
-    print('\t\tcondition_GOTOF\n')
-    quad.jump_stack_push()
-    quad.insert_goto(19)
 
     
-#<PRINT>
+#_________________________<PRINT>____________________
 def p_print(p):
-    '''print : PRINT LPAREN print_many RPAREN SEMICOLON'''
+    '''print : PRINT LPAREN print_many RPAREN SEMICOLON end_print_np'''
     
-#Notas modificar print para que sirva con exp en ID
 def p_print_type(p):
     '''print_type : exp'''
 
@@ -323,8 +324,19 @@ def p_print_many(p):
     '''print_many : print_type print_many2 '''
 
 def p_print_many2(p):
-    '''print_many2 : COMMA print_many
+    '''print_many2 : COMMA print_many_np print_many
                    | empty'''
+    
+def p_print_many_np(p):
+    '''print_many_np : empty'''
+    quad.print_quadruple()
+
+def p_end_print_np(p):
+    '''end_print_np : empty'''
+    quad.print_quadruple()
+    
+
+
 
 
     
@@ -337,11 +349,22 @@ def p_cycle(p):
     '''cycle : for
              | while'''
     
-#<WHILE>
+#___________________<WHILE>______________________
 def p_while(p):
-    '''while : DO body WHILE LPAREN exp RPAREN SEMICOLON'''
+    '''while : DO seed body WHILE LPAREN exp RPAREN SEMICOLON gotoV'''
 
-#<FOR>
+#neuralgic point 1 (guardar la semilla de a donde regreso)
+def p_seed(p):
+    '''seed : empty'''
+    quad.jump_seed()
+    
+#Neuralgic point 2
+def p_gotoV(p):
+    '''gotoV : empty'''
+    quad.insert_goto(19)
+
+
+#_________________<FOR>____________
 def p_for(p):
     '''for : FOR LPAREN ID TO for_end RPAREN body SEMICOLON'''
 
@@ -475,7 +498,7 @@ def p_expression(p):
 
 def p_expression_comp(p):
     '''expression_comp :  expression_comp_2  m_exp release_exp
-                       | empty'''
+                       |  empty'''
     print("expression_comp", p[1])
     
 
@@ -484,6 +507,8 @@ def p_expression_comp_2(p):
                          | EQUAL
                          | NOTEQUAL
                          | LTHAN
+                         | GORE
+                         | LORE
                          '''
      #NEURALGIC POINT 2
     
