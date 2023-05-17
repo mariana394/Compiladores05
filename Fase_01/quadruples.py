@@ -92,12 +92,24 @@ class Quadruples:
             if(self.pOperators[-1] == '('):
                 self.pOperators.pop()
 
-    #CORRECCION: SE AGREGO LA FUNCION DE FILL
+    #FILL
     def fill(self, jump, place):
         print("FILL", jump, place)
         self.quadruple[jump][3] = place
         print(self.quadruple)
 
+    #<FOR> Control and final variables declaration
+    def control_var(self):
+        place = self.t_i_cont + self.t_i_init
+        if (self.t_i_cont > self.t_i_size):
+                    print("ERROR: STACK OVERFLOW")
+                    exit()
+        self.t_i_cont += 1
+        value = self.pOperands[-1]
+        self.quadruple.append([21, value, '', place])
+        
+        
+        
     #Function for creating quadruples
     def create_quadruple(self, operator, operandR, result = None, operandL = None):
         #CHECK SEMANTICS
@@ -116,6 +128,27 @@ class Quadruples:
         self.t_c_cont = 0
         self.t_b_cont = 0 
 
+    #_________________CHECKERS______________________#
+                
+    def check_bool(self):
+        if(self.pTypes[-1] != '4'):
+            print('Bool type was expected')
+            exit()
+            
+    def check_integer(self):
+        print("PILA DE OPERANDOS", self.pOperands)
+        print("PILA DE TIPOS", self.pTypes)
+        #print("CHECK", self.pTypes[-1])
+        if(self.pTypes[-1] != '1'):
+             print('Integer type was expected')
+             exit()
+
+    def check_const(self):
+        print("PILA DE OPERANDOS", self.pOperands)
+        print("PILA DE TIPOS", self.pTypes)
+        if(self.pTypes[-1] != '28'):
+            print('Constant Integer type was expected')
+            exit()
 
     #Function to resolve EXP for queadruples 
 
@@ -159,7 +192,7 @@ class Quadruples:
             #INTEGER
             case '1':
                 if (self.t_i_cont > self.t_i_size):
-                    #print("ERROR: STACK OVERFLOW")
+                    print("ERROR: STACK OVERFLOW")
                     exit()
                 else:
                     result = self.t_i_init + self.t_i_cont
@@ -267,12 +300,8 @@ class Quadruples:
                 if (operator == 20 or operator == 22 or operator == 23 or operator == 24 or operator == 31 or operator == 32):
                     print('< > == != <= >=')
                     self.inner_quad_exp()
-            
-    def check_bool(self):
-        if(self.pTypes[-1] != '4'):
-            print('Bool type was expected')
-            exit()
-            
+
+        
 
     def insert_goto(self, goto_Type):
         # 1 -> gotofalso 18 | 2 -> gotverdadero  19| 3 -> GOTO 17
@@ -336,15 +365,17 @@ class Quadruples:
         self.type_stack_pop()
         self.quadruple.append([7, '','', printvalue])
         self.cont+=1
-        print("PILA DE OPERANDOS", self.pOperands)
-        print("PILA DE TIPOS", self.pTypes)
         self.print_quadruples()
 
         #self.quadruple.append([])
         
-
+    # PREGUNTAR QUE SE HACE  CON EL READ 
+    # SE TENÍA PENSADO USAR EL READ PARA EL TIPO LEER DATAFRAME
+    #     
     def read_quadruple(self):
-        self.quadruple.append()      
+
+        self.quadruple.append([8, '','', ''])
+        #self.quadruple.append()      
                     
     #         #SBER QUE TIPO ES EL RESULTANTE
     #         #INCREMENTAR EL CONTADOR ADECUADO
@@ -352,7 +383,6 @@ class Quadruples:
     #         #INSERTAR EN PILA DE OPERANDOS
     #         #CREAR EL CUADRUPLO
 
-    
 
     # #def solve_expressions(self, precedencia):
     #    # print("")

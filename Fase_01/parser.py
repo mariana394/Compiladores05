@@ -22,6 +22,8 @@ curr_columns = 0
 curr_dim = 0 #por si las moscas
 curr_temp = 0
 g_test = 10
+curr_const = None
+for_flag = False
 
 #Objects
 tables = DirFunc()
@@ -52,8 +54,12 @@ def p_id_saver(p):
 #Neuralgic point for constant Int, helps us to save the constant in the constants table and memory no matter where the constant is in the code. 
 # cte_int -> for (top of the cycle), array/matrix dimensions, special functions
 def p_int_const_saver(p):
-    '''int_const_saver : CTE_INT empty'''
-    tables.add_const(p[1], type (p[1]))
+    '''int_const_saver : CTE_INT 
+                       | empty'''
+    global curr_const, for_flag
+    curr_const = p[1]
+    for_flag = True
+    tables.add_const(curr_const, type (curr_const))
 
 #Neuralgic point number 1 for all expressions where we check first if we have a pending operator
 def p_release_exp(p):
@@ -335,15 +341,14 @@ def p_end_print_np(p):
     '''end_print_np : empty'''
     quad.print_quadruple()
     
-
-
-
-
     
-#<READ>
+#________________________<READ>_______________________
 def p_read(p):
-    '''read : READ LPAREN variable RPAREN'''
+    '''read : READ LPAREN variable RPAREN read_np'''
 
+def p_read_np(p):
+    '''read_np : empty'''
+    quad.read_quadruple()
 #<CYCLE>
 def p_cycle(p):
     '''cycle : for
@@ -366,12 +371,40 @@ def p_gotoV(p):
 
 #_________________<FOR>____________
 def p_for(p):
-    '''for : FOR LPAREN ID TO for_end RPAREN body SEMICOLON'''
+    '''for : FOR LPAREN id_saver for_np1 for_end for_np2  body SEMICOLON'''
+
+# def p_for(p):
+#     '''for : FOR LPAREN id_saver for_np1 TO for_end  RPAREN body SEMICOLON'''
+
 
 def p_for_end(p):
     '''for_end : int_const_saver
-               | ID'''
+               | ID '''
+    print('\t\tSEGUNDO PUNTO\n', p[1])
 
+
+def p_for_np1(p):
+    '''for_np1 : TO'''
+    global curr_name, scope
+    type = tables.search_variable_existance(curr_name, scope)
+    quad.type_stack_push(str(type))
+    quad.operands_stack_push(curr_name)
+    quad.check_integer()
+    
+    #print('\t\tPRIMER PUNTO\n', curr_name, scope)
+
+def p_for_np2(p):
+    '''for_np2 : RPAREN'''
+    global curr_name, curr_const,scope, for_flag
+    if (for_flag == True):
+        quad.type_stack_push('28')
+        quad.operands_stack_push(curr_const)
+        for_flag = False
+    else:
+        tipo = tables.search_variable_existance(curr_name, scope)
+        quad.type_stack_push(str(tipo))
+        quad.operands_stack_push(curr_name)
+        quad.check_integer()
 
 # <CALL_FUNCTION>
 def p_call_function(p):

@@ -31,11 +31,15 @@ z = 1;
 if ( a > d) {
     a = 2;
 }else{
-    d = 3;
+    d = 4.5;
 };
 }while (a > d);
 
-print('hola',2);
+a = 3
+for (a to 5){
+    a = 5;
+};
+
 
 }
 end
