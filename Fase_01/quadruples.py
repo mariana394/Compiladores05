@@ -105,8 +105,14 @@ class Quadruples:
                     print("ERROR: STACK OVERFLOW")
                     exit()
         self.t_i_cont += 1
+        #TOP of the stack
         value = self.pOperands[-1]
+        print("value ", self.pOperands)
+        #type of the top of the stack
         self.quadruple.append([21, value, '', place])
+        print("control :", self.quadruple[-1])
+        #Aqui ya place tiene un valor 
+
         
         
         
@@ -139,7 +145,7 @@ class Quadruples:
         print("PILA DE OPERANDOS", self.pOperands)
         print("PILA DE TIPOS", self.pTypes)
         #print("CHECK", self.pTypes[-1])
-        if(self.pTypes[-1] != '1'):
+        if(self.pTypes[-1] != 1):
              print('Integer type was expected')
              exit()
 
@@ -159,6 +165,8 @@ class Quadruples:
         operator = self.operators_stack_pop()
         operandR = self.operands_stack_pop()
         result = self.operands_stack_pop()
+        print("POP OPERANDE", result)
+
        #POP to the types
         #print(self.pTypes)
         typeR = self.type_stack_pop()
@@ -178,8 +186,12 @@ class Quadruples:
         print('Lista de operandos', self.pOperands)
         print('Lista de Tipos', self.pTypes)
         operandR = self.operands_stack_pop()
+        
+
         typeR = self.type_stack_pop()
         operandL = self.operands_stack_pop()
+       
+
         typeL = self.type_stack_pop()
         operator = self.operators_stack_pop()
         
@@ -299,6 +311,7 @@ class Quadruples:
             case 20 | 22 | 23 | 24 | 31 | 32:
                 if (operator == 20 or operator == 22 or operator == 23 or operator == 24 or operator == 31 or operator == 32):
                     print('< > == != <= >=')
+                    print("ENTRO", self.pOperators)
                     self.inner_quad_exp()
 
         
@@ -338,6 +351,7 @@ class Quadruples:
                 self.cont += 1
                 print("\t\tCONTADOR\t", self.cont)
                 print(self.quadruple)
+                #self.operators_stack_pop()
                
 
             #GOTOV

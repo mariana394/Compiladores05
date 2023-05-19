@@ -178,6 +178,7 @@ def p_var_s_dimesions(p):
 def p_variable(p):
     '''variable : id_saver variable_array'''
     global curr_name, scope
+    print("var m ", curr_name)
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type)
     quad.operands_stack_push(curr_name)
@@ -262,6 +263,8 @@ def p_inner_body(p):
 #__________________________<ASSIGN>____________________________________
 def p_assign(p):
     '''assign : variable keep_assign specialf_assign end_assign'''
+   #PRINT
+   
     quad.print_poperands()
 
 def p_specialf_assign(p):
@@ -272,8 +275,8 @@ def p_specialf_assign(p):
 #keep the assign -> STACK
 def p_keep_assign(p):
     '''keep_assign : ASSIGN empty'''
-   # print('ASSIGN ', p[1])
     global curr_name, scope
+    #print('ASSIGN H ', curr_name)
     #PUSH operators and operanas to the stakc
     #quad.operands_stack_push(curr_name)
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
@@ -371,40 +374,74 @@ def p_gotoV(p):
 
 #_________________<FOR>____________
 def p_for(p):
-    '''for : FOR LPAREN id_saver for_np1 for_end for_np2  body SEMICOLON'''
+    '''for : FOR LPAREN for_np1 for_end body for_np2'''
 
-# def p_for(p):
-#     '''for : FOR LPAREN id_saver for_np1 TO for_end  RPAREN body SEMICOLON'''
+def p_for_np1(p):
+    '''for_np1 : assign TO'''
+    global curr_name,scope
+    print("FOR FOR ", oracle.datalor_translator(type(curr_name).__name__.upper()))
+    #PUSH TO STACK
+    #print("FOR STACK ")
+    quad.operands_stack_push(curr_name)
+    quad.type_stack_push(oracle.datalor_translator(type(curr_name).__name__.upper()))
+    #CHECK THE VALUE IT SHOULD BE INT
+    quad.check_integer()
+    quad.control_var()
+
 
 
 def p_for_end(p):
-    '''for_end : int_const_saver
-               | ID '''
-    print('\t\tSEGUNDO PUNTO\n', p[1])
-
-
-def p_for_np1(p):
-    '''for_np1 : TO'''
-    global curr_name, scope
-    type = tables.search_variable_existance(curr_name, scope)
-    quad.type_stack_push(str(type))
-    quad.operands_stack_push(curr_name)
-    quad.check_integer()
-    
-    #print('\t\tPRIMER PUNTO\n', curr_name, scope)
+     '''for_end : int_const_saver RPAREN'''
+     global curr_const
+     print("constante for ", curr_const)
+     quad.operands_stack_push(curr_const)
+     quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
+     quad.create_exp_quadruple(31)
 
 def p_for_np2(p):
-    '''for_np2 : RPAREN'''
-    global curr_name, curr_const,scope, for_flag
-    if (for_flag == True):
-        quad.type_stack_push('28')
-        quad.operands_stack_push(curr_const)
-        for_flag = False
-    else:
-        tipo = tables.search_variable_existance(curr_name, scope)
-        quad.type_stack_push(str(tipo))
-        quad.operands_stack_push(curr_name)
-        quad.check_integer()
+    '''for_np2 : SEMICOLON'''
+    global curr_name
+
+# # def p_for(p):
+# #     '''for : FOR LPAREN id_saver for_np1 TO for_end  RPAREN body SEMICOLON'''
+
+
+# def p_for_end(p):
+#     '''for_end : int_const_saver
+#                | ID '''
+#     print('\t\tSEGUNDO PUNTO\n', p[1])
+    
+
+
+# def p_for_np1(p):
+#     '''for_np1 : TO'''
+#     global curr_name, scope
+#     type = tables.search_variable_existance(curr_name, scope)
+#     quad.type_stack_push(str(type))
+#     quad.operands_stack_push(curr_name)
+#     quad.check_integer()
+#     quad.control_var()
+#     #Insert the operator that represents "TO"
+#     quad.operators_stack_push(32)
+    
+    
+#     #print('\t\tPRIMER PUNTO\n', curr_name, scope)
+
+# def p_for_np2(p):
+#     '''for_np2 : RPAREN'''
+#     global curr_name, curr_const,scope, for_flag
+#     if (for_flag == True):
+#         quad.type_stack_push('28')
+#         quad.operands_stack_push(curr_const)
+#         for_flag = False
+#     else:
+#         tipo = tables.search_variable_existance(curr_name, scope)
+#         quad.type_stack_push(str(tipo))
+#         quad.operands_stack_push(curr_name)
+#         quad.check_integer()
+#     quad.create_exp_quadruple()
+    
+    
 
 # <CALL_FUNCTION>
 def p_call_function(p):

@@ -14,7 +14,7 @@ function void message (char name, int size, char test){
 
 main {
 var
-int d, a,z;
+int d, a,z,mia;
 float c;
 
 d = 2 * 3 ;
@@ -35,13 +35,12 @@ if ( a > d) {
 };
 }while (a > d);
 
-a = 3
-for (a to 5){
-    a = 5;
+a = 3;
+
+for(mia = 2; to 5){
+    a = 7;
 };
 
 
 }
 end
-
-
