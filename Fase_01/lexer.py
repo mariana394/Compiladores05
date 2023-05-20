@@ -87,6 +87,8 @@ tokens = [
     'GTHAN',
     'LTHAN',
     'NOTEQUAL', #!=
+    'GORE', #>=
+    'LORE', # <=
     'COLON',
     'SEMICOLON',
     'COMMA',
@@ -114,6 +116,8 @@ t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 t_RSQBRACKET = r'\]'
 t_LSQBRACKET = r'\['
+t_GORE = r'\>\='
+t_LORE = r'\<\='
 t_EQUAL = r'=='
 t_ASSIGN = r'='
 t_GTHAN = r'>'

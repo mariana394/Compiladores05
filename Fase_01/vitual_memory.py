@@ -44,20 +44,14 @@ class VirtualMemory:
 
         #LOCALES
         self.l_i_init = 9000
-        self.l_f_init = 12000
-        self.l_c_init = 15000
-        self.l_df_init = 18000
-
-        #TEMPORALES
-        self.t_i_init = 15000
-        self.t_f_init = 17000
-        self.t_c_init = 19000
-        self.t_b_init = 21000
+        self.l_f_init = 11000
+        self.l_c_init = 13000
+        self.l_df_init = 15000
 
         #CONSTANTES
-        self.c_i_init = 23000
-        self.c_f_init = 25000
-        self.c_c_init = 27000
+        self.c_i_init = 25000
+        self.c_f_init = 27000
+        self.c_c_init = 29000
 
         #_______COUNTERS_______
 
@@ -72,12 +66,6 @@ class VirtualMemory:
         self.l_f_cont = 0
         self.l_c_cont = 0
         self.l_df_cont = 0
-
-        #TEMPORALES
-        self.t_i_cont = 0
-        self.t_f_cont = 0
-        self.t_c_cont = 0
-        self.t_b_cont = 0
 
         #CONSTANTES
         self.c_i_cont = 0

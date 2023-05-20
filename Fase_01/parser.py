@@ -2,7 +2,7 @@
 # DATALOR: PARSER
 # Mariana Favarony Avila -A01704671
 # Mario Juarez - A01411049
-# PASER.... 
+# PARSER.... 
 # ------------------------------------------------------------
 import ply.yacc as yacc
 from lexer import tokens
@@ -22,6 +22,8 @@ curr_columns = 0
 curr_dim = 0 #por si las moscas
 curr_temp = 0
 g_test = 10
+curr_const = None
+for_flag = False
 
 #Objects
 tables = DirFunc()
@@ -52,14 +54,18 @@ def p_id_saver(p):
 #Neuralgic point for constant Int, helps us to save the constant in the constants table and memory no matter where the constant is in the code. 
 # cte_int -> for (top of the cycle), array/matrix dimensions, special functions
 def p_int_const_saver(p):
-    '''int_const_saver : CTE_INT empty'''
-    tables.add_const(p[1], type (p[1]))
+    '''int_const_saver : CTE_INT 
+                       | empty'''
+    global curr_const, for_flag
+    curr_const = p[1]
+    for_flag = True
+    tables.add_const(curr_const, type (curr_const))
 
 #Neuralgic point number 1 for all expressions where we check first if we have a pending operator
 def p_release_exp(p):
     '''release_exp : empty'''
     global g_test
-    print (g_test)
+    #print ("Tipo de Operacion", g_test)
     quad.create_exp_quadruple(g_test)
 
 #_________________________<LIBRERIES>_____________________________#
@@ -172,11 +178,12 @@ def p_var_s_dimesions(p):
 def p_variable(p):
     '''variable : id_saver variable_array'''
     global curr_name, scope
+    print("var m ", curr_name)
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type)
     quad.operands_stack_push(curr_name)
 
-    print(scope, ' factor variable ', curr_name, type )
+    #print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
@@ -256,7 +263,9 @@ def p_inner_body(p):
 #__________________________<ASSIGN>____________________________________
 def p_assign(p):
     '''assign : variable keep_assign specialf_assign end_assign'''
-
+   #PRINT
+   
+    quad.print_poperands()
 
 def p_specialf_assign(p):
     '''specialf_assign : exp
@@ -266,10 +275,10 @@ def p_specialf_assign(p):
 #keep the assign -> STACK
 def p_keep_assign(p):
     '''keep_assign : ASSIGN empty'''
-   # print('ASSIGN ', p[1])
     global curr_name, scope
+    #print('ASSIGN H ', curr_name)
     #PUSH operators and operanas to the stakc
-    quad.operands_stack_push(curr_name)
+    #quad.operands_stack_push(curr_name)
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
     #save the type 
     # var_type = tables.search_variable_existance(curr_name, scope)
@@ -286,17 +295,37 @@ def p_end_assign(p):
 
 #_________________________<CONDITION>___________________________________
 def p_condition(p):
-    '''condition : IF LPAREN exp RPAREN body condition2 SEMICOLON'''
+    '''condition : IF LPAREN exp RPAREN condition_GOTOF body condition2 SEMICOLON end_condition'''
 
 def p_condition2(p):
-    '''condition2 : ELSE body
+    '''condition2 : ELSE condition_GOTO body
                  | empty'''
+
+# Neuralgic point 1
+def p_condition_GOTOF(p):   
+    '''condition_GOTOF : empty'''
+    print('\t\tcondition_GOTOF\n')
+    quad.jump_stack_push()
+    quad.insert_goto(18)
+
+#Neuralgic point 2
+def p_condition_GOTO(p):   
+    '''condition_GOTO : empty'''
+    print('\t\tcondition_GOTO\n')
+    quad.insert_goto(17)
+
+def p_end_condition(p):
+    '''end_condition : empty'''
+    jump = quad.jump_stack_pop()
+    where = quad.cont_place()
+    quad.fill(jump, where)
+
+
     
-#<PRINT>
+#_________________________<PRINT>____________________
 def p_print(p):
-    '''print : PRINT LPAREN print_many RPAREN SEMICOLON'''
+    '''print : PRINT LPAREN print_many RPAREN SEMICOLON end_print_np'''
     
-#Notas modificar print para que sirva con exp en ID
 def p_print_type(p):
     '''print_type : exp'''
 
@@ -304,32 +333,124 @@ def p_print_many(p):
     '''print_many : print_type print_many2 '''
 
 def p_print_many2(p):
-    '''print_many2 : COMMA print_many
+    '''print_many2 : COMMA print_many_np print_many
                    | empty'''
-
-
     
-#<READ>
-def p_read(p):
-    '''read : READ LPAREN variable RPAREN'''
+def p_print_many_np(p):
+    '''print_many_np : empty'''
+    quad.print_quadruple()
 
+def p_end_print_np(p):
+    '''end_print_np : empty'''
+    quad.print_quadruple()
+    
+    
+#________________________<READ>_______________________
+def p_read(p):
+    '''read : READ LPAREN variable RPAREN read_np'''
+
+def p_read_np(p):
+    '''read_np : empty'''
+    quad.read_quadruple()
 #<CYCLE>
 def p_cycle(p):
     '''cycle : for
              | while'''
     
-#<WHILE>
+#___________________<WHILE>______________________
 def p_while(p):
-    '''while : DO body WHILE LPAREN exp RPAREN SEMICOLON'''
+    '''while : DO seed body WHILE LPAREN exp RPAREN SEMICOLON gotoV'''
 
-#<FOR>
+#neuralgic point 1 (guardar la semilla de a donde regreso)
+def p_seed(p):
+    '''seed : empty'''
+    quad.jump_seed()
+    
+#Neuralgic point 2
+def p_gotoV(p):
+    '''gotoV : empty'''
+    quad.insert_goto(19)
+
+
+#_________________<FOR>____________
 def p_for(p):
-    '''for : FOR LPAREN ID TO for_end RPAREN body SEMICOLON'''
+    '''for : FOR LPAREN for_control keep_assign exp for_np1 for_end body for_np2'''
+
+def p_for_control(p):
+    '''for_control : id_saver'''
+    global curr_name, scope
+    type = tables.search_variable_existance(curr_name, scope)
+    quad.type_stack_push(type)
+    quad.operands_stack_push(curr_name)
+
+
+
+def p_for_np1(p):
+    '''for_np1 :  TO'''
+    quad.control_var()
+
 
 def p_for_end(p):
-    '''for_end : int_const_saver
-               | ID'''
+     '''for_end : int_const_saver RPAREN'''
+     global curr_const
+     print("constante for ", curr_const)
+     quad.operands_stack_push(curr_const)
+     quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
+     quad.final_var()
+     #Se inserta un 32 para que se haga la comparacion
+     quad.print_poperands()
+     quad.operators_stack_push(32)
+     quad.create_exp_quadruple(32)
+     quad.jump_stack_push()
+     quad.insert_goto(18)
+     quad.jump_stack_push()
 
+
+
+def p_for_np2(p):
+    '''for_np2 : SEMICOLON'''
+    quad.end_for()
+
+# # def p_for(p):
+# #     '''for : FOR LPAREN id_saver for_np1 TO for_end  RPAREN body SEMICOLON'''
+
+
+# def p_for_end(p):
+#     '''for_end : int_const_saver
+#                | ID '''
+#     print('\t\tSEGUNDO PUNTO\n', p[1])
+    
+
+
+# def p_for_np1(p):
+#     '''for_np1 : TO'''
+#     global curr_name, scope
+#     type = tables.search_variable_existance(curr_name, scope)
+#     quad.type_stack_push(str(type))
+#     quad.operands_stack_push(curr_name)
+#     quad.check_integer()
+#     quad.control_var()
+#     #Insert the operator that represents "TO"
+#     quad.operators_stack_push(32)
+    
+    
+#     #print('\t\tPRIMER PUNTO\n', curr_name, scope)
+
+# def p_for_np2(p):
+#     '''for_np2 : RPAREN'''
+#     global curr_name, curr_const,scope, for_flag
+#     if (for_flag == True):
+#         quad.type_stack_push('28')
+#         quad.operands_stack_push(curr_const)
+#         for_flag = False
+#     else:
+#         tipo = tables.search_variable_existance(curr_name, scope)
+#         quad.type_stack_push(str(tipo))
+#         quad.operands_stack_push(curr_name)
+#         quad.check_integer()
+#     quad.create_exp_quadruple()
+    
+    
 
 # <CALL_FUNCTION>
 def p_call_function(p):
@@ -416,15 +537,18 @@ def p_model_predict(p):
 
 #__________________________________<EXP>___________________________
 def p_exp(p):
-    '''exp : t_exp exp_or'''
-
+    '''exp : t_exp release_exp exp_or'''
+#CORRECCION :  SE CAMBIO DE LUGAR release_exp
+#ANTERIORMENTE ESTABA ABAJO \/
 def p_exp_or(p):
-    '''exp_or : exp_keep_or release_exp exp
+    '''exp_or : exp_keep_or  exp
               | empty'''
     
 def p_exp_keep_or(p):
     '''exp_keep_or : OR'''
      #NEURALGIC POINT 2
+     #Se coloca p[-1] para que s 
+    print("exp_keep_or\n\n" , p[1])
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 #_________________________________<T_EXP>_____________________________________
@@ -434,15 +558,16 @@ def p_t_exp(p):
     g_test = 10
 
 def p_t_exp_and(p):
-    '''t_exp_and : AND keep_and t_exp
+    '''t_exp_and : keep_and t_exp
                  | empty'''
 
 def p_keep_and(p):
-    '''keep_and : empty '''
+    '''keep_and : AND '''
     #NEURALGIC POINT 2
+    #CORRECCION : SE CAMBIO EL EMPTY POR AND PARA QUE FUERA MAS FACIL
+    #ENVIAR LOS DATOS, EN LUGAR DE MANDAR P[-1] SE MANDA P[1]
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-
-    
+  
 #____________________________________<EXPRESSION>___________________________________
 def p_expression(p):
     '''expression : m_exp release_exp expression_comp'''
@@ -451,17 +576,24 @@ def p_expression(p):
     print("expression")
 
 def p_expression_comp(p):
-    '''expression_comp : expression_comp_2 m_exp
-                       | empty'''
+    '''expression_comp :  expression_comp_2  m_exp release_exp
+                       |  empty'''
+    print("expression_comp", p[1])
+    
 
 def p_expression_comp_2(p):
-    '''expression_comp_2 : EQUAL
+    '''expression_comp_2 : GTHAN
+                         | EQUAL
                          | NOTEQUAL
                          | LTHAN
-                         | GTHAN'''
+                         | GORE
+                         | LORE
+                         '''
      #NEURALGIC POINT 2
+    
+    print("expression_comp_2", p[1])
+    
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-
 
 #__________________________________<M_EXP>_________________________________________
 def p_m_exp(p):
@@ -469,7 +601,7 @@ def p_m_exp(p):
     global g_test
     #Valor de not equal
     g_test = 24
-    print("m_exp")
+    #print("m_exp")
 
 def p_m_exp_sr(p): 
     '''m_exp_sr : m_exp_sr_2 m_exp
@@ -487,7 +619,7 @@ def p_term(p):
     '''term : sub_factor release_exp term_pc'''
     global g_test
     g_test = 11
-    print("term")
+    #print("term")
 
 def p_term_pc(p):
     '''term_pc : term_pc_2 term
@@ -514,8 +646,7 @@ def p_sub_factor_pc_2(p):
     '''sub_factor_pc_2 : POWER empty'''
     #NEURALGIC POINT 2
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-    
-
+  
 #_____________________________<FACTOR>______________________________
 
 def p_factor(p):
@@ -528,7 +659,22 @@ def p_factor(p):
     g_test = 16
 
 def p_factor_exp(p):
-    '''factor_exp : LPAREN exp RPAREN'''
+    '''factor_exp : false_button exp release_false_button'''
+
+#_______NEURALGIC POINT_____ PARENTESIS
+
+def p_false_button(p):
+    '''false_button : LPAREN'''
+    #NEURALGIC POINT 1
+    print("false_button")
+    quad.false_button()
+
+def p_release_false_button(p):
+    '''release_false_button : RPAREN'''
+    #NEURALGIC POINT 1
+    quad.release_false_button()
+
+#_______NEURALGIC POINT_____ END PARENTESIS
 
 def p_factor_cte(p):
     '''factor_cte : CTE_FLOAT
