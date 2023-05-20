@@ -99,19 +99,50 @@ class Quadruples:
         print(self.quadruple)
 
     #<FOR> Control and final variables declaration
-    def control_var(self):
+    def control_var(self ):
+        self.check_integer()
+        exp_type = self.type_stack_pop()
+        exp = self.operands_stack_pop()
+        #Se elige el valor y tipo para la variable de control
+        vControl = self.pOperands[-1]
+        control_type = self.pTypes[-1]
+        #Se genera un espacio en memoria para la variable de control
         place = self.t_i_cont + self.t_i_init
         if (self.t_i_cont > self.t_i_size):
-                    print("ERROR: STACK OVERFLOW")
-                    exit()
+            print("ERROR: STACK OVERFLOW")
+            exit()
         self.t_i_cont += 1
-        #TOP of the stack
-        value = self.pOperands[-1]
-        print("value ", self.pOperands)
-        #type of the top of the stack
-        self.quadruple.append([21, value, '', place])
-        print("control :", self.quadruple[-1])
-        #Aqui ya place tiene un valor 
+        #Fin de asignacion de memoria
+        #Se revisa si es posible la asignacion del ID y la expresion
+        res = oracle.oracle_cmddwtm(str(exp_type),str(control_type),'21')
+        print ("DE QUE TIPO ES", res)
+        if (res != '1'):
+            print("ERROR: TYPE MISMATCH")
+            exit()
+        else:
+            self.quadruple.append([21, exp, '', vControl])
+            self.cont += 1
+            self.quadruple.append([21, vControl, '', place])
+            self.cont += 1
+            self.operands_stack_push(place)
+            self.type_stack_push(control_type)
+
+    def final_var(self):
+        self.check_integer()
+        exp_type = self.type_stack_pop()
+        exp = self.operands_stack_pop()
+        #Se genera un espacio en memoria para la variable Final
+        place = self.t_i_cont + self.t_i_init
+        if (self.t_i_cont > self.t_i_size):
+            print("ERROR: STACK OVERFLOW")
+            exit()
+        self.t_i_cont += 1
+        #Fin de asignacion de memoria
+        self.quadruple.append([21, exp, '', place])
+        self.cont += 1
+        self.operands_stack_push(place)
+        self.type_stack_push(exp_type)
+
 
         
         
@@ -276,7 +307,7 @@ class Quadruples:
         else:
             print("TAMA;O ES IGUAL A 0")
             operator = 0
-        print("OPERATOR",type_exp)
+        #print("OPERATOR",type_exp)
         match type_exp:
             #AND
             
@@ -409,7 +440,11 @@ class Quadruples:
     #     #     type mistmatch
 
     def print_poperands(self):
+        self.print_quadruples()
         print ('OPERANDOS',self.pOperands)
+        print ('TIPOS',self.pTypes)
+        print ('SALTOS', self.pJumps)
+        print ('CONTADOR', self.cont)
 
     def print_quadruples(self):
         for i in range(len(self.quadruple)):

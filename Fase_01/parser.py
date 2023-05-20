@@ -65,7 +65,7 @@ def p_int_const_saver(p):
 def p_release_exp(p):
     '''release_exp : empty'''
     global g_test
-    print ("Tipo de Operacion", g_test)
+    #print ("Tipo de Operacion", g_test)
     quad.create_exp_quadruple(g_test)
 
 #_________________________<LIBRERIES>_____________________________#
@@ -374,20 +374,20 @@ def p_gotoV(p):
 
 #_________________<FOR>____________
 def p_for(p):
-    '''for : FOR LPAREN for_np1 for_end body for_np2'''
+    '''for : FOR LPAREN for_control keep_assign exp for_np1 for_end body for_np2'''
+
+def p_for_control(p):
+    '''for_control : id_saver'''
+    global curr_name, scope
+    type = tables.search_variable_existance(curr_name, scope)
+    quad.type_stack_push(type)
+    quad.operands_stack_push(curr_name)
+
+
 
 def p_for_np1(p):
-    '''for_np1 : assign TO'''
-    global curr_name,scope
-    print("FOR FOR ", oracle.datalor_translator(type(curr_name).__name__.upper()))
-    #PUSH TO STACK
-    #print("FOR STACK ")
-    quad.operands_stack_push(curr_name)
-    quad.type_stack_push(oracle.datalor_translator(type(curr_name).__name__.upper()))
-    #CHECK THE VALUE IT SHOULD BE INT
-    quad.check_integer()
+    '''for_np1 :  TO'''
     quad.control_var()
-
 
 
 def p_for_end(p):
@@ -396,11 +396,16 @@ def p_for_end(p):
      print("constante for ", curr_const)
      quad.operands_stack_push(curr_const)
      quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
-     quad.create_exp_quadruple(31)
+     quad.final_var()
+     #Se inserta un 32 para que se haga la comparacion
+     quad.operators_stack_push(32)
+     quad.create_exp_quadruple(32)
+     quad.jump_stack_push()
+     quad.insert_goto(18)
+
 
 def p_for_np2(p):
     '''for_np2 : SEMICOLON'''
-    global curr_name
 
 # # def p_for(p):
 # #     '''for : FOR LPAREN id_saver for_np1 TO for_end  RPAREN body SEMICOLON'''
