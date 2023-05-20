@@ -398,14 +398,19 @@ def p_for_end(p):
      quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
      quad.final_var()
      #Se inserta un 32 para que se haga la comparacion
+     quad.print_poperands()
      quad.operators_stack_push(32)
+
      quad.create_exp_quadruple(32)
      quad.jump_stack_push()
      quad.insert_goto(18)
+     quad.jump_stack_push()
+
 
 
 def p_for_np2(p):
     '''for_np2 : SEMICOLON'''
+    quad.end_for()
 
 # # def p_for(p):
 # #     '''for : FOR LPAREN id_saver for_np1 TO for_end  RPAREN body SEMICOLON'''

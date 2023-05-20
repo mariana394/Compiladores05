@@ -94,9 +94,9 @@ class Quadruples:
 
     #FILL
     def fill(self, jump, place):
-        print("FILL", jump, place)
+        print("ULTIMO FILL", jump, place)
         self.quadruple[jump][3] = place
-        print(self.quadruple)
+        self.print_poperands()
 
     #<FOR> Control and final variables declaration
     def control_var(self ):
@@ -126,6 +126,8 @@ class Quadruples:
             self.cont += 1
             self.operands_stack_push(place)
             self.type_stack_push(control_type)
+            
+
 
     def final_var(self):
         self.check_integer()
@@ -142,9 +144,46 @@ class Quadruples:
         self.cont += 1
         self.operands_stack_push(place)
         self.type_stack_push(exp_type)
+        print("FINAL FINAL", )
+        self.print_poperands()
+        #DUPLICAR LOS DATOS DE LA VARIABLE DE CONTROL Y LA VARIABLE FINAL
+        vcontrol = self.pOperands[-2]
+        vfinal = self.pOperands[-1]
+        control_type = self.pTypes[-2]
+        final_type = self.pTypes[-1]
+        self.operands_stack_push(vcontrol)
+        self.type_stack_push(control_type)
 
 
-        
+    def end_for(self):
+        vControl = self.operands_stack_pop()
+        vControl_type = self.type_stack_pop()
+        #Se genera un espacio para el incremento del la variable de control
+        place = self.t_i_cont + self.t_i_init
+        if (self.t_i_cont > self.t_i_size):
+            print("ERROR: STACK OVERFLOW")
+            exit()
+        self.t_i_cont += 1
+        #Fin de asignacion de memoria
+        #Se obtiene el lugar de donde se obtuvo el valor de la variable de control
+        idfrom = self.operands_stack_pop()
+        idfrom_type = self.type_stack_pop()
+        self.quadruple.append([11, vControl, 1, place])
+        self.cont += 1
+        self.quadruple.append([21, place, '', vControl])
+        self.cont += 1
+        self.quadruple.append([21, place, '', idfrom])
+        self.cont += 1
+
+
+        fin = self.pJumps.pop()
+        ret = self.pJumps.pop()
+        self.quadruple.append([17, '', '', ret])
+        self.cont += 1
+        self.fill(fin-1, self.cont)
+
+        self.print_poperands()
+
         
         
     #Function for creating quadruples
