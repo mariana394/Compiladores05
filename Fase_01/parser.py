@@ -400,7 +400,6 @@ def p_for_end(p):
      #Se inserta un 32 para que se haga la comparacion
      quad.print_poperands()
      quad.operators_stack_push(32)
-
      quad.create_exp_quadruple(32)
      quad.jump_stack_push()
      quad.insert_goto(18)

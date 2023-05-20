@@ -140,6 +140,7 @@ class Quadruples:
             exit()
         self.t_i_cont += 1
         #Fin de asignacion de memoria
+        igual = self.operators_stack_pop()
         self.quadruple.append([21, exp, '', place])
         self.cont += 1
         self.operands_stack_push(place)
@@ -148,9 +149,9 @@ class Quadruples:
         self.print_poperands()
         #DUPLICAR LOS DATOS DE LA VARIABLE DE CONTROL Y LA VARIABLE FINAL
         vcontrol = self.pOperands[-2]
-        vfinal = self.pOperands[-1]
+        #vfinal = self.pOperands[-1]
         control_type = self.pTypes[-2]
-        final_type = self.pTypes[-1]
+        #final_type = self.pTypes[-1]
         self.operands_stack_push(vcontrol)
         self.type_stack_push(control_type)
 
@@ -181,8 +182,6 @@ class Quadruples:
         self.quadruple.append([17, '', '', ret])
         self.cont += 1
         self.fill(fin-1, self.cont)
-
-        self.print_poperands()
 
         
         
@@ -480,6 +479,7 @@ class Quadruples:
 
     def print_poperands(self):
         self.print_quadruples()
+        print ('OPERADORES',self.pOperators)
         print ('OPERANDOS',self.pOperands)
         print ('TIPOS',self.pTypes)
         print ('SALTOS', self.pJumps)
