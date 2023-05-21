@@ -15,7 +15,7 @@ from dictionary import Dictionary
 curr_type = ''
 scope = 0 
 curr_name = ''
-curr_function = ''
+curr_function = 'global'
 # GB for arrays and Matrix
 curr_rows = 0
 curr_columns = 0
@@ -24,21 +24,30 @@ curr_temp = 0
 g_test = 10
 curr_const = None
 for_flag = False
+return_type = None
 
 #Objects
 tables = DirFunc()
 quad = Quadruples()
 oracle = Dictionary()
-#<PROGRAM>
+#__________________________<PROGRAM>_________________________
 def p_program(p):
-    '''program : PROGRAM ID SEMICOLON program_libraries program_vars program_function program_main end'''
+    '''program : PROGRAM ID goto_main program_libraries program_vars program_function program_main end '''
     p[0] = "COMPILED"
 
+def p_goto_main(p):
+    '''goto_main : SEMICOLON'''
+    quad.insert_goto(16)
+
 def p_end(p):
-    '''end : END empty'''
+    '''end : END '''
+    global curr_function
     tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont)
     print("RESOURCES DONE")
+    print("CURR_ FUNCTION", type(curr_function))
+    tables.resources_handler(curr_function)
     tables.print()
+
 #EMPTY
 def p_empty(p):
     'empty : '
@@ -69,6 +78,11 @@ def p_release_exp(p):
     global g_test
     #print ("Tipo de Operacion", g_test)
     quad.create_exp_quadruple(g_test)
+
+def p_resources(p):
+    '''resources : empty'''
+    global curr_function
+    tables.resources_handler(curr_function)
 
 #_________________________<LIBRERIES>_____________________________#
 #Uso de las librerias en el programa  
@@ -199,7 +213,7 @@ def p_variable_matrix(p):
 #
 #Program functions 
 def p_program_function(p):
-    '''program_function : FUNCTION f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return RBRACKET program_function
+    '''program_function : FUNCTION resources f_type id_saver func_creator  LPAREN param RPAREN np_call_func program_vars inner_body return end_function program_function
                         | empty'''
 
 
@@ -209,9 +223,13 @@ def p_f_type(p):
               | FLOAT
               | CHAR
               | VOID'''
-    global curr_type,scope
+    global curr_type,scope,return_type
     curr_type = p[1]
+    return_type = curr_type
     scope += 1
+    
+   
+    
     #print(curr_type,scope)
 #______FUNCTION___NEURALGIC POINTS________#
 
@@ -220,9 +238,21 @@ def p_func_creator(p):
     global scope, curr_function, curr_type, curr_name
     curr_function = curr_name
     tables.add_function(curr_name,scope,curr_type)
+
+
+def p_np_call_func(p):
+    '''np_call_func : LBRACKET'''
+    global curr_function,scope
+    tables.memory_num = quad.cont_place()
+    tables.add_vars(curr_function,scope,6)
+    print("CONTADORRR, ", quad.cont_place())
+
+def p_end_function(p):
+    '''end_function : RBRACKET'''
+    quad.end_func_quad()
 #_____________________________________________________
 
-#<PARAM>
+#_________________________<PARAM>__________________________#
 def p_param(p):
     '''param : s_type id_saver add_params param2'''
     
@@ -237,19 +267,47 @@ def p_add_params(p):
     tables.add_vars(curr_name,scope,curr_type)
     tables.add_params(curr_function,curr_type)
 
-#<RETURN>
+#_________________________<RETURN>____________________#
 def p_return(p):
-    '''return : RETURN exp SEMICOLON
-              | empty'''
+    '''return : return_np exp return_quad SEMICOLON
+              | empty_path_return'''
+
+def p_return_np(p):
+    '''return_np : RETURN'''
+    global return_type
+    if(return_type != 'void'):
+        print("okay")
+    else:
+        print("ERROR: FUNCTION IS VOID: NON-VALUE RETURNING FUNCTION")
+        exit()
+
+def p_return_quad(p):
+    '''return_quad : empty'''
+    global return_type
+    quad.return_quad(return_type)
+
+# Void function for empty path
+def p_empty_path_return(p):
+    '''empty_path_return : empty'''
+    global return_type
+    if(return_type == 'void'):
+        print("okay")
+    else:
+        print("ERROR: FUNCTION MUST HAVE RETURN STATEMENT")
+        exit()
+
 #____________________MAIN_________________#
 #Uso del main en el programa
 def p_program_main(p):
-    '''program_main : MAIN main_id LBRACKET program_vars inner_body RBRACKET'''
+    '''program_main :  main_id LBRACKET program_vars inner_body RBRACKET'''
 
-def p_main_id(p):
-    '''main_id : empty'''
-    global scope
+def p_main_id(p): 
+    '''main_id : MAIN resources '''
+    global scope, curr_function
     scope += 1
+    curr_function = 'main'
+   # print("TIPOO JUMPS", quad.jump_stack_pop())
+    quad.fill(quad.jump_stack_pop()-1,quad.cont_place())
     tables.add_function('main',scope,'void')
     
 #<BODY>

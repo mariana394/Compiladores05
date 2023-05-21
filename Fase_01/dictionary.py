@@ -59,6 +59,10 @@ class Dictionary:
             #EXPRESSIONS ADDED
             'GORE' : 31, #>=
             'LORE': 32, # <=
+
+            #RETURN FUNCTIONS
+            'RETURN': 33,
+            'END_FUNCTION' : 34,
         }
         self.datalor_symbol_dictionary = {
             

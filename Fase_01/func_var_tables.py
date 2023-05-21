@@ -19,7 +19,8 @@ class DirFunc:
 			"global": {
 				"return_type": "void", 
 				"scope": 0 ,
-				"params": []
+				"params": [],
+				"resources": [] 
 			}
 		}
 
@@ -32,8 +33,10 @@ class DirFunc:
 		#Initialize the constant dictionary varibales
 		self.constants = {}
 		#RESOURCES
-		# 0->int 1->float 2->bool 3-> char 4->DF
-		self.resources = [0,0,0,0,0]
+		# 0->int 1->float 2->bool 3-> char 4->DF 5 -> function
+		self.resources = [0,0,0,0,0,0]
+
+		self.memory_num = 0
 		
 	def add_resources_temp(self,temp_i, temp_f, temp_b, temp_c):
 		print("temp_ i ", temp_i)
@@ -60,6 +63,7 @@ class DirFunc:
 			self.dir_func[name]["return_type"] = type
 			self.dir_func[name]["scope"] = scope
 			self.dir_func[name]["params"] = []
+			self.dir_func[name]["resources"] = []
 			
 			#CREATING VARIABLE TABLE FOR THE FUNCTION SCOPE
 			self.vars[scope] = {}
@@ -97,7 +101,8 @@ class DirFunc:
 	#ADD VARIABLES
 	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
-		type = type.upper()
+		
+
 		if(self.search_variable_declaration(name, scope)):
 			print("Variable already declared",name)
 			exit()
@@ -106,11 +111,19 @@ class DirFunc:
 			# 0 -> Normal variable
 			# 1 -> Array variable
 			# 2 -> Matrix variable
+			
+			if(type != 6):
+				type = type.upper()
+				tipo = dic.datalor_translator(type)
+				self.memory_num = memory.assign_memory(tipo,scope)
+			else:
+				type = "FUNCTION"
+				tipo = dic.datalor_translator(type)
+				
 
 			#Check if the rowDim and ColDim are 0 or 
-			if(rowDim is None and columnDim is None or rowDim == 0 and columnDim == 0 ):
-				tipo = dic.datalor_translator(type)
-				newVar = {name: { 'type': tipo, 'size': 0,'address': memory.assign_memory(tipo,scope)}}
+			if(rowDim is None and columnDim is None or rowDim == 0 and columnDim == 0 ):	
+				newVar = {name: { 'type': tipo, 'size': 0,'address': self.memory_num}}
 				self.vars[scope]['vars'].update(newVar)
 				print("tipo normal ", tipo)
 				self.resources[tipo - 1] += 1
@@ -118,8 +131,7 @@ class DirFunc:
 			else:
 				# MATRIX
 				if(rowDim != 0 and columnDim != 0):
-					tipo = dic.datalor_translator(type)
-					newVar = {name: { 'type': tipo, 'size': [rowDim,columnDim],'address': memory.assign_memory(tipo,scope)}}
+					newVar = {name: { 'type': tipo, 'size': [rowDim,columnDim],'address': self.memory_num}}
 					self.vars[scope]['vars'].update(newVar)
 					print("tipo matriz", tipo)
 					self.resources[tipo -1] += rowDim * columnDim
@@ -127,8 +139,7 @@ class DirFunc:
 				
 				#ARRAY
 				else:
-					tipo = dic.datalor_translator(type)
-					newVar = {name: { 'type': tipo, 'size': [rowDim],'address': memory.assign_memory(tipo,scope)}}
+					newVar = {name: { 'type': tipo, 'size': [rowDim],'address': self.memory_num}}
 					self.vars[scope]['vars'].update(newVar)
 					#print(self.vars.values())
 					self.resources[tipo - 1] += rowDim
@@ -176,6 +187,15 @@ class DirFunc:
 			# print(self.constants.values())
 
 	
+	#___________________________RESOURES HANDLER____________________#
+	def resources_handler(self,func_name):
+		#Assgin function resources
+		print ("recursos", self.dir_func)
+		self.dir_func[func_name]["resources"] = self.resources
+		#Reset variable resource counter
+		self.resources = [0,0,0,0,0,0]
+		
+
 	def print(self):
 		#print(tabulate(self.vars,headers='keys'))
 		print("\n____________________TABLA DE FUNCIONES________________\n")

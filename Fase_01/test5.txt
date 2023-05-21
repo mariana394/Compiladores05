@@ -6,10 +6,12 @@ import numpy as np
 var dataframe costos, ventas, test2, test3;
 char inicio, fin;
 
-function void message (char name, int size, char test){
+function float message (char name, int size, char test){
 	var 
 	int test2, a;
     a = 3;
+    
+    return 2.3;
 }
 
 main {

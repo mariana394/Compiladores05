@@ -397,6 +397,12 @@ class Quadruples:
         
         match goto_Type:
 
+            #GOTOMAIN
+            case 16:           
+                self.quadruple.append([17,'','' , ''])
+                self.cont += 1
+                self.jump_stack_push()
+                
             #GOTO
             case 17:
                 #ANOTACIONES: POR EL MOMENTO SOLO ESTA PENSADO PARA EL IF
@@ -445,6 +451,24 @@ class Quadruples:
                 #print("semilla", self.pJumps)
                 print("semilla", self.pJumps)
 
+    def return_quad(self,return_type):
+        #CHECK 
+        print("return cuadruplo, ", self.pOperands)
+        exp = self.operands_stack_pop()
+        exp_type = self.type_stack_pop()
+        func_type = oracle.datalor_translator(return_type.upper())
+        
+        if(exp_type == func_type):
+            self.quadruple.append([33, '','', exp])
+            self.cont+=1
+        else:
+            print("No match in return type")
+            exit()
+
+    def end_func_quad(self):
+        self.quadruple.append([34, '','', ''])
+        self.cont+=1
+    
     def print_quadruple(self):
         printvalue = self.operands_stack_pop()
         self.type_stack_pop()
