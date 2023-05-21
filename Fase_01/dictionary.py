@@ -16,8 +16,8 @@ class Dictionary:
             'BOOL' : 4,
 
             #TIPOS COMPUESTOS
-            'DATE' : 5,
-            'DATAFRAME' : 6,
+            #'DATE' : 5,
+            'DATAFRAME' : 5,
 
             #PALABRAS RESERVADAS
             'PRINT': 7,

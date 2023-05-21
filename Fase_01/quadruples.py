@@ -6,7 +6,9 @@
 # -----------------------------------------------------------
 from dictionary import Dictionary
 
+
 oracle = Dictionary()
+
 
 class Quadruples:
    
@@ -488,3 +490,5 @@ class Quadruples:
     def print_quadruples(self):
         for i in range(len(self.quadruple)):
             print(i + 1 , " - ",self.quadruple[i])
+
+

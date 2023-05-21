@@ -36,6 +36,8 @@ def p_program(p):
 
 def p_end(p):
     '''end : END empty'''
+    tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont)
+    print("RESOURCES DONE")
     tables.print()
 #EMPTY
 def p_empty(p):
@@ -382,7 +384,7 @@ def p_for_control(p):
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type)
     quad.operands_stack_push(curr_name)
-
+    
 
 
 def p_for_np1(p):

@@ -31,7 +31,17 @@ class DirFunc:
 		}}
 		#Initialize the constant dictionary varibales
 		self.constants = {}
+		#RESOURCES
+		# 0->int 1->float 2->bool 3-> char 4->DF
+		self.resources = [0,0,0,0,0]
 		
+	def add_resources_temp(self,temp_i, temp_f, temp_b, temp_c):
+		print("temp_ i ", temp_i)
+		self.resources[0] += temp_i
+		self.resources[1] += temp_f
+		self.resources[2] += temp_b
+		self.resources[3] += temp_c
+
 	#FUNCIONES
 	# Function for adding functions to function directory
 	def add_function(self, name, scope, type):
@@ -102,6 +112,8 @@ class DirFunc:
 				tipo = dic.datalor_translator(type)
 				newVar = {name: { 'type': tipo, 'size': 0,'address': memory.assign_memory(tipo,scope)}}
 				self.vars[scope]['vars'].update(newVar)
+				print("tipo normal ", tipo)
+				self.resources[tipo - 1] += 1
 				#print(self.vars.values())
 			else:
 				# MATRIX
@@ -109,6 +121,8 @@ class DirFunc:
 					tipo = dic.datalor_translator(type)
 					newVar = {name: { 'type': tipo, 'size': [rowDim,columnDim],'address': memory.assign_memory(tipo,scope)}}
 					self.vars[scope]['vars'].update(newVar)
+					print("tipo matriz", tipo)
+					self.resources[tipo -1] += rowDim * columnDim
 					#print(self.vars.values())
 				
 				#ARRAY
@@ -117,7 +131,7 @@ class DirFunc:
 					newVar = {name: { 'type': tipo, 'size': [rowDim],'address': memory.assign_memory(tipo,scope)}}
 					self.vars[scope]['vars'].update(newVar)
 					#print(self.vars.values())
-					
+					self.resources[tipo - 1] += rowDim
 			
 	# Checking for sizes of the arrays and matrix to be greater than 0 and not allowing the user to create for example a[0]
 	def check_stype_size(self, size):
@@ -184,6 +198,8 @@ class DirFunc:
 		print(df)
 		
 		print("\n")
+		print("RESOURCES", self.resources)
+
 	#GET ADDRESS FOR CREATING QUADRUPLE
 	#def get_address(self, item, scope):
 

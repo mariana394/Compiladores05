@@ -14,7 +14,7 @@ function void message (char name, int size, char test){
 
 main {
 var
-int d, a,z,mia;
+int d[3], a,z[3][4],mia;
 float c;
 
 d = 2 * 3 ;
