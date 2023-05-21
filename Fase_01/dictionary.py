@@ -18,6 +18,7 @@ class Dictionary:
             #TIPOS COMPUESTOS
             #'DATE' : 5,
             'DATAFRAME' : 5,
+            'FUNCTION' : 6,
 
             #PALABRAS RESERVADAS
             'PRINT': 7,
