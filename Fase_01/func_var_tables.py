@@ -33,9 +33,11 @@ class DirFunc:
 		#Initialize the constant dictionary varibales
 		self.constants = {}
 		#RESOURCES
-		# 0->int 1->float 2->bool 3-> char 4->DF 5 -> function
-		self.resources = [0,0,0,0,0,0]
-
+		# 0->int 1->float 2->bool 3-> char 4->DF
+		self.resources = [0,0,0,0,0]
+		#counter for function
+		self.func_cont = 0 
+		#memory count
 		self.memory_num = 0
 		
 	def add_resources_temp(self,temp_i, temp_f, temp_b, temp_c):
@@ -45,6 +47,9 @@ class DirFunc:
 		self.resources[2] += temp_b
 		self.resources[3] += temp_c
 
+	#add function resources
+	def add_func_resources_glob(self):
+		self.dir_func['global']['resources'].append(self.func_cont)
 	#FUNCIONES
 	# Function for adding functions to function directory
 	def add_function(self, name, scope, type):
@@ -126,7 +131,10 @@ class DirFunc:
 				newVar = {name: { 'type': tipo, 'size': 0,'address': self.memory_num}}
 				self.vars[scope]['vars'].update(newVar)
 				print("tipo normal ", tipo)
-				self.resources[tipo - 1] += 1
+				if (tipo != 6):
+					self.resources[tipo - 1] += 1
+				else:
+					self.func_cont += 1
 				#print(self.vars.values())
 			else:
 				# MATRIX
@@ -193,7 +201,7 @@ class DirFunc:
 		print ("recursos", self.dir_func)
 		self.dir_func[func_name]["resources"] = self.resources
 		#Reset variable resource counter
-		self.resources = [0,0,0,0,0,0]
+		self.resources = [0,0,0,0,0]
 		
 
 	def print(self):

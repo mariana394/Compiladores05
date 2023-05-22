@@ -46,6 +46,7 @@ def p_end(p):
     print("RESOURCES DONE")
     print("CURR_ FUNCTION", type(curr_function))
     tables.resources_handler(curr_function)
+    tables.add_func_resources_glob()
     tables.print()
 
 #EMPTY
