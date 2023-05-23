@@ -392,7 +392,7 @@ class Quadruples:
 
         
 
-    def insert_goto(self, goto_Type, func_start = None):
+    def insert_goto(self, goto_Type, func = None):
         # 1 -> gotofalso 18 | 2 -> gotverdadero  19| 3 -> GOTO 17
         print("PILA DE OPERANDOS", self.pOperands)
         print("PILA DE TIPOS", self.pTypes)
@@ -452,9 +452,14 @@ class Quadruples:
 
             #_________GOSUB____
             case 36:
-                self.quadruple.append([36,'','' ,func_start])
+                self.quadruple.append([36,'','' ,func])
                 self.cont += 1
-                
+
+            #_________GOSPECIAL_______
+            case 38:
+                self.quadruple.append([38,'','',func])
+                self.cont += 1
+
 
     def create_era(self,resources):
         print("ESTOY EN EL ERA")

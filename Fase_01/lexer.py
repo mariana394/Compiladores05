@@ -62,7 +62,7 @@ reserved = {
    #FUNCIONES ESPECIALES
    'exploration' : 'EXPLORATION',
    'financial_state' : 'FINANCIAL_STATE',
-   'season_analyzer' : 'SEASON_ANALYSIS',
+   'season_analysis' : 'SEASON_ANALYSIS',
    'trend_prediction' : 'TREND_PREDICTION',
    'dummi_regression' : 'DUMMI_REGRESSION',
    

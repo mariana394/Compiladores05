@@ -68,6 +68,7 @@ class Dictionary:
             'ERA' : 35,
             'GOSUB' : 36,
             'PARAMETER' : 37,
+            'GOSPECIAL' : 38,
 
           
         }
@@ -219,7 +220,4 @@ class Dictionary:
             else:
                 print("Type mismatch")
                 exit()
-        
-        
-
 

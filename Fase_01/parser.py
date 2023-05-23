@@ -10,6 +10,7 @@ import sys
 from func_var_tables import DirFunc
 from quadruples import Quadruples
 from dictionary import Dictionary
+from special_functions import special_functions
 
 #Global variables
 curr_type = ''
@@ -31,6 +32,7 @@ function_flag = False #False for normal variables, true for functions
 tables = DirFunc()
 quad = Quadruples()
 oracle = Dictionary()
+special = special_functions()
 #__________________________<PROGRAM>_________________________
 def p_program(p):
     '''program : PROGRAM ID goto_main program_libraries program_vars program_function program_main end '''
@@ -74,6 +76,9 @@ def p_int_const_saver(p):
     curr_const = p[1]
     for_flag = True
     tables.add_const(curr_const, type (curr_const))
+    print("constante for ", curr_const)
+    quad.operands_stack_push(curr_const)
+    quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
 
 #Neuralgic point number 1 for all expressions where we check first if we have a pending operator
 def p_release_exp(p):
@@ -504,10 +509,6 @@ def p_for_np1(p):
 
 def p_for_end(p):
      '''for_end : int_const_saver RPAREN'''
-     global curr_const
-     print("constante for ", curr_const)
-     quad.operands_stack_push(curr_const)
-     quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
      quad.final_var()
      #Se inserta un 32 para que se haga la comparacion
      quad.print_poperands()
@@ -685,37 +686,93 @@ def p_special_function(p):
                         | trend_prediction
                         | model_predict'''
 
-    #<STATISTICAL_ANALYSIS>
+#__________GENERIC SPECIAL FUNCTIONS GRAMMAR_______
+#tag_sp -> tag special function
+def p_tag_sp(p):
+    '''tag_sp : LPAREN'''
+    global curr_function
+    curr_function = p[-1]
+    #Inicializa el contador de parametros en 1
+    quad.param_cont = 1
+    print("TAMOS PROBANDO", p[-1])
+    quad.quadruple.append(['special','','',curr_function])
+    quad.cont += 1
 
-#<EXPLORATION>
+#____________<STATISTICAL_ANALYSIS>_____________
+
+#_______________<EXPLORATION>________________
 def p_exploration(p):
-    '''exploration : EXPLORATION LPAREN variable explore_var explor_cte RPAREN'''
+    '''exploration : EXPLORATION tag_sp variable explore_var np_check_size'''
+
+def p_sp_param(p):
+    '''sp_param : COMMA'''
+    global curr_function
+    param = quad.param_cont
+    #Check tipy for special function params
+    
+    tipo = quad.type_stack_pop()
+    value = quad.operands_stack_pop()
+    print("PARAMETROS", tipo , value)
+    print("ESTOY DENTRO DE LA COMA", tipo)
+    special.search_sf_param(curr_function, param, tipo)
+    
+    
+    quad.quadruple.append([37,tipo,value,param])
+    quad.cont += 1 
+    quad.param_cont += 1
+
+def p_np_check_size(p):
+    '''np_check_size : RPAREN'''
+    global curr_function
+    param = quad.param_cont
+    #Check tipy for special function params
+    print('Operadores', quad.pOperands)
+    
+    tipo = quad.type_stack_pop()
+    value = quad.operands_stack_pop()
+    print("ESTOY DENTRO DE LA COMA", tipo)
+
+    special.search_sf_param(curr_function, param, tipo)
+    
+    print("PARAMETROS", tipo , value)
+
+    #
+    quad.quadruple.append([37,tipo,value,param])
+    quad.cont += 1 
+    memory = quad.t_df_cont + quad.t_df_init
+    quad.t_df_cont += 1
+    quad.insert_goto(38,memory)
+    quad.operands_stack_push(memory)
+    quad.type_stack_push(5)
+
 
 def p_explore_var(p):
-    '''explore_var : COMMA variable
-                   | empty'''  
+    '''explore_var : sp_param variable explor_cte
+                   | empty'''
+      
 
 def p_explor_cte(p):
-    '''explor_cte : COMMA int_const_saver
+    '''explor_cte : sp_param int_const_saver
                   | empty'''
     
-#<FINANCIAL_STATE>
+    
+#__________<FINANCIAL_STATE>__________
 def p_financial_state(p):
-    '''financial_state : FINANCIAL_STATE LPAREN variable COMMA variable COMMA variable COMMA variable RPAREN'''
+    '''financial_state : FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param variable np_check_size'''
 
-#<SEASON_ANALYSIS>
+#___________<SEASON_ANALYSIS>_______
 def p_season_analysis(p):
-    '''season_analysis : SEASON_ANALYSIS LPAREN variable RPAREN'''
+    '''season_analysis : SEASON_ANALYSIS tag_sp variable np_check_size'''
 
     #<MACHINE LEARNING>
 
-#<TREND_PREDICTION>
+#_____________<TREND_PREDICTION>_____________
 def p_trend_prediction(p):
-    '''trend_prediction : TREND_PREDICTION LPAREN variable COMMA int_const_saver COMMA int_const_saver COMMA int_const_saver RPAREN'''
+    '''trend_prediction : TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size'''
 
-#<DUMMI_PREDICTION>
+#_____________<DUMMI_PREDICTION>__________________
 def p_dummi_regression(p):
-    '''dummi_regression : DUMMI_REGRESSION LPAREN variable COMMA variable dr_array dr_int RPAREN'''
+    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param variable dr_array dr_int np_check_size'''
 
 def p_dr_array(p):
     '''dr_array : COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET
@@ -729,9 +786,9 @@ def p_dr_int(p):
     '''dr_int : COMMA int_const_saver
               | empty'''
     
-#<MODEL_PREDICT>
+#____________<MODEL_PREDICT>___________
 def p_model_predict(p):
-    '''model_predict : MODEL_PREDICT LPAREN variable COMMA variable COMMA RPAREN'''
+    '''model_predict : MODEL_PREDICT tag_sp variable sp_param variable np_check_size'''
 
 
 #__________________________________<EXP>___________________________

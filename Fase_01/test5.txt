@@ -45,5 +45,8 @@ for(mia = a to 5){
 name = message(2 + 5);
 costos = read(name);
 
+test2 = financial_state(costos,costos,name,name);
+
+
 }
 end
