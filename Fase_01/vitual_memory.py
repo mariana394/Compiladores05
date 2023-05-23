@@ -53,6 +53,7 @@ class VirtualMemory:
         self.c_f_init = 27000
         self.c_c_init = 29000
 
+
         #_______COUNTERS_______
 
         #GLOBALES
@@ -117,7 +118,7 @@ class VirtualMemory:
                     self.g_c_cont += 1
                     #print(address)
                     return address
-                case 6:
+                case 5:
                     #Overflow checker
                     self.overflow(self.g_df_cont, self.g_df_size)
                     #returns the address

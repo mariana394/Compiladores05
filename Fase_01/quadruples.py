@@ -30,18 +30,21 @@ class Quadruples:
         self.t_f_size = 1999
         self.t_c_size = 1999
         self.t_b_size = 1999
+        self.t_df_size = 1999
 
         #START TEMPORALES
         self.t_i_init = 17000
         self.t_f_init = 19000
         self.t_c_init = 21000
         self.t_b_init = 23000
+        self.t_df_init = 31000
 
         #COUNTER TEMPORALES
         self.t_i_cont = 0
         self.t_f_cont = 0
         self.t_c_cont = 0
         self.t_b_cont = 0 
+        self.t_df_cont = 0
 
         #self.temp_cont = {} 
 
@@ -505,9 +508,21 @@ class Quadruples:
     # PREGUNTAR QUE SE HACE  CON EL READ 
     # SE TENÍA PENSADO USAR EL READ PARA EL TIPO LEER DATAFRAME
     #     
-    def read_quadruple(self):
+    def read_quadruple(self, value):
+        #Create read quad
+        address = self.t_df_cont + self.t_df_init
+        if (self.t_df_cont > self.t_df_size):
+            print("ERROR: STACK OVERFLOW")
+            exit()
+        self.t_df_cont += 1
+        
+        self.quadruple.append([8, value,'', address])
+        self.cont += 1
 
-        self.quadruple.append([8, '','', ''])
+        #Insert read result 
+        self.operands_stack_push(address)
+        self.type_stack_push(5)
+
         #self.quadruple.append()      
                     
     #         #SBER QUE TIPO ES EL RESULTANTE

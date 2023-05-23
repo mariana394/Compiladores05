@@ -440,12 +440,31 @@ def p_end_print_np(p):
     
 #________________________<READ>_______________________
 def p_read(p):
-    '''read : READ LPAREN variable RPAREN read_np'''
+    '''read : np_read LPAREN valid_exp_read read_np'''
+    print("NI LO CONOCE")
+
+def p_np_read(p):
+    '''np_read : READ'''
+    print("SI LO CONOCE")
+
+def p_valid_exp_read(p):
+    '''valid_exp_read : exp'''
+    #CHECK TOP OF THE STACK
+    type_exp = quad.type_stack_pop()
+    print('PRINT END', type_exp)
+    if (type_exp != 3 ):
+        print('ERROR: Only char parameters are allowed')        
+        exit()
+    
+        
 
 def p_read_np(p):
-    '''read_np : empty'''
-    quad.read_quadruple()
-#<CYCLE>
+    '''read_np : RPAREN'''
+    print("SI LLEGA AL READ")
+    value = quad.operands_stack_pop()
+    quad.read_quadruple(value)
+
+#_____________________<CYCLE>_________________
 def p_cycle(p):
     '''cycle : for
              | while'''
