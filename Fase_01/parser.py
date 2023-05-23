@@ -24,7 +24,8 @@ curr_temp = 0
 g_test = 10
 curr_const = None
 for_flag = False
-return_type = None
+return_flag = False
+function_flag = False #False for normal variables, true for functions
 
 #Objects
 tables = DirFunc()
@@ -84,6 +85,15 @@ def p_resources(p):
     '''resources : empty'''
     global curr_function
     tables.resources_handler(curr_function)
+
+# flag check for knowing if its is a variabel or a function
+def check_flag_func():
+    global function_flag
+    if(function_flag):
+        print("ERROR: Function name used as a variable")
+        exit()
+    else:
+        print("toy chiquito no puedo")
 
 #_________________________<LIBRERIES>_____________________________#
 #Uso de las librerias en el programa  
@@ -194,8 +204,14 @@ def p_var_s_dimesions(p):
 
 def p_variable(p):
     '''variable : id_saver variable_array'''
-    global curr_name, scope
-    print("var m ", curr_name)
+    global curr_name, scope, function_flag
+    #print("var m ", curr_name)
+   
+    if(tables.search_func_exist(curr_name)):
+        function_flag = True
+    else:
+        function_flag = False
+
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type)
     quad.operands_stack_push(curr_name)
@@ -205,7 +221,10 @@ def p_variable(p):
 def p_variable_array(p):
     '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
                       | empty'''
-
+    check_flag_func()
+ 
+        
+    
 def p_variable_matrix(p):
     '''variable_matrix : LSQBRACKET exp RSQBRACKET
                        | empty'''
@@ -214,7 +233,7 @@ def p_variable_matrix(p):
 #
 #Program functions 
 def p_program_function(p):
-    '''program_function : FUNCTION resources f_type id_saver func_creator  LPAREN param RPAREN np_call_func program_vars inner_body return end_function program_function
+    '''program_function : FUNCTION resources f_type id_saver func_creator  LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function
                         | empty'''
 
 
@@ -241,11 +260,17 @@ def p_func_creator(p):
     tables.add_function(curr_name,scope,curr_type)
 
 
-def p_np_call_func(p):
-    '''np_call_func : LBRACKET'''
-    global curr_function,scope
-    tables.memory_num = quad.cont_place()
-    tables.add_vars(curr_function,scope,6)
+def p_add_func_glob(p):
+    '''add_func_glob : LBRACKET'''
+    global curr_function,scope, return_type,function_flag
+    #tables.memory_num = quad.cont_place()
+    #
+    tables.add_vars(curr_function,0,return_type)
+    
+    #Idea de nosotros donde guardaba tipo funcion
+    # y a donde debe de saltar
+    #tables.add_vars(curr_function,0,6)
+
     print("CONTADORRR, ", quad.cont_place())
 
 def p_end_function(p):
@@ -352,7 +377,10 @@ def p_keep_assign(p):
 #END-> Quadruple
 def p_end_assign(p):
     '''end_assign : SEMICOLON empty'''
+    global function_flag
     quad.assign_quadruple()
+    check_flag_func()
+
 
 #_________________________<CONDITION>___________________________________
 def p_condition(p):
@@ -513,17 +541,63 @@ def p_for_np2(p):
     
     
 
-# <CALL_FUNCTION>
+#____________________________<CALL_FUNCTION>___________________________#
 def p_call_function(p):
-    '''call_function : function_saver LPAREN exp exp_many RPAREN '''
+    '''call_function : function_saver function_flag call_params check_not_void '''
     #TEST 
     #print('factor funcion ', p[-1])
 
+def p_check_not_void(p):
+    '''check_not_void : RPAREN'''
+    global return_flag
+    print("return flag ", return_flag)
+    if (return_flag == True):
+        print("ERROR: Function must not be part of an expression")
+        exit()
+
+
+
+#______________CALL VOID FUNCTION______________________#
+
+def p_call_void_function(p):
+    '''call_void_function : function_saver function_flag call_params RPAREN check_void'''
+
+def p_check_void(p):
+    '''check_void : SEMICOLON'''
+    global return_flag
+    #CHECK FOR VOID FUNCTION
+    if (return_flag == False):
+        print("ERROR: Function must be part of an expression")
+        exit()
+    else:
+        return_flag = False
+#____________-GENERIC CALL FUNCTIONS_________+
 def p_function_saver(p):
     '''function_saver : ID empty'''
-    global curr_name
+    global curr_name, curr_type , function_flag
     curr_name = p[1]
-    #print('factor funcion ', curr_name)
+
+    #LOOK FOR FUNCTION EXISTANCE
+    function_flag = tables.search_func_exist(curr_name)
+    #It is after return_type becuase it will exit in case
+    #the function does not exist and will continue if it does
+    print('factor funcion ', curr_name)
+
+def p_function_flag(p):
+    '''function_flag : LPAREN'''
+    global function_flag, curr_name, return_type, return_flag
+    function_flag = False
+    quad.operands_stack_push(curr_name)
+    return_type = tables.search_variable_existance(curr_name, 0)
+    quad.type_stack_push(return_type)
+    if (return_type == 6):
+        return_flag = True 
+
+
+def p_call_params(p):
+    '''call_params : exp exp_many
+                   | empty'''
+
 
 #<EXP_MANY>
 def p_exp_many(p):
@@ -536,7 +610,7 @@ def p_statement(p):
                  | condition
                  | print
                  | cycle
-                 | call_function'''
+                 | call_void_function'''
 
 #<SPECIAL_FUNCTIONS>
 def p_special_function(p):
@@ -610,6 +684,7 @@ def p_exp_keep_or(p):
      #NEURALGIC POINT 2
      #Se coloca p[-1] para que s 
     print("exp_keep_or\n\n" , p[1])
+    check_flag_func()
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 #_________________________________<T_EXP>_____________________________________
@@ -627,6 +702,7 @@ def p_keep_and(p):
     #NEURALGIC POINT 2
     #CORRECCION : SE CAMBIO EL EMPTY POR AND PARA QUE FUERA MAS FACIL
     #ENVIAR LOS DATOS, EN LUGAR DE MANDAR P[-1] SE MANDA P[1]
+    check_flag_func()
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
   
 #____________________________________<EXPRESSION>___________________________________
@@ -653,7 +729,7 @@ def p_expression_comp_2(p):
      #NEURALGIC POINT 2
     
     print("expression_comp_2", p[1])
-    
+    check_flag_func()
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 #__________________________________<M_EXP>_________________________________________
@@ -672,6 +748,7 @@ def p_m_exp_sr_2(p):
     '''m_exp_sr_2 : PLUS
                   | MINUS'''
      #NEURALGIC POINT 2
+    check_flag_func()
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
     
 #____________________________________<TERM>__________________________________
@@ -691,6 +768,7 @@ def p_term_pc_2(p):
                  | DIVIDE
                  | MODULE'''
     #NEURALGIC POINT 2
+    check_flag_func()
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 #____________________________________<SUB_FACTOR>____________________________________
 def p_sub_factor(p):
@@ -706,6 +784,7 @@ def p_sub_factor_pc(p):
 def p_sub_factor_pc_2(p):
     '''sub_factor_pc_2 : POWER empty'''
     #NEURALGIC POINT 2
+    check_flag_func()
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
   
 #_____________________________<FACTOR>______________________________
@@ -717,6 +796,7 @@ def p_factor(p):
               | call_function'''
     global g_test
     #Valor de la potencia
+    check_flag_func()
     g_test = 16
 
 def p_factor_exp(p):

@@ -18,7 +18,7 @@ class Dictionary:
             #TIPOS COMPUESTOS
             #'DATE' : 5,
             'DATAFRAME' : 5,
-            'FUNCTION' : 6,
+            'VOID' : 6,
 
             #PALABRAS RESERVADAS
             'PRINT': 7,
@@ -63,6 +63,11 @@ class Dictionary:
             #RETURN FUNCTIONS
             'RETURN': 33,
             'END_FUNCTION' : 34,
+
+            #FUNCTION CALLs
+            'ERA' : 35,
+
+          
         }
         self.datalor_symbol_dictionary = {
             
@@ -122,6 +127,7 @@ class Dictionary:
                     '32': '4'   
                     
                 }
+                
             },
             '2': {
                 '2': {
@@ -138,9 +144,22 @@ class Dictionary:
                     '24': '4',
                     '31': '4',
                     '32': '4'
-                    
-                   
-                    }
+                    },
+                '1': {
+                    '11': '2',
+                    '12': '2',
+                    '13': '2',
+                    '14': '2',
+                    '15': '2',
+                    '16': '2',
+                    '20': '4',
+                    '21': '1',
+                    '22': '4',
+                    '23': '4',
+                    '24': '4',
+                    '31': '4',
+                    '32': '4'
+                }
             },
             '3': {
                 '3': {

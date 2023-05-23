@@ -2,7 +2,7 @@
 # DATALOR: CUADRUPLOS
 # Mariana Favarony Avila A01704671
 # Mario Juarez  A01411049
-# 
+# Quadruples....
 # -----------------------------------------------------------
 from dictionary import Dictionary
 
@@ -236,7 +236,7 @@ class Quadruples:
         operator = self.operators_stack_pop()
         operandR = self.operands_stack_pop()
         result = self.operands_stack_pop()
-        print("POP OPERANDE", result)
+        print("VALORES A SUMAR",operandR, result )
 
        #POP to the types
         #print(self.pTypes)

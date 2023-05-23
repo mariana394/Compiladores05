@@ -20,7 +20,8 @@ class DirFunc:
 				"return_type": "void", 
 				"scope": 0 ,
 				"params": [],
-				"resources": [] 
+				"resources": [],
+	
 			}
 		}
 
@@ -47,10 +48,8 @@ class DirFunc:
 		self.resources[2] += temp_b
 		self.resources[3] += temp_c
 
-	#add function resources
-	def add_func_resources_glob(self):
-		self.dir_func['global']['resources'].append(self.func_cont)
-	#FUNCIONES
+	#_____________________________FUNCTIONS____________________#
+	
 	# Function for adding functions to function directory
 	def add_function(self, name, scope, type):
 		#SEARCHING IF THE FUNCTION ALREADY EXISTS
@@ -68,6 +67,8 @@ class DirFunc:
 			self.dir_func[name]["return_type"] = type
 			self.dir_func[name]["scope"] = scope
 			self.dir_func[name]["params"] = []
+			#Creation of a place that saves where to function quadruples start
+			self.dir_func[name]["start"] = 0
 			self.dir_func[name]["resources"] = []
 			
 			#CREATING VARIABLE TABLE FOR THE FUNCTION SCOPE
@@ -77,6 +78,20 @@ class DirFunc:
 
 			#print(self.dir_func.keys(), self.dir_func.values())
 		
+	#add function resources
+	def add_func_resources_glob(self):
+		self.dir_func['global']['resources'].append(self.func_cont)
+	
+	#Function existance?
+	def search_func_exist(self, funct_name):
+
+		if(funct_name in self.dir_func.keys()):
+			return True
+			
+		else:
+			return False
+			print("FUNCTION DOESNT EXIST")
+			exit()
 	#__________________VARIABLES________________________________
 	
 	#VARIABLES VALIDATION
@@ -123,6 +138,7 @@ class DirFunc:
 				self.memory_num = memory.assign_memory(tipo,scope)
 			else:
 				type = "FUNCTION"
+				#self.memory_num = memory.assign_memory(tipo,scope)
 				tipo = dic.datalor_translator(type)
 				
 
@@ -133,8 +149,7 @@ class DirFunc:
 				print("tipo normal ", tipo)
 				if (tipo != 6):
 					self.resources[tipo - 1] += 1
-				else:
-					self.func_cont += 1
+				
 				#print(self.vars.values())
 			else:
 				# MATRIX
