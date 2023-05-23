@@ -66,6 +66,8 @@ class Dictionary:
 
             #FUNCTION CALLs
             'ERA' : 35,
+            'GOSUB' : 36,
+            'PARAMETER' : 37,
 
           
         }

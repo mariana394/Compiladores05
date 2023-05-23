@@ -48,6 +48,7 @@ def p_end(p):
     print("CURR_ FUNCTION", type(curr_function))
     tables.resources_handler(curr_function)
     tables.add_func_resources_glob()
+    quad.print_poperands()
     tables.print()
 
 #EMPTY
@@ -257,7 +258,8 @@ def p_func_creator(p):
     '''func_creator : empty'''
     global scope, curr_function, curr_type, curr_name
     curr_function = curr_name
-    tables.add_function(curr_name,scope,curr_type)
+    start = quad.cont_place()
+    tables.add_function(curr_name,scope,curr_type, start)
 
 
 def p_add_func_glob(p):
@@ -280,7 +282,8 @@ def p_end_function(p):
 
 #_________________________<PARAM>__________________________#
 def p_param(p):
-    '''param : s_type id_saver add_params param2'''
+    '''param : s_type id_saver add_params param2
+             | empty'''
     
 def p_param2(p):
     '''param2 : COMMA s_type id_saver add_params param2
@@ -554,13 +557,23 @@ def p_check_not_void(p):
     if (return_flag == True):
         print("ERROR: Function must not be part of an expression")
         exit()
-
+    
+   
 
 
 #______________CALL VOID FUNCTION______________________#
 
 def p_call_void_function(p):
-    '''call_void_function : function_saver function_flag call_params RPAREN check_void'''
+    '''call_void_function : function_saver function_flag call_params verify_params check_void'''
+
+def p_verify_params(p):
+    '''verify_params : RPAREN'''
+    global curr_function 
+    params_len = tables.get_size_param(curr_function)
+    print("entro al verificador", params_len, quad.param_cont-1)
+    if(params_len > quad.param_cont-1):
+        print("ERROR: MISSING PARAMETERS ")
+        exit()
 
 def p_check_void(p):
     '''check_void : SEMICOLON'''
@@ -574,9 +587,10 @@ def p_check_void(p):
 #____________-GENERIC CALL FUNCTIONS_________+
 def p_function_saver(p):
     '''function_saver : ID empty'''
-    global curr_name, curr_type , function_flag
+    global curr_name, curr_type , function_flag, curr_function
     curr_name = p[1]
-
+    #Test
+    curr_function = curr_name
     #LOOK FOR FUNCTION EXISTANCE
     function_flag = tables.search_func_exist(curr_name)
     #It is after return_type becuase it will exit in case
@@ -592,16 +606,34 @@ def p_function_flag(p):
     quad.type_stack_push(return_type)
     if (return_type == 6):
         return_flag = True 
+    era_resource = tables.get_resources(curr_name)
+    print("TEST",era_resource)
+    quad.create_era(era_resource)
+    
 
 
 def p_call_params(p):
-    '''call_params : exp exp_many
+    '''call_params : check_param exp_many
                    | empty'''
+    
+
+#_________EXP_______
+def p_check_param(p):
+    '''check_param : exp'''
+    global curr_function
+    param = quad.operands_stack_pop()
+    param_type = quad.type_stack_pop()
+    print ("param ", param, param_type)
+    tables.check_param(param_type, quad.param_cont, curr_function)
+    quad.quadruple.append([37, param, '', quad.param_cont])
+    quad.cont += 1
+    quad.param_cont += 1
 
 
-#<EXP_MANY>
+
+#______<EXP_MANY>
 def p_exp_many(p):
-    '''exp_many : COMMA exp exp_many
+    '''exp_many : COMMA check_param exp_many
                 | empty'''
     
 #<STATEMENT>

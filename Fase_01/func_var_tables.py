@@ -51,7 +51,7 @@ class DirFunc:
 	#_____________________________FUNCTIONS____________________#
 	
 	# Function for adding functions to function directory
-	def add_function(self, name, scope, type):
+	def add_function(self, name, scope, type, start = None):
 		#SEARCHING IF THE FUNCTION ALREADY EXISTS
 
 		if(name in self.dir_func.keys()):
@@ -68,9 +68,10 @@ class DirFunc:
 			self.dir_func[name]["scope"] = scope
 			self.dir_func[name]["params"] = []
 			#Creation of a place that saves where to function quadruples start
-			self.dir_func[name]["start"] = 0
 			self.dir_func[name]["resources"] = []
-			
+			if (name != "main"):
+				self.dir_func[name]["start"] = start
+
 			#CREATING VARIABLE TABLE FOR THE FUNCTION SCOPE
 			self.vars[scope] = {}
 			self.vars[scope]['function_name'] = name
@@ -82,6 +83,11 @@ class DirFunc:
 	def add_func_resources_glob(self):
 		self.dir_func['global']['resources'].append(self.func_cont)
 	
+	#Get the resources from a function
+	def get_resources(self, funct_name):
+		if(funct_name in self.dir_func.keys()):
+			return self.dir_func[funct_name]['resources']
+
 	#Function existance?
 	def search_func_exist(self, funct_name):
 
@@ -90,8 +96,27 @@ class DirFunc:
 			
 		else:
 			return False
-			print("FUNCTION DOESNT EXIST")
-			exit()
+	
+	def check_param(self, tipo, num_param, func):
+
+		if(func in self.dir_func.keys()):
+			params = self.dir_func[func]["params"]
+			if(num_param > len(params)):
+				print("ERROR: INVALID ARGUMENT")
+				exit()
+			param_type = dic.datalor_translator(params[num_param-1].upper())
+			if(tipo != param_type):
+				print("TIPO TIPO", params)
+				print("ERROR: Type mistmatch")
+				exit()
+			
+			
+	def get_size_param(self, func_name):
+		
+		if(func_name in self.dir_func.keys()):
+			params = self.dir_func[func_name]["params"]
+			return len(params)
+
 	#__________________VARIABLES________________________________
 	
 	#VARIABLES VALIDATION
@@ -131,15 +156,15 @@ class DirFunc:
 			# 0 -> Normal variable
 			# 1 -> Array variable
 			# 2 -> Matrix variable
-			
-			if(type != 6):
-				type = type.upper()
-				tipo = dic.datalor_translator(type)
+			type = type.upper()
+			tipo = dic.datalor_translator(type)
+			if(tipo != 6):
 				self.memory_num = memory.assign_memory(tipo,scope)
 			else:
-				type = "FUNCTION"
-				#self.memory_num = memory.assign_memory(tipo,scope)
-				tipo = dic.datalor_translator(type)
+				#FOR VOID TYPE
+				#IT DOESNT SAVE NOTHING IN MEMORY
+				self.memory_num = 0
+				
 				
 
 			#Check if the rowDim and ColDim are 0 or 
@@ -183,6 +208,9 @@ class DirFunc:
 	def add_params(self, func_name, type):	
 		self.dir_func[func_name]['params'].append(type)
 		#print(self.dir_func.values())
+
+
+
 
 	#Function for filling in the constants table with their values and address
 	def add_const(self, value, type):

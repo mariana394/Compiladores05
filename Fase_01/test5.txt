@@ -6,13 +6,12 @@ import numpy as np
 var dataframe costos, ventas, test2, test3;
 char inicio, fin;
 
-function float message (char name, int size, char test){
+function void message (char f){
 	var 
 	int test2, a;
     float b;
     a = 3;
     
-    return b;
 }
 
 main {
@@ -40,9 +39,9 @@ if ( a > d) {
 }while (a > d);
 
 for(mia = a to 5){
-    if ( message() < message()){
+    if ( a < mia){
     };
 };
-message();
+message(name);
 }
 end

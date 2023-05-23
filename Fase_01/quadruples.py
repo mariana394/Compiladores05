@@ -44,6 +44,8 @@ class Quadruples:
         self.t_b_cont = 0 
 
         #self.temp_cont = {} 
+
+        self.param_cont = 0
    
    #_________________STACKS__________________
 
@@ -431,7 +433,7 @@ class Quadruples:
                 #self.operators_stack_pop()
                
 
-            #GOTOV
+            #____GOTOV___
             case 19:
                 self.check_bool()
                 print("semilla", self.pJumps)
@@ -444,6 +446,13 @@ class Quadruples:
                 self.cont += 1
                 print("\t\tCONTADOR\t", self.cont)
                 print('A DONDE RELLENAR', gotoVerdadero )
+            
+            #GOSUB
+            case 36:
+                argument = self.operands_stack_pop()
+                argument_type = self.type_stack_pop()
+
+
                 
                 
                 
@@ -451,6 +460,28 @@ class Quadruples:
                 #print("semilla", self.pJumps)
                 print("semilla", self.pJumps)
 
+    def create_era(self,resources):
+        print("ESTOY EN EL ERA")
+        era_int = resources[0]
+        era_float = resources[1] 
+        era_bool = resources[2] 
+        era_char = resources[3]
+        era_df = resources[4]
+
+        self.quadruple.append([35,'','' , era_int])
+        self.cont += 1
+        self.quadruple.append([35,'','' , era_float])
+        self.cont += 1
+        self.quadruple.append([35,'','' , era_bool])
+        self.cont += 1
+        self.quadruple.append([35,'','' , era_char])
+        self.cont += 1
+        self.quadruple.append([35,'','' , era_df])
+        self.cont += 1
+
+        
+        self.param_cont = 1
+    
     def return_quad(self,return_type):
         #CHECK 
         print("return cuadruplo, ", self.pOperands)
