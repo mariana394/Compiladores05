@@ -98,15 +98,15 @@ class DirFunc:
 			return False
 	
 	def check_param(self, tipo, num_param, func):
-
+		
 		if(func in self.dir_func.keys()):
 			params = self.dir_func[func]["params"]
 			if(num_param > len(params)):
 				print("ERROR: INVALID ARGUMENT")
 				exit()
 			param_type = dic.datalor_translator(params[num_param-1].upper())
-			if(tipo != param_type):
-				print("TIPO TIPO", params)
+			if(int(tipo) != param_type):
+				#print("TIPO", type(tipo), "PARAM", type(param_type))
 				print("ERROR: Type mistmatch")
 				exit()
 			
@@ -241,7 +241,7 @@ class DirFunc:
 	#___________________________RESOURES HANDLER____________________#
 	def resources_handler(self,func_name):
 		#Assgin function resources
-		print ("recursos", self.dir_func)
+		#print ("recursos por funcion", func_name,  self.resources)
 		self.dir_func[func_name]["resources"] = self.resources
 		#Reset variable resource counter
 		self.resources = [0,0,0,0,0]

@@ -389,7 +389,7 @@ class Quadruples:
 
         
 
-    def insert_goto(self, goto_Type):
+    def insert_goto(self, goto_Type, func_start = None):
         # 1 -> gotofalso 18 | 2 -> gotverdadero  19| 3 -> GOTO 17
         print("PILA DE OPERANDOS", self.pOperands)
         print("PILA DE TIPOS", self.pTypes)
@@ -446,19 +446,12 @@ class Quadruples:
                 self.cont += 1
                 print("\t\tCONTADOR\t", self.cont)
                 print('A DONDE RELLENAR', gotoVerdadero )
-            
-            #GOSUB
+
+            #_________GOSUB____
             case 36:
-                argument = self.operands_stack_pop()
-                argument_type = self.type_stack_pop()
-
-
+                self.quadruple.append([36,'','' ,func_start])
+                self.cont += 1
                 
-                
-                
-                #print("\t\tCONTADOR\t", self.cont)
-                #print("semilla", self.pJumps)
-                print("semilla", self.pJumps)
 
     def create_era(self,resources):
         print("ESTOY EN EL ERA")
@@ -482,7 +475,7 @@ class Quadruples:
         
         self.param_cont = 1
     
-    def return_quad(self,return_type):
+    def return_quad(self,return_type, function_place = None):
         #CHECK 
         print("return cuadruplo, ", self.pOperands)
         exp = self.operands_stack_pop()
@@ -490,10 +483,10 @@ class Quadruples:
         func_type = oracle.datalor_translator(return_type.upper())
         
         if(exp_type == func_type):
-            self.quadruple.append([33, '','', exp])
+            self.quadruple.append([33, exp,'', function_place])
             self.cont+=1
         else:
-            print("No match in return type")
+            print("ERROR: No match in return type")
             exit()
 
     def end_func_quad(self):

@@ -46,7 +46,7 @@ def p_end(p):
     tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont)
     print("RESOURCES DONE")
     print("CURR_ FUNCTION", type(curr_function))
-    tables.resources_handler(curr_function)
+    tables.resources_handler('main')
     tables.add_func_resources_glob()
     quad.print_poperands()
     tables.print()
@@ -312,8 +312,9 @@ def p_return_np(p):
 
 def p_return_quad(p):
     '''return_quad : empty'''
-    global return_type
-    quad.return_quad(return_type)
+    global return_type, curr_function
+    #Needs to be used address instead only name
+    quad.return_quad(return_type, curr_function)
 
 # Void function for empty path
 def p_empty_path_return(p):
@@ -552,13 +553,21 @@ def p_call_function(p):
 
 def p_check_not_void(p):
     '''check_not_void : RPAREN'''
-    global return_flag
+    global return_flag, curr_function
     print("return flag ", return_flag)
     if (return_flag == True):
         print("ERROR: Function must not be part of an expression")
         exit()
+    #CHECK AMOUNT OF PARAMETERS   
+    params_len = tables.get_size_param(curr_function)
+    print("entro al verificador", params_len, quad.param_cont-1)
+    if(params_len > quad.param_cont-1):
+        print("ERROR: MISSING PARAMETERS ")
+        exit()
+    #Inserts Gosub for void function
+    quad.insert_goto(36,tables.dir_func[curr_function]["start"])
     
-   
+    
 
 
 #______________CALL VOID FUNCTION______________________#
@@ -574,16 +583,20 @@ def p_verify_params(p):
     if(params_len > quad.param_cont-1):
         print("ERROR: MISSING PARAMETERS ")
         exit()
-
+    
 def p_check_void(p):
     '''check_void : SEMICOLON'''
-    global return_flag
+    global return_flag, curr_function
     #CHECK FOR VOID FUNCTION
     if (return_flag == False):
         print("ERROR: Function must be part of an expression")
         exit()
     else:
         return_flag = False
+    #Inserts Gosub for void function
+    quad.insert_goto(36,tables.dir_func[curr_function]["start"])
+    
+    
 #____________-GENERIC CALL FUNCTIONS_________+
 def p_function_saver(p):
     '''function_saver : ID empty'''
