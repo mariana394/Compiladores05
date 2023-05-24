@@ -172,6 +172,7 @@ def p_var_s_type(p):
 def p_var_s_type2(p):
     '''var_s_type2 : COMMA id_saver var_s_array add_s_var var_s_type2
                    | empty'''
+    
 
 #____NEURALGIC POINT______#
 def p_add_s_var(p):
@@ -181,22 +182,25 @@ def p_add_s_var(p):
     #RESET variables to 0 for the next one to be read
     curr_columns = 0
     curr_rows = 0
+  
 #----var_s_dimensions era anteriormente CTE_INT y funcionaba bien-----#
 def p_var_s_array(p):
     '''var_s_array : LSQBRACKET var_s_dimesions RSQBRACKET var_s_matrix 
                    | empty'''
+    global curr_name
+    print("arreglo", p[1])
 
 def p_var_s_matrix(p):
     '''var_s_matrix : LSQBRACKET var_s_dimesions RSQBRACKET
                     | empty'''
-
+    print("matriz", p[1])
 #____NEURALGIC POINT______#
 def p_var_s_dimesions(p):
     '''var_s_dimesions : CTE_INT empty'''
     global curr_rows, curr_columns, curr_dim
     #____Classifying s_type variables____#
     #Add the size as a constant in the constants variable
-    tables.add_const(p[1], type (p[1]))
+    tables.add_const(p[1], type(p[1]))
     #MATRIX
     if (curr_rows != 0):
         if (curr_columns == 0):

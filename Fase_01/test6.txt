@@ -1,0 +1,13 @@
+program TESTCORRECTO;
+
+import pandas as pd
+import numpy as np
+
+main {
+var
+int d[3],a,bien;
+
+
+
+}
+end

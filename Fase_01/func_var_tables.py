@@ -147,6 +147,7 @@ class DirFunc:
 	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
 		
+		size = 1
 
 		if(self.search_variable_declaration(name, scope)):
 			print("Variable already declared",name)
@@ -158,17 +159,18 @@ class DirFunc:
 			# 2 -> Matrix variable
 			type = type.upper()
 			tipo = dic.datalor_translator(type)
-			if(tipo != 6):
-				self.memory_num = memory.assign_memory(tipo,scope)
-			else:
-				#FOR VOID TYPE
-				#IT DOESNT SAVE NOTHING IN MEMORY
-				self.memory_num = 0
+			
 				
 				
 
 			#Check if the rowDim and ColDim are 0 or 
 			if(rowDim is None and columnDim is None or rowDim == 0 and columnDim == 0 ):	
+				if(tipo == 6):
+				#FOR VOID TYPE#IT DOESNT SAVE NOTHING IN MEMORY
+					self.memory_num = 0
+				else:
+					self.memory_num = memory.assign_memory(tipo,scope,size)
+
 				newVar = {name: { 'type': tipo, 'size': 0,'address': self.memory_num}}
 				self.vars[scope]['vars'].update(newVar)
 				print("tipo normal ", tipo)
@@ -179,18 +181,37 @@ class DirFunc:
 			else:
 				# MATRIX
 				if(rowDim != 0 and columnDim != 0):
-					newVar = {name: { 'type': tipo, 'size': [rowDim,columnDim],'address': self.memory_num}}
+					#CALCULOS DE ROWS
+
+					r = 1 * (rowDim) 
+					r2 = r * ((columnDim-1) - (0) + 1 )
+					m0 = r2
+					m1 = m0/((rowDim-1)-0 + 1)
+					m2 = m1/((columnDim-1)- (0) + 1 )
+					
+					self.memory_num = memory.assign_memory(tipo,scope,m0)
+
+					offset = 0 + 0 * 1
+					offset_end = offset + 0 * m2
+					
+					newVar = {name: { 'type': tipo, 'size': [[0,rowDim-1,m1,1],[0,columnDim-1,offset_end,None]],'address': self.memory_num}}
 					self.vars[scope]['vars'].update(newVar)
 					print("tipo matriz", tipo)
 					self.resources[tipo -1] += rowDim * columnDim
+
 					#print(self.vars.values())
 				
 				#ARRAY
 				else:
-					newVar = {name: { 'type': tipo, 'size': [rowDim],'address': self.memory_num}}
+
+					self.memory_num = memory.assign_memory(tipo,scope,rowDim)
+					newVar = {name: { 'type': tipo, 'size': [0,rowDim-1,0,None],'address': self.memory_num}}
 					self.vars[scope]['vars'].update(newVar)
 					#print(self.vars.values())
 					self.resources[tipo - 1] += rowDim
+		
+
+		
 			
 	# Checking for sizes of the arrays and matrix to be greater than 0 and not allowing the user to create for example a[0]
 	def check_stype_size(self, size):
@@ -220,12 +241,12 @@ class DirFunc:
 			type = type.__name__
 			if(type == 'int'):
 				tipo = dic.datalor_translator('CTE_INT')
-				newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
+				newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1, 1)}}
 				self.constants.update(newVar)
 			else: 
 				if(type == 'float'):
 					tipo = dic.datalor_translator('CTE_FLOAT')
-					newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
+					newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1,1)}}
 					self.constants.update(newVar)
 				# else:
 				# 	if(type == 'str'):
@@ -236,7 +257,7 @@ class DirFunc:
 			
 			# print(self.constants.keys())
 			# print(self.constants.values())
-
+	#_______________Array calculus______________________#
 	
 	#___________________________RESOURES HANDLER____________________#
 	def resources_handler(self,func_name):

@@ -89,7 +89,7 @@ class VirtualMemory:
 
 
     # ASSIGN ADDRESS MEMORY TO THE VARIABLES
-    def assign_memory(self, tipo, scope):
+    def assign_memory(self, tipo, scope,size):
     #GLOBAL 
         # 1 int # 2 float # 3 char 
         address = 0 
@@ -99,14 +99,14 @@ class VirtualMemory:
                     #Overflow checker
                     self.overflow(self.g_i_cont, self.g_i_size)
                     address = self.g_i_init + self.g_i_cont
-                    self.g_i_cont += 1
+                    self.g_i_cont += size
                     #print(address)
                     return address
                 case 2:
                     #Overflow checker
                     self.overflow(self.g_f_cont, self.g_f_size)
                     address = self.g_f_init + self.g_f_cont
-                    self.g_f_cont += 1
+                    self.g_f_cont += size
                     #print(address)
                     return address
 
@@ -115,7 +115,7 @@ class VirtualMemory:
                     self.overflow(self.g_c_cont, self.g_c_size)
                     #returns the address 
                     address =  self.g_c_init + self.g_c_cont
-                    self.g_c_cont += 1
+                    self.g_c_cont += size
                     #print(address)
                     return address
                 case 5:
@@ -123,7 +123,7 @@ class VirtualMemory:
                     self.overflow(self.g_df_cont, self.g_df_size)
                     #returns the address
                     address = self.g_df_init + self.g_df_cont
-                    self.g_df_cont += 1
+                    self.g_df_cont += size
                     #print(address)
                     return address
                 
@@ -166,7 +166,7 @@ class VirtualMemory:
                         self.overflow(self.l_i_cont, self.l_i_size)
                         #returns the address
                         address = self.l_i_init + self.l_i_cont
-                        self.l_i_cont += 1
+                        self.l_i_cont += size
                         #print(address)
                         return address
                     #FLOAT
@@ -174,7 +174,7 @@ class VirtualMemory:
                         self.overflow(self.l_f_cont, self.l_f_size)
                         #return the address
                         address = self.l_f_init + self.l_f_cont
-                        self.l_f_cont += 1
+                        self.l_f_cont += size
                         #print(address)
                         return address
                     #CHAR
@@ -182,7 +182,7 @@ class VirtualMemory:
                         self.overflow(self.l_c_cont, self.l_c_size)
                         #return the address
                         address = self.l_c_init + self.l_c_cont
-                        self.l_c_cont += 1
+                        self.l_c_cont += size
                         #print (address)
                         return address
                     #DATAFRAME
@@ -190,4 +190,4 @@ class VirtualMemory:
                         self.overflow(self.l_df_cont, self.l_df_size)
                         #return the address
                         address = self.l_df_init + self.l_df_cont
-                        self.l_df_cont += 1
+                        self.l_df_cont += size
