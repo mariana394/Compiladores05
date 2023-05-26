@@ -23,16 +23,29 @@ curr_columns = 0
 curr_dim = 0 #por si las moscas
 curr_temp = 0
 g_test = 10
+curr_variable = ''
 curr_const = None
 for_flag = False
 return_flag = False
 function_flag = False #False for normal variables, true for functions
+#____________________________CLASS PARSER_________________________
+class Parser:
+    def __init__(self):
+        self.quad = []
+        self.dir_func = {}
+        self.const = {}
+
 
 #Objects
 tables = DirFunc()
 quad = Quadruples()
 oracle = Dictionary()
 special = special_functions()
+parser = Parser()
+
+
+
+
 #__________________________<PROGRAM>_________________________
 def p_program(p):
     '''program : PROGRAM ID goto_main program_libraries program_vars program_function program_main end '''
@@ -49,9 +62,21 @@ def p_end(p):
     print("RESOURCES DONE")
     print("CURR_ FUNCTION", type(curr_function))
     tables.resources_handler('main')
-    tables.add_func_resources_glob()
-    quad.print_poperands()
+    print(quad.print_poperands())
     tables.print()
+
+    # ovejota = None
+    # tables.add_func_resources_glob()
+    # cuadruplos = quad.print_poperands()
+    # print("CUADRUPLOS", cuadruplos)
+    # dir = tables.print()
+    # const = tables.get_const()
+    # ovejota = "&&" + str(dir) + "&&" + str(const)
+    # with open('intermedio.txt', 'w') as filehandle:
+    #     for listitem in quad.quadruple:
+    #         filehandle.write(f'{listitem}\n')
+    #     filehandle.write(ovejota)
+
 
 #EMPTY
 def p_empty(p):
@@ -65,6 +90,7 @@ def p_id_saver(p):
     '''id_saver : ID empty '''
     global curr_name
     curr_name = p[1]
+
     #print(curr_name)
 
 #Neuralgic point for constant Int, helps us to save the constant in the constants table and memory no matter where the constant is in the code. 
@@ -199,7 +225,7 @@ def p_var_s_matrix(p):
 #____NEURALGIC POINT______#
 def p_var_s_dimesions(p):
     '''var_s_dimesions : CTE_INT empty'''
-    global curr_rows, curr_columns, curr_dim
+    global curr_rows, curr_columns
     #____Classifying s_type variables____#
     #Add the size as a constant in the constants variable
     address = tables.add_const(p[1], type(p[1]))
@@ -215,31 +241,58 @@ def p_var_s_dimesions(p):
 
 
 def p_variable(p):
-    '''variable : id_saver variable_array'''
-    global curr_name, scope, function_flag
+    '''variable : var_id_saver variable_array'''
+    
+def p_var_id_saver(p):
+    ''' var_id_saver : id_saver'''    
+    global curr_name, scope, function_flag, curr_variable
     #print("var m ", curr_name)
-   
+    curr_variable = curr_name
     if(tables.search_func_exist(curr_name)):
         function_flag = True
     else:
         function_flag = False
     type = []
+    print("variable antes ", curr_name)
     type = tables.search_variable_existance(curr_name, scope)
+    print("variable ", curr_name, type)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
 
     #print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
-    '''variable_array : LSQBRACKET exp RSQBRACKET variable_matrix
+    '''variable_array : LSQBRACKET index_arr_mat RSQBRACKET variable_matrix
                       | empty'''
     check_flag_func()
- 
+    
+    
         
     
 def p_variable_matrix(p):
-    '''variable_matrix : LSQBRACKET exp RSQBRACKET
+    '''variable_matrix : LSQBRACKET index_arr_mat RSQBRACKET
                        | empty'''
+
+
+def p_index_arr_mat(p):
+    '''index_arr_mat : exp'''
+    global curr_dim, scope,curr_variable
+    curr_dim += 1
+    size = tables.get_arr_mat_info(curr_variable, scope)
+    quad.arr_mat_quad(size, curr_dim)
+    
+    #print("TAG DE VIERNES", size[0])
+    #print("TAG sDE VIERNES2", size[1])
+
+    #quad.arr_mat_quad(size, curr_dim)
+
+    # print ("CURR",curr_variable)
+    # if (curr_dim == 1):
+    #     size = tables.get_arr_mat_info(curr_variable, scope)
+    #     s1 = quad.operands_stack_pop()
+    #     if (len(size) == 1):
+    #         quad.quadruple.append([39,s1,size[0],size[1]])
+    #         quad.quadruple.append([11,s1,size[2],])
     
 #_________________________________________FUNCTIONS______________________________________#
 #
@@ -368,8 +421,6 @@ def p_assign(p):
     '''assign : variable keep_assign specialf_assign end_assign'''
    #PRINT
    
-    quad.print_poperands()
-
 def p_specialf_assign(p):
     '''specialf_assign : exp
                        | special_function
@@ -519,7 +570,7 @@ def p_for_end(p):
      '''for_end : int_const_saver RPAREN'''
      quad.final_var()
      #Se inserta un 32 para que se haga la comparacion
-     quad.print_poperands()
+     #quad.print_poperands()
      quad.operators_stack_push(32)
      quad.create_exp_quadruple(32)
      quad.jump_stack_push()
@@ -963,6 +1014,8 @@ def p_factor_cte(p):
     quad.type_stack_push(const_type)
     quad.operands_stack_push(address)
     print('Const ',curr_name , type_test, const_type)
+
+
 
 # Build the parser
 parser = yacc.yacc()

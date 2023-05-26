@@ -70,6 +70,9 @@ class Dictionary:
             'PARAMETER' : 37,
             'GOSPECIAL' : 38,
 
+            #ARRAYS-MATRIX
+            'VER' : 39,
+
           
         }
         self.datalor_symbol_dictionary = {

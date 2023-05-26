@@ -7,6 +7,7 @@
 from dictionary import Dictionary
 from vitual_memory import VirtualMemory
 import pandas as pd
+import json
 
 dic = Dictionary()
 memory = VirtualMemory()
@@ -40,6 +41,7 @@ class DirFunc:
 		self.func_cont = 0 
 		#memory count
 		self.memory_num = 0
+		
 		
 	def add_resources_temp(self,temp_i, temp_f, temp_b, temp_c):
 		print("temp_ i ", temp_i)
@@ -142,10 +144,9 @@ class DirFunc:
 				print('Variable not declared ', name, scope)
 				exit()
 		
-	
 	#_________________CREATING VARIABLES_________________
 	#ADD VARIABLES
-	def add_vars(self, name, scope, type, rowDim = None, columnDim = None):
+	def add_vars(self, name, scope, types, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
 		
 		size = 1
@@ -161,8 +162,8 @@ class DirFunc:
 			# 0 -> Normal variable
 			# 1 -> Array variable
 			# 2 -> Matrix variable
-			type = type.upper()
-			tipo = dic.datalor_translator(type)
+			types = types.upper()
+			tipo = dic.datalor_translator(types)
 			#Check if the rowDim and ColDim are 0 or 
 			if(rowDim is None and columnDim is None or rowDim == 0 and columnDim == 0 ):	
 				if(tipo == 6):
@@ -193,6 +194,9 @@ class DirFunc:
 
 					offset = 0 + 0 * 1
 					offset_end = offset + 0 * m2
+					m1 = self.add_const(m1, type(int(m1)))
+					offset_end = self.add_const(int(offset), type(int(offset_end)))
+
 					
 					newVar = {name: { 'type': tipo, 'size': [[0,rowDim-1,m1,1],[0,columnDim-1,offset_end,None]],'address': self.memory_num}}
 					self.vars[scope]['vars'].update(newVar)
@@ -205,7 +209,8 @@ class DirFunc:
 				else:
 
 					self.memory_num = memory.assign_memory(tipo,scope,rowDim)
-					newVar = {name: { 'type': tipo, 'size': [0,rowDim-1,0,None],'address': self.memory_num}}
+					k = self.add_const(0, type(0))
+					newVar = {name: { 'type': tipo, 'size': [0,rowDim-1,k,None],'address': self.memory_num}}
 					self.vars[scope]['vars'].update(newVar)
 					#print(self.vars.values())
 					self.resources[tipo - 1] += rowDim
@@ -267,8 +272,12 @@ class DirFunc:
 			return self.constants[value]['address']
 			# print(self.constants.keys())
 			# print(self.constants.values())
-	#_______________Array calculus______________________#
 	
+	#_______________Array calculus______________________#
+	def get_arr_mat_info(self, name, scope): 
+		if (name in self.vars[scope]['vars'].keys()):
+			return self.vars[scope]['vars'][name]['size']
+		
 	#___________________________RESOURES HANDLER____________________#
 	def resources_handler(self,func_name):
 		#Assgin function resources
@@ -280,6 +289,8 @@ class DirFunc:
 
 	def print(self):
 		#print(tabulate(self.vars,headers='keys'))
+		#return json.dumps(self.dir_func)
+		
 		print("\n____________________TABLA DE FUNCIONES________________\n")
 		for keys in self.dir_func.keys():	
 			print('\nFuncion ', keys)
@@ -301,7 +312,9 @@ class DirFunc:
 		
 		print("\n")
 		print("RESOURCES", self.resources)
-
+	
+	def get_const(self):
+		return self.constants
 	#GET ADDRESS FOR CREATING QUADRUPLE
 	
 

@@ -31,6 +31,7 @@ class Quadruples:
         self.t_c_size = 1999
         self.t_b_size = 1999
         self.t_df_size = 1999
+        self.t_tp_size = 1999
 
         #START TEMPORALES
         self.t_i_init = 17000
@@ -38,13 +39,16 @@ class Quadruples:
         self.t_c_init = 21000
         self.t_b_init = 23000
         self.t_df_init = 31000
-
+        self.t_tp_init = 33000
+        
         #COUNTER TEMPORALES
         self.t_i_cont = 0
         self.t_f_cont = 0
         self.t_c_cont = 0
         self.t_b_cont = 0 
         self.t_df_cont = 0
+        self.t_tp_cont = 0
+
 
         #self.temp_cont = {} 
 
@@ -103,7 +107,6 @@ class Quadruples:
     def fill(self, jump, place):
         print("ULTIMO FILL", jump, place)
         self.quadruple[jump][3] = place
-        self.print_poperands()
 
     #<FOR> Control and final variables declaration
     def control_var(self ):
@@ -153,7 +156,6 @@ class Quadruples:
         self.operands_stack_push(place)
         self.type_stack_push(exp_type)
         print("FINAL FINAL", )
-        self.print_poperands()
         #DUPLICAR LOS DATOS DE LA VARIABLE DE CONTROL Y LA VARIABLE FINAL
         vcontrol = self.pOperands[-2]
         #vfinal = self.pOperands[-1]
@@ -547,7 +549,79 @@ class Quadruples:
     #     #           darle la address temporal a la variable temp 
     #     #     type mistmatch
 
+    #_________________<Array/Matrix>__________________
+    def arr_mat_quad(self, size, curr_dim):
+        #Check if type is integer
+        self.check_integer()
+        self.pTypes.pop()
+        if (curr_dim == 1):
+            #ARRAY
+            if (len(size) == 4):
+                s1 = self.operands_stack_pop()
+
+                self.quadruple.append([39,s1,size[0],size[1]])
+                self.cont += 1
+                address = self.t_i_cont + self.t_i_init
+                self.t_i_cont += 1
+                #ADD (-K)
+                self.quadruple.append([11,s1,size[2],address])
+                self.cont += 1
+                #ADD DIR BASE
+                pointer = self.t_tp_cont + self.t_tp_init
+                self.t_tp_cont += 1
+                #Clear array dir_base
+                dir_base = self.operands_stack_pop()
+                self.quadruple.append([11,address,dir_base,pointer])
+                self.cont += 1
+                #Saves pointer in stack
+                self.operands_stack_push(pointer)
+
+                
+            #MATRIX
+            if (len(size) == 2):
+                s1 = self.operands_stack_pop()
+
+                self.quadruple.append([39,s1,size[0][0],size[0][1]])
+                self.cont += 1
+                address = self.t_i_cont + self.t_i_init
+                self.t_i_cont += 1
+                #(S1*m1)
+                m1 = size[0][2]
+                self.quadruple.append([13,s1,m1,address])
+                self.cont += 1    
+                #Saves s1*m1 in stack
+                self.operands_stack_push(address)
+                self.type_stack_push(1)   
+        #MATRIX
+        if (curr_dim == 2):
+            s2 = self.operands_stack_pop()
+            print("problema", size)
+            self.quadruple.append([39,s2,size[1][0],size[1][1]])
+            self.cont += 1
+            #(S1*m1+S2)
+            address = self.t_i_cont + self.t_i_init
+            self.t_i_cont += 1
+            s1m1 = self.operands_stack_pop()
+            self.type_stack_pop()
+            self.quadruple.append([11,s1m1,s2,address])
+            self.cont += 1
+            #ADD (-K)
+            address2 = self.t_i_cont + self.t_i_init
+            self.t_i_cont += 1
+            self.quadruple.append([11,address,size[1][2],address2])
+            self.cont += 1
+            #ADD DIR BASE
+            pointer = self.t_tp_cont + self.t_tp_init
+            self.t_tp_cont += 1
+            dir_base = self.operands_stack_pop()
+            self.quadruple.append([11,address2,dir_base,pointer])
+            self.cont += 1
+            #ADD POINTER TO STACK
+            self.operands_stack_push(pointer)
+
+
     def print_poperands(self):
+        #return self.quadruple
         self.print_quadruples()
         print ('OPERADORES',self.pOperators)
         print ('OPERANDOS',self.pOperands)

@@ -16,7 +16,7 @@ function char message (int f){
 
 main {
 var
-int d, a,z,mia,size;
+int d, a,z,f[7][2],mia,size, j[2];
 float c;
 char name,test;
 
@@ -42,7 +42,10 @@ for(mia = a to 5){
     };
 };
 
+
+
 name = message(2 + 5);
+f[1][1] = 2;
 
 }
 end
