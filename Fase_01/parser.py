@@ -75,9 +75,10 @@ def p_int_const_saver(p):
     global curr_const, for_flag
     curr_const = p[1]
     for_flag = True
-    tables.add_const(curr_const, type (curr_const))
+    address = tables.add_const(curr_const, type (curr_const))
     print("constante for ", curr_const)
-    quad.operands_stack_push(curr_const)
+    
+    quad.operands_stack_push(address)
     quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
 
 #Neuralgic point number 1 for all expressions where we check first if we have a pending operator
@@ -100,6 +101,7 @@ def check_flag_func():
         exit()
     else:
         print("toy chiquito no puedo")
+
 
 #_________________________<LIBRERIES>_____________________________#
 #Uso de las librerias en el programa  
@@ -200,7 +202,7 @@ def p_var_s_dimesions(p):
     global curr_rows, curr_columns, curr_dim
     #____Classifying s_type variables____#
     #Add the size as a constant in the constants variable
-    tables.add_const(p[1], type(p[1]))
+    address = tables.add_const(p[1], type(p[1]))
     #MATRIX
     if (curr_rows != 0):
         if (curr_columns == 0):
@@ -221,10 +223,10 @@ def p_variable(p):
         function_flag = True
     else:
         function_flag = False
-
+    type = []
     type = tables.search_variable_existance(curr_name, scope)
-    quad.type_stack_push(type)
-    quad.operands_stack_push(curr_name)
+    quad.type_stack_push(type[0])
+    quad.operands_stack_push(type[1])
 
     #print(scope, ' factor variable ', curr_name, type )
 
@@ -268,21 +270,19 @@ def p_func_creator(p):
     global scope, curr_function, curr_type, curr_name
     curr_function = curr_name
     start = quad.cont_place()
+    print ("func_creator", curr_function, scope, curr_type, start)
+    tables.add_vars(curr_function,0,return_type)
     tables.add_function(curr_name,scope,curr_type, start)
 
 
 def p_add_func_glob(p):
     '''add_func_glob : LBRACKET'''
-    global curr_function,scope, return_type,function_flag
+    global curr_function,scope, return_type,function_flag, curr_name, curr_type
     #tables.memory_num = quad.cont_place()
-    #
-    tables.add_vars(curr_function,0,return_type)
-    
+
     #Idea de nosotros donde guardaba tipo funcion
     # y a donde debe de saltar
     #tables.add_vars(curr_function,0,6)
-
-    print("CONTADORRR, ", quad.cont_place())
 
 def p_end_function(p):
     '''end_function : RBRACKET'''
@@ -293,16 +293,18 @@ def p_end_function(p):
 def p_param(p):
     '''param : s_type id_saver add_params param2
              | empty'''
-    
+    print("PARAMETRO")    
+
 def p_param2(p):
     '''param2 : COMMA s_type id_saver add_params param2
               | empty'''
-
+    print("PARAMETRO 2")
 #________PARAMS NEURALGIC POINTS___________________________
 def p_add_params(p):
     '''add_params : empty'''
     global curr_type, curr_name, scope, curr_function
     tables.add_vars(curr_name,scope,curr_type)
+    print("parametros", curr_name, scope, curr_type, curr_function)
     tables.add_params(curr_function,curr_type)
 
 #_________________________<RETURN>____________________#
@@ -323,7 +325,9 @@ def p_return_quad(p):
     '''return_quad : empty'''
     global return_type, curr_function
     #Needs to be used address instead only name
-    quad.return_quad(return_type, curr_function)
+    address = []
+    address = tables.search_variable_existance(curr_function, 0)
+    quad.return_quad(return_type, address[1])
 
 # Void function for empty path
 def p_empty_path_return(p):
@@ -499,10 +503,10 @@ def p_for(p):
 
 def p_for_control(p):
     '''for_control : id_saver'''
-    global curr_name, scope
+    global curr_name, scope 
     type = tables.search_variable_existance(curr_name, scope)
-    quad.type_stack_push(type)
-    quad.operands_stack_push(curr_name)
+    quad.type_stack_push(type[0])
+    quad.operands_stack_push(type[1])
     
 
 
@@ -638,10 +642,13 @@ def p_function_flag(p):
     '''function_flag : LPAREN'''
     global function_flag, curr_name, return_type, return_flag
     function_flag = False
-    quad.operands_stack_push(curr_name)
-    return_type = tables.search_variable_existance(curr_name, 0)
-    quad.type_stack_push(return_type)
-    if (return_type == 6):
+    
+    type= []
+    type = tables.search_variable_existance(curr_name, scope)
+    quad.type_stack_push(type[0])
+    quad.operands_stack_push(type[1])
+    
+    if (type[0] == 6):
         return_flag = True 
     era_resource = tables.get_resources(curr_name)
     print("TEST",era_resource)
@@ -948,13 +955,13 @@ def p_factor_cte(p):
                   | CTE_CHAR'''
     global  curr_name
     curr_name = p[1]
-    tables.add_const(p[1], type (p[1]))
+    address = tables.add_const(p[1], type (p[1]))
     type_test = type(p[1]).__name__
     if(type_test == 'str'):
         type_test = 'char'
     const_type = oracle.datalor_translator(type_test.upper())
     quad.type_stack_push(const_type)
-    quad.operands_stack_push(curr_name)
+    quad.operands_stack_push(address)
     print('Const ',curr_name , type_test, const_type)
 
 # Build the parser

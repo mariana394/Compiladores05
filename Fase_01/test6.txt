@@ -3,11 +3,46 @@ program TESTCORRECTO;
 import pandas as pd
 import numpy as np
 
+var dataframe costos, ventas, test2, test3;
+char inicio, fin;
+
+function char message (int f){
+	var 
+	int test2, a;
+    float b;
+    a = 3;
+    return 'hola';
+}
+
 main {
 var
-int d[3],a,bien;
+int d, a,z,mia,size;
+float c;
+char name,test;
 
+d = 2 * 3 ;
+c = 6 % 2;
+if ( a > d) {
+    a = 2;
+}else{
+    d = 3;
+};
 
+do {
+z = 1;
+if ( a > d) {
+    a = 2;
+}else{
+    d = 4.5;
+};
+}while (a > d);
+
+for(mia = a to 5){
+    if ( a < mia){
+    };
+};
+
+name = message(2 + 5);
 
 }
 end

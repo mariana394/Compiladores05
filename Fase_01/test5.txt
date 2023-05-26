@@ -16,7 +16,7 @@ function char message (int f){
 
 main {
 var
-int d[3], a,z[3][4],mia,size;
+int d, a,z,mia,size;
 float c,message;
 char name,test;
 

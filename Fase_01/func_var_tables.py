@@ -64,7 +64,7 @@ class DirFunc:
 
 
 			self.dir_func[name] = {}
-			self.dir_func[name]["return_type"] = type
+			self.dir_func[name]["return_type"] = dic.datalor_translator(type.upper())
 			self.dir_func[name]["scope"] = scope
 			self.dir_func[name]["params"] = []
 			#Creation of a place that saves where to function quadruples start
@@ -104,7 +104,8 @@ class DirFunc:
 			if(num_param > len(params)):
 				print("ERROR: INVALID ARGUMENT")
 				exit()
-			param_type = dic.datalor_translator(params[num_param-1].upper())
+			print('ANTES DEL ERROR')
+			param_type =  params[num_param-1]
 			if(int(tipo) != param_type):
 				#print("TIPO", type(tipo), "PARAM", type(param_type))
 				print("ERROR: Type mistmatch")
@@ -132,10 +133,10 @@ class DirFunc:
 	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
 	def search_variable_existance(self, name, scope):
 		if (name in self.vars[scope]['vars'].keys()):
-			return self.vars[scope]['vars'][name]['type']
+			return [(self.vars[scope]['vars'][name]['type']),(self.vars[scope]['vars'][name]['address'])] 
 		else:
 			if (name in self.vars[0]['vars'].keys()):
-				return self.vars[0]['vars'][name]['type']
+				return [self.vars[0]['vars'][name]['type'], self.vars[0]['vars'][name]['address']]
 			else:
 			#CHECK VAR AND SCOPE
 				print('Variable not declared ', name, scope)
@@ -153,16 +154,15 @@ class DirFunc:
 			print("Variable already declared",name)
 			exit()
 		else:
+			if(self.search_func_exist(name)):
+				print("Variable already declared as a function", name)
+				exit()
 			# CHECK IF IT IS A NORMAL VARIABLE
 			# 0 -> Normal variable
 			# 1 -> Array variable
 			# 2 -> Matrix variable
 			type = type.upper()
 			tipo = dic.datalor_translator(type)
-			
-				
-				
-
 			#Check if the rowDim and ColDim are 0 or 
 			if(rowDim is None and columnDim is None or rowDim == 0 and columnDim == 0 ):	
 				if(tipo == 6):
@@ -226,8 +226,10 @@ class DirFunc:
 		
 
 	#ADD PARAMS
-	def add_params(self, func_name, type):	
-		self.dir_func[func_name]['params'].append(type)
+	def add_params(self, func_name, type):
+		tipo = dic.datalor_translator(str(type).upper())
+		print("QUE TIPO MANDAS", tipo)
+		self.dir_func[func_name]['params'].append(tipo)
 		#print(self.dir_func.values())
 
 
@@ -241,20 +243,28 @@ class DirFunc:
 			type = type.__name__
 			if(type == 'int'):
 				tipo = dic.datalor_translator('CTE_INT')
-				newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1, 1)}}
+				address = memory.assign_memory(tipo,-1, 1)
+				newVar = {value: {'type': tipo, 'address': address}}
 				self.constants.update(newVar)
+				return address
+				
 			else: 
 				if(type == 'float'):
 					tipo = dic.datalor_translator('CTE_FLOAT')
-					newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1,1)}}
+					address = memory.assign_memory(tipo,-1, 1)
+					newVar = {value: {'type': tipo, 'address': address}}
 					self.constants.update(newVar)
-				# else:
-				# 	if(type == 'str'):
-				# 		tipo = dic.datalor_translator('CTE_CHAR')
-				# 		newVar = {value: {'type': tipo, 'address': memory.assign_memory(tipo,-1)}}
-				# 		self.constants.update(newVar)
+					return address
+				else:
+					if(type == 'str'):
+						tipo = dic.datalor_translator('CTE_CHAR')
+						address = memory.assign_memory(tipo,-1,1)
+						newVar = {value: {'type': tipo, 'address': address}}
+						self.constants.update(newVar)
+						return address
 
-			
+		else:
+			return self.constants[value]['address']
 			# print(self.constants.keys())
 			# print(self.constants.values())
 	#_______________Array calculus______________________#
@@ -293,7 +303,7 @@ class DirFunc:
 		print("RESOURCES", self.resources)
 
 	#GET ADDRESS FOR CREATING QUADRUPLE
-	#def get_address(self, item, scope):
+	
 
 	
 
