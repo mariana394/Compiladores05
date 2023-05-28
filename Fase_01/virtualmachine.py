@@ -108,12 +108,12 @@ class VirtualMachine:
         #CHAR
         if(virtual_address >= self.g_c_init and virtual_address < self.g_df_init):
             address = (virtual_address - 5000)
-            return [3,address]
+            return [2,address]
         
         #DATAFRAME
         if(virtual_address >= self.g_df_init and virtual_address < self.l_i_init):
             address = (virtual_address - 7000)
-            return [4,address]
+            return [3,address]
         
          #________LOCALES________
        #INT
@@ -229,6 +229,7 @@ class VirtualMachine:
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(ip-1,offset,offset_end)
                 pass
+            
             #PLUS - Sin terminar 
             case 11:
                 left_addr = self.quaduples[inst_pointer][1]

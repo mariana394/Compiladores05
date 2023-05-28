@@ -122,8 +122,46 @@ class MemoryMap:
     def get_value(self,aux):
         tipo = aux[0]
         index = aux[1]
+
+        #Global/Local Int
+        if (tipo == 0):
+            return self.int[index]
+        
+        #Global/Local Float
         if (tipo == 1):
             return self.float[index]
+        
+        #Global/Local Char
+        if (tipo == 2):
+            return self.char[index]
+        
+        #Global/Local Char
+        if (tipo == 3):
+            return self.df[index]
+        
+        #_____TEMPORAL____
+        # TEMP INT
+        if (tipo == 4):
+            return self.t_int[index]
+
+        #TEMPORAL FLOAT
+        if (tipo == 5):
+            return self.t_float[index]
+       
+       # TEMP BOOL
+        if (tipo == 6):
+            return self.t_bool[index]
+
+        #TEMPORAL CHAR
+        if (tipo == 7):
+            return self.t_char[index]
+        
+        #TEMPORAL DATAFRAME
+        if (tipo == 8):
+            return self.t_df[index]
+       
+       
+       #_______CONSTANTES__________
         #Const int
         if(tipo == 9):
             return self.c_int[index]
@@ -132,9 +170,11 @@ class MemoryMap:
         if(tipo == 10):
             return self.c_float[index]
     
-        #TEMPORAL FLOAT
-        if (tipo == 5):
-            return self.t_float[index]
+        #Const char
+        if(tipo == 11):
+            return self.c_char[index]
+        
+
     
 
 
