@@ -211,6 +211,8 @@ class Quadruples:
         self.t_f_cont = 0
         self.t_c_cont = 0
         self.t_b_cont = 0 
+        self.t_df_cont = 0
+        self.t_tp_cont = 0 
 
     #_________________CHECKERS______________________#
                 
@@ -470,17 +472,26 @@ class Quadruples:
         era_bool = resources[2] 
         era_char = resources[3]
         era_df = resources[4]
+        era_t_int = resources[5]
+        era_t_float = resources[6] 
+        era_t_bool = resources[7] 
+        era_t_char = resources[8]
+        era_t_df = resources[9]
+        era_t_tp = resources[10]
 
-        self.quadruple.append([35,'','' , era_int])
+        self.quadruple.append([35,'', era_int, era_t_int])
         self.cont += 1
-        self.quadruple.append([35,'','' , era_float])
+        self.quadruple.append([35,'',era_float,era_t_float ])
         self.cont += 1
-        self.quadruple.append([35,'','' , era_bool])
+        self.quadruple.append([35,'', era_bool, era_t_bool])
         self.cont += 1
-        self.quadruple.append([35,'','' , era_char])
+        self.quadruple.append([35,'',era_char, era_t_char])
         self.cont += 1
-        self.quadruple.append([35,'','' , era_df])
+        self.quadruple.append([35,'',era_df, era_t_df])
         self.cont += 1
+        self.quadruple.append([35,'',0, era_t_tp])
+        self.cont += 1
+
 
         
         self.param_cont = 1
@@ -621,13 +632,16 @@ class Quadruples:
 
 
     def print_poperands(self):
-        #return self.quadruple
+        
         self.print_quadruples()
         print ('OPERADORES',self.pOperators)
         print ('OPERANDOS',self.pOperands)
         print ('TIPOS',self.pTypes)
         print ('SALTOS', self.pJumps)
         print ('CONTADOR', self.cont)
+
+    def get_quad(self):
+        return self.quadruple
 
     def print_quadruples(self):
         for i in range(len(self.quadruple)):

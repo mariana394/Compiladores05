@@ -10,7 +10,7 @@ function char message (int f){
 	var 
 	int test2, a;
     float b;
-    a = 3;
+    a = 3 + 1;
     return 'hola';
 }
 

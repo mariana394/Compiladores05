@@ -43,12 +43,17 @@ class DirFunc:
 		self.memory_num = 0
 		
 		
-	def add_resources_temp(self,temp_i, temp_f, temp_b, temp_c):
-		print("temp_ i ", temp_i)
-		self.resources[0] += temp_i
-		self.resources[1] += temp_f
-		self.resources[2] += temp_b
-		self.resources[3] += temp_c
+	def add_resources_temp(self,temp_i, temp_f, temp_b, temp_c, temp_df,temp_pt,func_name):
+		#print("temp_ i ", temp_i)
+		#if(func_name != 'global'): 
+		self.dir_func[func_name]["resources"].append(temp_i) 
+		self.dir_func[func_name]["resources"].append(temp_f) 
+		self.dir_func[func_name]["resources"].append(temp_b) 
+		self.dir_func[func_name]["resources"].append(temp_c) 
+		self.dir_func[func_name]["resources"].append(temp_df) 
+		self.dir_func[func_name]["resources"].append(temp_pt) 
+
+		
 
 	#_____________________________FUNCTIONS____________________#
 	
@@ -315,6 +320,11 @@ class DirFunc:
 	
 	def get_const(self):
 		return self.constants
+	
+	def get_func_res(self):
+		main = self.dir_func['main']['resources']	
+		res_global = self.dir_func['global']['resources']
+		return [res_global, main]
 	#GET ADDRESS FOR CREATING QUADRUPLE
 	
 

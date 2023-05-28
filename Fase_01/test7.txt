@@ -1,0 +1,16 @@
+program TESTCORRECTO;
+
+main {
+var
+float c;
+int d, a;
+char name;
+
+
+d = 2 * 3.1 ;
+name = 'mariohizotrampa';
+print(name);
+c = 6 * 2.2;
+
+}
+end

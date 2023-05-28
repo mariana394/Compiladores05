@@ -11,6 +11,7 @@ from func_var_tables import DirFunc
 from quadruples import Quadruples
 from dictionary import Dictionary
 from special_functions import special_functions
+from virtualmachine import VirtualMachine
 
 #Global variables
 curr_type = ''
@@ -28,12 +29,7 @@ curr_const = None
 for_flag = False
 return_flag = False
 function_flag = False #False for normal variables, true for functions
-#____________________________CLASS PARSER_________________________
-class Parser:
-    def __init__(self):
-        self.quad = []
-        self.dir_func = {}
-        self.const = {}
+
 
 
 #Objects
@@ -41,7 +37,7 @@ tables = DirFunc()
 quad = Quadruples()
 oracle = Dictionary()
 special = special_functions()
-parser = Parser()
+vm = VirtualMachine()
 
 
 
@@ -58,12 +54,23 @@ def p_goto_main(p):
 def p_end(p):
     '''end : END '''
     global curr_function
-    tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont)
+    curr_function = 'main'
     print("RESOURCES DONE")
-    print("CURR_ FUNCTION", type(curr_function))
-    tables.resources_handler('main')
+    print("CURR_ FUNCTION", curr_function)
+    tables.resources_handler(curr_function)
+    tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont, quad.t_df_cont,quad.t_tp_cont, curr_function)
     print(quad.print_poperands())
-    tables.print()
+    all_quad = quad.get_quad()
+    res = tables.get_func_res()
+    const = tables.constants
+    vm.set_quadruples(all_quad)
+    vm.set_const(const)
+    vm.set_resources(res)
+    vm.start_vm()
+
+    
+    #print()
+    
 
     # ovejota = None
     # tables.add_func_resources_glob()
@@ -118,6 +125,8 @@ def p_resources(p):
     '''resources : empty'''
     global curr_function
     tables.resources_handler(curr_function)
+    tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont, quad.t_df_cont,quad.t_tp_cont, curr_function)
+    quad.reset_temp()
 
 # flag check for knowing if its is a variabel or a function
 def check_flag_func():
@@ -339,7 +348,9 @@ def p_add_func_glob(p):
 
 def p_end_function(p):
     '''end_function : RBRACKET'''
+
     quad.end_func_quad()
+    
 #_____________________________________________________
 
 #_________________________<PARAM>__________________________#
@@ -519,8 +530,6 @@ def p_valid_exp_read(p):
     if (type_exp != 3 ):
         print('ERROR: Only char parameters are allowed')        
         exit()
-    
-        
 
 def p_read_np(p):
     '''read_np : RPAREN'''
