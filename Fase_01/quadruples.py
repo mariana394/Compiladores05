@@ -252,6 +252,7 @@ class Quadruples:
         typeR = self.type_stack_pop()
         typeRes = self.type_stack_pop()
         #ASK THE ORACLE IF MDDWTM
+
         oracle_answer = oracle.oracle_cmddwtm(str(typeRes),str(typeR),str(operator))
         print("Oracle answer",oracle_answer)
        #CREATING THE CUADRUPLE

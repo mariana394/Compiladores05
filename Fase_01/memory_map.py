@@ -116,7 +116,38 @@ class MemoryMap:
         self.c_int += consts[0]
         self.c_float += consts[1]
         self.c_char += consts[2]
-    # def set_value(self, offset, value):
+    
+    #_____________QUADRUPLES GETTERS/SETTERS_____________#
+
+    def get_value(self,aux):
+        tipo = aux[0]
+        index = aux[1]
+        if (tipo == 1):
+            return self.float[index]
+        #Const int
+        if(tipo == 9):
+            return self.c_int[index]
         
-    #     if():
+        #Const Float
+        if(tipo == 10):
+            return self.c_float[index]
+    
+        #TEMPORAL FLOAT
+        if (tipo == 5):
+            return self.t_float[index]
+    
+
+
+    def set_value(self, aux, value):
+        tipo = aux[0]
+        index = aux[1]
+
+        #GLOBAL/LOCAL FLOAT
+        if(tipo == 1):
+            self.float[index] = value
+
+        #TEMPORAL FLOAT
+        if (tipo == 5):
+            self.t_float[index] = value
+    
             

@@ -2,15 +2,17 @@ program TESTCORRECTO;
 
 main {
 var
-float c;
-int d, a;
+float c,d;
+int a;
 char name;
 
-
-d = 2 * 3.1 ;
+d = 2 * 3.2 ;
 name = 'mariohizotrampa';
 print(name);
 c = 6 * 2.2;
+
+print(d);
+print(c);
 
 }
 end

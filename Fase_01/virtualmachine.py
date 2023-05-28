@@ -70,9 +70,13 @@ class VirtualMachine:
         print("END MAIN", end_main)
         self.sort_const()
         
+        print("____________________________________________________________")
+
+        self.vm_handler(0, main_offset, end_main)
+        print("____________________________________________________________")
 
         print("________MEMORY MAP__________")
-        print(  mp.int,     ("\n"),
+        print(  mp.int,     ("int \n"),
                 mp.float,("\n"),
                 mp.char,("\n"),
                 mp.bool, ("\n"),
@@ -125,40 +129,62 @@ class VirtualMachine:
         #CHAR
         if(virtual_address >= self.l_c_init and virtual_address < self.l_df_init):
             address = (virtual_address - self.l_c_init + offset[3])
-            return [3,address]
+            return [2,address]
         
         #DATAFRAME
         if(virtual_address >= self.l_df_init and virtual_address < self.t_i_init):
             address = (virtual_address - self.l_df_init + offset[4])
-            return [4,address]
+            return [3,address]
         
          #________TEMPORALES________
        #INT
         if(virtual_address >= self.t_i_init and virtual_address < self.t_f_init):
             address = (virtual_address - self.t_i_init + offset[5])
-            return [0,address]
+            return [4,address]
        
        #FLOAT
         if(virtual_address >= self.t_f_init and virtual_address < self.t_c_init):
             address = (virtual_address - self.t_f_init + offset[6])
-            return [1,address]
+            return [5,address]
         
         #BOOL
-        if(virtual_address >= self.t_b_init and virtual_address < self.t_df_init):
+        if(virtual_address >= self.t_b_init and virtual_address < self.c_i_init):
             address = (virtual_address - self.t_b_init + offset[7])
-            return [2,address]
+            return [6,address]
         
         #CHAR
         if(virtual_address >= self.t_c_init and virtual_address < self.t_b_init):
             address = (virtual_address - self.t_c_init + offset[8])
-            return [3,address]
+            return [7,address]
         
         #DATAFRAME
-        if(virtual_address >= self.t_df_init and virtual_address < self.c_i_init):
+        if(virtual_address >= self.t_df_init and virtual_address < self.t_tp_init):
             address = (virtual_address - self.t_df_init + offset[9])
-            return [4,address]
+            return [8,address]
 
         #________CONSTANTES________
+        #INT
+        if(virtual_address >= self.c_i_init and virtual_address < self.c_f_init):
+            address = (virtual_address - self.c_i_init)
+            #5 -> int Const
+            return [9, address]
+        
+        #FLOAT
+        if(virtual_address >= self.c_f_init and virtual_address < self.c_c_init):
+            address = (virtual_address - self.c_f_init)
+            #6 -> float Const
+            return [10, address]
+        
+        #CHAR
+        if(virtual_address >= self.c_c_init and virtual_address < self.t_df_init):
+            address = (virtual_address - self.c_c_init)
+            #7 -> char Const
+            return [11, address]
+        
+        #__________POINTERS__________
+        if(virtual_address >= self.t_tp_init and virtual_address < self.t_tp_init + 1999):
+            address = (virtual_address - self.t_tp_init)
+            return [12, address]
 
     def sort_const(self):
         # const_value =  list(self.const.keys)
@@ -186,17 +212,79 @@ class VirtualMachine:
 
         mp.set_constants([int_list, float_list, char_list])
         
-    def vm_handler(self, inst_pointer):
+    def check_len_quad(self, inst_pointer):
+        if(inst_pointer >= len(self.quaduples)):
+            print("END OF FILE")
+            exit()
+
+    def vm_handler(self, inst_pointer, offset, offset_end):
         operation = self.quaduples[inst_pointer][0]
-        
+        print("Curr_quad ", self.quaduples[inst_pointer] )
         match operation:
 
             #GOTO
             case 17:
                 ip = self.quaduples[inst_pointer][3]
-                self.vm_handler(ip)
-            
-            #PLUS
+                inst_pointer = ip - 1 
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(ip-1,offset,offset_end)
+                pass
+            #PLUS - Sin terminar 
             case 11:
-                #Borrar
-                exit()
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                pass
+                
+
+            #MULTIPLY
+            case 13:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+
+                value = left_value * right_value
+                print("REAL ADD",res_real_address)
+                mp.set_value(res_real_address,value)
+                
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+            #ASSIGN
+            case 21:
+                value_a = self.quaduples[inst_pointer][1]
+                where = self.quaduples[inst_pointer][3] 
+                
+                real_add_value = self.real_address(offset,value_a)
+                real_where = self.real_address(offset,where)
+            
+                value_v = mp.get_value(real_add_value)
+
+                mp.set_value(real_where,value_v)
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+                
+
+            #PRINT
+            case 7:
+                value_p = self.quaduples[inst_pointer][3]
+                real_print_address =  self.real_address(offset, value_p)   
+                print(real_print_address)
+                print_v = mp.get_value(real_print_address)
+                print(print_v)
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
+                
