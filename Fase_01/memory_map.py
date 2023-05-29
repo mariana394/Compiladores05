@@ -30,18 +30,18 @@ class MemoryMap:
 
     def res_global (self, resources):
         print("MEMORY MAP", resources)
-        int = [0] * resources[0]
-        float = [0] * resources[1]
-        char= [0] * resources[2]
-        bool = [0] * resources[3]
-        df = [0] * resources[4]
+        int = [None] * resources[0]
+        float = [None] * resources[1]
+        char= [None] * resources[2]
+        bool = [None] * resources[3]
+        df = [None] * resources[4]
 
-        t_int = [0] * resources[5]
-        t_float = [0] * resources[6]
-        t_char= [0] * resources[7]
-        t_bool = [0] * resources[8]
-        t_df = [0] * resources[9]
-        t_pt = [0] * resources[10]
+        t_int = [None] * resources[5]
+        t_float = [None] * resources[6]
+        t_bool = [None] * resources[7]
+        t_char= [None] * resources[8]
+        t_df = [None] * resources[9]
+        t_pt = [None] * resources[10]
 
         self.int += (int)
         self.float += (float)
@@ -125,10 +125,12 @@ class MemoryMap:
 
         #Global/Local Int
         if (tipo == 0):
+            print("GET INT", self.int[index])
             return self.int[index]
         
         #Global/Local Float
         if (tipo == 1):
+            print("GET FLOAT", self.float[index])
             return self.float[index]
         
         #Global/Local Char
@@ -182,12 +184,45 @@ class MemoryMap:
         tipo = aux[0]
         index = aux[1]
 
-        #GLOBAL/LOCAL FLOAT
+        #________________GLOBAL/LOCAL_______
+        #Int
+        if (tipo == 0):
+            self.int[index] = value
+            
+        # FLOAT
         if(tipo == 1):
             self.float[index] = value
 
-        #TEMPORAL FLOAT
+        # CHAR
+        if(tipo == 2):
+            self.char[index] = value
+
+         # DATAFRAME
+        if(tipo == 3):
+            self.df[index] = value
+
+
+        #_______________TEMPORAL________________
+        #INT
+        if (tipo == 4):
+            self.t_int[index] = value
+        
+        # FLOAT
         if (tipo == 5):
             self.t_float[index] = value
     
-            
+        #BOOL
+        if (tipo == 6):
+            self.t_bool[index] = value
+
+        #CHAR
+        if (tipo == 7):
+            self.t_char[index] = value
+        
+        #DATAFRAME
+        if (tipo == 8):
+            self.t_df[index] = value
+        
+        #POINTER
+        if (tipo == 12):
+            self.pointer[index] = value

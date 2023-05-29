@@ -73,6 +73,9 @@ class Dictionary:
             #ARRAYS-MATRIX
             'VER' : 39,
 
+            #END
+            'END' : 40
+
           
         }
         self.datalor_symbol_dictionary = {
@@ -123,7 +126,6 @@ class Dictionary:
                     '13': '2',
                     '14': '2',
                     '15': '2',
-                    '16': '2',
                     '20': '4',
                     '22': '4',
                     '23': '4',
@@ -141,7 +143,6 @@ class Dictionary:
                     '13': '2',
                     '14': '2',
                     '15': '2',
-                    '16': '2',
                     '20': '4',
                     '21': '2',
                     '22': '4',

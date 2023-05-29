@@ -3,16 +3,26 @@ program TESTCORRECTO;
 main {
 var
 float c,d;
-int a;
-char name;
+int a,b,f;
+char sara,name;
 
-d = 2 * 3.2 ;
+a = 1;
+b = 2;
+
 name = 'mariohizotrampa';
+sara = 'sarahizotrampa';
 print(name);
-c = 6 * 2.2;
+f = 7;
+if ( b <= f) {
+    a = 2;
+}else{
+    a = 45;
+};
+for(a = 0 to 100){
+    print(a);
+};
 
-print(d);
-print(c);
+
 
 }
 end

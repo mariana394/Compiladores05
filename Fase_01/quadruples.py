@@ -178,7 +178,8 @@ class Quadruples:
         #Se obtiene el lugar de donde se obtuvo el valor de la variable de control
         idfrom = self.operands_stack_pop()
         idfrom_type = self.type_stack_pop()
-        self.quadruple.append([11, vControl, 1, place])
+        #17000 because is the place where 1 is stored
+        self.quadruple.append([11, vControl, 25000, place])
         self.cont += 1
         self.quadruple.append([21, place, '', vControl])
         self.cont += 1

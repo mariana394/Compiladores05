@@ -69,29 +69,30 @@ class VirtualMachine:
         end_main = mp.res_global(self.resources[1])
         print("END MAIN", end_main)
         self.sort_const()
-        
         print("____________________________________________________________")
 
         self.vm_handler(0, main_offset, end_main)
         print("____________________________________________________________")
 
+        
+        
+    def print_todo(self):
+
         print("________MEMORY MAP__________")
         print(  mp.int,     ("int \n"),
-                mp.float,("\n"),
-                mp.char,("\n"),
-                mp.bool, ("\n"),
-                mp.df,("\n"),
-                mp.t_int,("\n"),
-                mp.t_float,("\n"),
-                mp.t_char,("\n"),
-                mp.t_bool,("\n"),
-                mp.t_df,("\n"),
-                mp.pointer, ("\n"),
-                mp.c_int, ("\n"),
-                mp.c_float, ("\n"),
-                mp.c_char,("\n"),
+                mp.float,("float\n"),
+                mp.char,("char\n"),
+                mp.df,("df\n"),
+                mp.t_int,("t_int\n"),
+                mp.t_float,("t_float\n"),
+                mp.t_char,("t_char\n"),
+                mp.t_bool,("t_bool\n"),
+                mp.t_df,("t_df\n"),
+                mp.pointer, ("pointer\n"),
+                mp.c_int, ("c_int\n"),
+                mp.c_float, ("c_float\n"),
+                mp.c_char,("c_char \n"),
                 )
-        
 
     def real_address(self, offset, virtual_address):
         #________GLOBAL_________
@@ -199,7 +200,7 @@ class VirtualMachine:
 
         print( "Const", const_value)
         for i in range(len(const_value)):
-            print(type(const_value[i]).__name__)
+            #print(type(const_value[i]).__name__)
             
             if ((type(const_value[i]).__name__) == 'int'):
                 int_list.append(const_value[i])
@@ -215,6 +216,7 @@ class VirtualMachine:
     def check_len_quad(self, inst_pointer):
         if(inst_pointer >= len(self.quaduples)):
             print("END OF FILE")
+            self.print_todo()
             exit()
 
     def vm_handler(self, inst_pointer, offset, offset_end):
@@ -222,22 +224,110 @@ class VirtualMachine:
         print("Curr_quad ", self.quaduples[inst_pointer] )
         match operation:
 
-            #GOTO
-            case 17:
-                ip = self.quaduples[inst_pointer][3]
-                inst_pointer = ip - 1 
+            #PRINT
+            case 7:
+                value_p = self.quaduples[inst_pointer][3]
+                real_print_address =  self.real_address(offset, value_p)   
+                print("PRINT ADD",real_print_address)
+                print_v = mp.get_value(real_print_address)
+                
+                print(print_v)
+                inst_pointer += 1
                 self.check_len_quad(inst_pointer)
-                self.vm_handler(ip-1,offset,offset_end)
+                self.vm_handler(inst_pointer,offset,offset_end)
                 pass
             
+            #READ ->INCOMPLETO
+            case 8:
+                value_r = self.quaduples[inst_pointer][3]
+                real_read_address =  self.real_address(offset, value_r)
+                #Read a file in the same dir scope
+
+            #AND
+            case 9:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3]
+
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+
+                value = left_value and right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+                
+                
+            #OR
+            case 10:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3]
+
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+
+                value = left_value or right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
             #PLUS - Sin terminar 
             case 11:
                 left_addr = self.quaduples[inst_pointer][1]
                 right_addr = self.quaduples[inst_pointer][2]
                 res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value + right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
                 pass
                 
+            #MINUS
+            case 12:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
 
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value - right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+            
             #MULTIPLY
             case 13:
                 left_addr = self.quaduples[inst_pointer][1]
@@ -252,13 +342,125 @@ class VirtualMachine:
                 right_value = mp.get_value(right_real_address)
 
                 value = left_value * right_value
-                print("REAL ADD",res_real_address)
                 mp.set_value(res_real_address,value)
                 
                 inst_pointer += 1
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
+            
+            #DIVIDE
+            case 14:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value / right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
+            #MODULE
+            case 15:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value % right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
+            #POWER
+            case 16:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                #print("power", left_value, right_value)
+                value = pow(left_value,right_value)
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+            
+             #GOTO
+            case 17:
+                jump = self.quaduples[inst_pointer][3] 
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(jump-1,offset,offset_end)
+                pass
+
+            #GOTOF
+            case 18: 
+                condition = self.quaduples[inst_pointer][1]
+                jump = self.quaduples[inst_pointer][3]
+                
+                condition_real_address = self.real_address(offset, condition)
+                #print  ("condition_real_address", condition_real_address)
+                value = mp.get_value(condition_real_address)
+
+                if(value):
+                    inst_pointer += 1
+                    self.check_len_quad(inst_pointer)
+                    self.vm_handler(inst_pointer,offset,offset_end)
+                    pass 
+                else:
+                    self.check_len_quad(inst_pointer)
+                    self.vm_handler(jump-1,offset,offset_end)
+                    pass 
+                
+            
+            #EQUAL
+            case 20: 
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value == right_value
+                #print("EQUAL ==", value, res_real_address)
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+                
             #ASSIGN
             case 21:
                 value_a = self.quaduples[inst_pointer][1]
@@ -274,18 +476,120 @@ class VirtualMachine:
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
-                
 
-            #PRINT
-            case 7:
-                value_p = self.quaduples[inst_pointer][3]
-                real_print_address =  self.real_address(offset, value_p)   
-                print(real_print_address)
-                print_v = mp.get_value(real_print_address)
-                print(print_v)
+            #GTHAN
+            case 22:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value > right_value
+                mp.set_value(res_real_address, value)
+
                 inst_pointer += 1
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
+
+            #LTHAN
+            case 23:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value < right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
+            #NOTEQUAL
+            case 24:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value != right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+            
+            #GREATER OR EQUAL
+            case 31:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value >= right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
+            #LESS OR EQUAL
+            case 32:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                right_real_address = self.real_address(offset, right_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                right_value = mp.get_value(right_real_address)
+                
+                value = left_value <= right_value
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass  
+
+            #END
+            case 40:
+                exit()  
+
+
+
+                
+
+            
 
                 

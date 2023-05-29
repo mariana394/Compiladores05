@@ -49,16 +49,19 @@ def p_program(p):
 
 def p_goto_main(p):
     '''goto_main : SEMICOLON'''
+    tables.add_const(1,type(1))
     quad.insert_goto(16)
 
 def p_end(p):
     '''end : END '''
     global curr_function
+    quad.quadruple.append([40,0,0,0])
     curr_function = 'main'
     print("RESOURCES DONE")
     print("CURR_ FUNCTION", curr_function)
     tables.resources_handler(curr_function)
     tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont, quad.t_df_cont,quad.t_tp_cont, curr_function)
+    
     print(quad.print_poperands())
     all_quad = quad.get_quad()
     res = tables.get_func_res()
@@ -290,18 +293,7 @@ def p_index_arr_mat(p):
     size = tables.get_arr_mat_info(curr_variable, scope)
     quad.arr_mat_quad(size, curr_dim)
     
-    #print("TAG DE VIERNES", size[0])
-    #print("TAG sDE VIERNES2", size[1])
 
-    #quad.arr_mat_quad(size, curr_dim)
-
-    # print ("CURR",curr_variable)
-    # if (curr_dim == 1):
-    #     size = tables.get_arr_mat_info(curr_variable, scope)
-    #     s1 = quad.operands_stack_pop()
-    #     if (len(size) == 1):
-    #         quad.quadruple.append([39,s1,size[0],size[1]])
-    #         quad.quadruple.append([11,s1,size[2],])
     
 #_________________________________________FUNCTIONS______________________________________#
 #
@@ -580,8 +572,8 @@ def p_for_end(p):
      quad.final_var()
      #Se inserta un 32 para que se haga la comparacion
      #quad.print_poperands()
-     quad.operators_stack_push(32)
-     quad.create_exp_quadruple(32)
+     quad.operators_stack_push(31)
+     quad.create_exp_quadruple(31)
      quad.jump_stack_push()
      quad.insert_goto(18)
      quad.jump_stack_push()
