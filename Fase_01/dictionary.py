@@ -16,8 +16,9 @@ class Dictionary:
             'BOOL' : 4,
 
             #TIPOS COMPUESTOS
-            'DATE' : 5,
-            'DATAFRAME' : 6,
+            #'DATE' : 5,
+            'DATAFRAME' : 5,
+            'VOID' : 6,
 
             #PALABRAS RESERVADAS
             'PRINT': 7,
@@ -58,6 +59,24 @@ class Dictionary:
             #EXPRESSIONS ADDED
             'GORE' : 31, #>=
             'LORE': 32, # <=
+
+            #RETURN FUNCTIONS
+            'RETURN': 33,
+            'END_FUNCTION' : 34,
+
+            #FUNCTION CALLs
+            'ERA' : 35,
+            'GOSUB' : 36,
+            'PARAMETER' : 37,
+            'GOSPECIAL' : 38,
+
+            #ARRAYS-MATRIX
+            'VER' : 39,
+
+            #END
+            'END' : 40
+
+          
         }
         self.datalor_symbol_dictionary = {
             
@@ -107,9 +126,7 @@ class Dictionary:
                     '13': '2',
                     '14': '2',
                     '15': '2',
-                    '16': '2',
                     '20': '4',
-                    '21': '2',
                     '22': '4',
                     '23': '4',
                     '24': '4',
@@ -117,7 +134,8 @@ class Dictionary:
                     '32': '4'   
                     
                 }
-            },
+                
+                },
             '2': {
                 '2': {
                     '11': '2',
@@ -125,7 +143,6 @@ class Dictionary:
                     '13': '2',
                     '14': '2',
                     '15': '2',
-                    '16': '2',
                     '20': '4',
                     '21': '2',
                     '22': '4',
@@ -133,16 +150,29 @@ class Dictionary:
                     '24': '4',
                     '31': '4',
                     '32': '4'
-                    
-                   
-                    }
-            },
+                    },
+                '1': {
+                    '11': '2',
+                    '12': '2',
+                    '13': '2',
+                    '14': '2',
+                    '15': '2',
+                    '16': '2',
+                    '20': '4',
+                    '22': '4',
+                    '23': '4',
+                    '24': '4',
+                    '31': '4',
+                    '32': '4'
+                }
+                },
             '3': {
                 '3': {
                     '20': '4',
+                    '21': '3',
                     '24': '4'
                 }
-            },
+                },
             '4': {
                 '4': {
                     '9': '4',
@@ -150,7 +180,12 @@ class Dictionary:
                     '20': '4',
                     '24': '4',
                 }
-            }
+                },
+            '5': {
+                '5': {
+                    '21': '5',
+                }
+                }
         }
 
 
@@ -187,7 +222,4 @@ class Dictionary:
             else:
                 print("Type mismatch")
                 exit()
-        
-        
-
 

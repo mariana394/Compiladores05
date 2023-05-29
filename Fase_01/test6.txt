@@ -10,19 +10,18 @@ function char message (int f){
 	var 
 	int test2, a;
     float b;
-    a = 3;
+    a = 3 + 1;
     return 'hola';
 }
 
 main {
 var
-int d, a,z,mia,size;
-float c,message;
+int d, a,z,f[7][2],mia,size, j[2];
+float c;
 char name,test;
 
 d = 2 * 3 ;
 c = 6 % 2;
-
 if ( a > d) {
     a = 2;
 }else{
@@ -42,11 +41,11 @@ for(mia = a to 5){
     if ( a < mia){
     };
 };
+
+
+
 name = message(2 + 5);
-costos = read(name);
-
-test2 = financial_state(costos,costos,name,name);
-
+f[1][1] = 2;
 
 }
 end

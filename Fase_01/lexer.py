@@ -62,7 +62,7 @@ reserved = {
    #FUNCIONES ESPECIALES
    'exploration' : 'EXPLORATION',
    'financial_state' : 'FINANCIAL_STATE',
-   'season_analyzer' : 'SEASON_ANALYSIS',
+   'season_analysis' : 'SEASON_ANALYSIS',
    'trend_prediction' : 'TREND_PREDICTION',
    'dummi_regression' : 'DUMMI_REGRESSION',
    
@@ -137,12 +137,12 @@ t_POWER = r'\^'
 
 #CONSTANTES
 def t_CTE_FLOAT(t):
-    r'\d+\.\d+'
+    r'-?\d+\.\d+'
     t.value = float(t.value)    
     return t
 
 def t_CTE_INT(t):
-    r'\d+'
+    r'-?\d+'
     t.value = int(t.value)    
     return t
 

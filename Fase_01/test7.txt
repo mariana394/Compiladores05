@@ -1,0 +1,28 @@
+program TESTCORRECTO;
+
+main {
+var
+float c,d;
+int a,b,f;
+char sara,name;
+
+a = 1;
+b = 2;
+
+name = 'mariohizotrampa';
+sara = 'sarahizotrampa';
+print(name);
+f = 7;
+if ( b <= f) {
+    a = 2;
+}else{
+    a = 45;
+};
+for(a = 0 to 100){
+    print(a);
+};
+
+
+
+}
+end

@@ -1,0 +1,14 @@
+program HELLOWORLD;
+
+main {
+
+var
+char hello,datalor;
+hello = 'HelloWorld';
+datalor = 'WelcomeToDatalor';
+
+print(hello);
+print(datalor);
+
+}
+end
