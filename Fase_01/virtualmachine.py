@@ -42,6 +42,11 @@ class VirtualMachine:
 
         
         self.t_tp_init = 33000
+        self.temporal_offset= []
+        self.size_memory = []
+        # 0 -> int, 1 -> Float, 2 -> Char , 3 -> DF
+        self.t_param_counter = [0,0,0,0]
+    
        
        
     
@@ -608,6 +613,81 @@ class VirtualMachine:
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass  
+
+            #END FUNCTION
+            case 34:
+                size = self.size_memory.pop()
+                mp.release_memory(size)
+                #Llama a la variable que guarda los size de memoria
+                #Usa esos size para liberar ese espacio de memoria
+                #Termina la llamada recursiva aquí
+            #ERA
+            case 35:
+                g_int = self.quaduples[inst_pointer][2]
+                t_int = self.quaduples[inst_pointer][3]
+                g_float = self.quaduples[inst_pointer+1][2]
+                t_float = self.quaduples[inst_pointer+1][3]
+                g_bool = self.quaduples[inst_pointer+2][2]
+                t_bool = self.quaduples[inst_pointer+2][3]
+                g_char = self.quaduples[inst_pointer+3][2]
+                t_char = self.quaduples[inst_pointer+3][3]
+                g_df = self.quaduples[inst_pointer+4][2]
+                t_df = self.quaduples[inst_pointer+4][3]
+                t_pointer = self.quaduples[inst_pointer+5][3]
+
+                memory_size = [g_int, g_float, g_char, g_bool, g_df, t_int, t_float, t_bool, t_char, t_df, t_pointer]
+                end_era = mp.res_global(memory_size)
+                #Guardamos el tamaño para liberar memoria en endfunc 
+                self.size_memory.append(memory_size)
+                #Guardamos el offset para usarlo en gosub
+                self.temporal_offset = end_era
+                inst_pointer += 6
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+                #Llama al tamaño y crea el espacio en memoria
+                #Salto de +6 en cuadruplos
+                #Transformar las duplas de los ERA en una lista para
+                #asignar memoria
+
+            #GOSUB
+            case 36:
+                jump = self.quaduples[inst_pointer][3]
+                self.t_param_counter= [0,0,0,0]
+                self.vm_handler(jump - 1,offset_end, self.temporal_offset)
+                inst_pointer += 1
+                self.vm_handler(inst_pointer, offset, offset_end)
+                pass
+
+            #PARAMETER
+            case 37:
+                left_addr = self.quaduples[inst_pointer][1]
+                left_real_address = self.real_address(offset, left_addr)
+                param_address = 0
+                print("left_real_address", left_real_address)
+                if (left_real_address[0] == 0 or left_real_address[0] == 4 or left_real_address[0] == 9):
+                    param_address = self.l_i_init + self.t_param_counter[0] 
+                    self.t_param_counter[0] += 1
+                if (left_real_address[0] == 1 or left_real_address[0] == 5 or left_real_address[0] == 10):
+                    param_address = self.l_f_init + self.t_param_counter[1]
+                    self.t_param_counter[1] += 1
+                if (left_real_address[0] == 2 or left_real_address[0] == 7 or left_real_address[0] == 11):
+                    param_address = self.l_c_init + self.t_param_counter[2]
+                    self.t_param_counter[2] += 1
+                if (left_real_address[0] == 3 or left_real_address[0] == 8):
+                    param_address = self.l_df_init + self.t_param_counter[3]
+                    self.t_param_counter[3] += 1
+                print("param_address", param_address)
+                param_real_address = self.real_address(offset_end, param_address)
+
+                left_value = mp.get_value(left_real_address)
+                mp.set_value(param_real_address,left_value)
+                self.print_todo()
+                self.vm_handler(inst_pointer+1,offset,offset_end)
+                pass
+
+                
+            # #GOSPECIAL
+            # case 38:
 
             #VER-> VERIFICATION RANGE OF ARR-MAT
             case 39:

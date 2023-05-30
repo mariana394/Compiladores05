@@ -25,9 +25,6 @@ class MemoryMap:
         self.c_char = []       
         self.overflow = 10000
 
-        
-
-
     def res_global (self, resources):
         print("MEMORY MAP", resources)
         int = [None] * resources[0]
@@ -182,9 +179,6 @@ class MemoryMap:
             return self.pointer[index]
         
 
-    
-
-
     def set_value(self, aux, value):
         tipo = aux[0]
         index = aux[1]
@@ -231,3 +225,20 @@ class MemoryMap:
         #POINTER
         if (tipo == 12):
             self.pointer[index] = value
+
+    def release_memory(self,size):
+        print("SIZE MARTES", size)
+        self.int = self.int[:-size[0]]
+        self.float = self.float[:-size[1]]
+        self.char = self.char[:-size[2]]
+        self.bool = self.bool[:-size[3]]
+        self.df = self.df[:-size[4]]
+        self.t_int = self.t_int[:-size[5]]
+        self.t_float = self.t_float[:-size[6]]
+        self.t_bool = self.t_bool[:-size[7]]
+        self.t_char = self.t_char[:-size[8]]
+        self.t_df = self.t_df[:-size[9]]
+        self.pointer = self.pointer[:-size[10]]
+        
+
+        
