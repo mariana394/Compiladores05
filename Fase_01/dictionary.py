@@ -72,9 +72,12 @@ class Dictionary:
 
             #ARRAYS-MATRIX
             'VER' : 39,
-
+            #PLUS DIR BASE
+            'PLUS_DIR_BASE' : 40,
             #END
-            'END' : 40
+            'END' : 41,
+
+            
 
           
         }
@@ -108,7 +111,7 @@ class Dictionary:
                     '12': '1',
                     '13': '1',
                     '14': '1',
-                    '15': '2',
+                    '15': '1',
                     '16': '1',
                     '20': '4',
                     '21': '1',

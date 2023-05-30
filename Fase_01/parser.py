@@ -55,7 +55,7 @@ def p_goto_main(p):
 def p_end(p):
     '''end : END '''
     global curr_function
-    quad.quadruple.append([40,0,0,0])
+    quad.quadruple.append([41,0,0,0])
     curr_function = 'main'
     print("RESOURCES DONE")
     print("CURR_ FUNCTION", curr_function)
@@ -253,8 +253,14 @@ def p_var_s_dimesions(p):
 
 
 def p_variable(p):
-    '''variable : var_id_saver variable_array'''
+    '''variable : var_id_saver variable_array clear_dimension'''
     
+def p_clear_dimension(p):
+    '''clear_dimension : empty'''
+    global curr_dim
+    curr_dim = 0
+    quad.release_false_button()
+
 def p_var_id_saver(p):
     ''' var_id_saver : id_saver'''    
     global curr_name, scope, function_flag, curr_variable
@@ -265,6 +271,9 @@ def p_var_id_saver(p):
     else:
         function_flag = False
     type = []
+    #TEST1
+    print("false_button")
+    quad.false_button()
     print("variable antes ", curr_name)
     type = tables.search_variable_existance(curr_name, scope)
     print("variable ", curr_name, type)

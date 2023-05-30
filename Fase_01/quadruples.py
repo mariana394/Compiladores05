@@ -226,7 +226,7 @@ class Quadruples:
         print("PILA DE OPERANDOS", self.pOperands)
         print("PILA DE TIPOS", self.pTypes)
         #print("CHECK", self.pTypes[-1])
-        if(self.pTypes[-1] != 1):
+        if(int(self.pTypes[-1]) != 1):
              print('Integer type was expected')
              exit()
 
@@ -584,7 +584,7 @@ class Quadruples:
                 self.t_tp_cont += 1
                 #Clear array dir_base
                 dir_base = self.operands_stack_pop()
-                self.quadruple.append([11,address,dir_base,pointer])
+                self.quadruple.append([40,address,dir_base,pointer])
                 self.cont += 1
                 #Saves pointer in stack
                 self.operands_stack_push(pointer)
@@ -627,7 +627,7 @@ class Quadruples:
             pointer = self.t_tp_cont + self.t_tp_init
             self.t_tp_cont += 1
             dir_base = self.operands_stack_pop()
-            self.quadruple.append([11,address2,dir_base,pointer])
+            self.quadruple.append([40,address2,dir_base,pointer])
             self.cont += 1
             #ADD POINTER TO STACK
             self.operands_stack_push(pointer)
