@@ -184,8 +184,15 @@ class VirtualMachine:
         
         #__________POINTERS__________
         if(virtual_address >= self.t_tp_init and virtual_address < self.t_tp_init + 1999):
+            
             address = (virtual_address - self.t_tp_init)
-            return [12, address]
+            new_address = mp.get_value([12,address])
+            
+            if (new_address == None):
+                return [12, address]
+            else : 
+                return  self.real_address(offset,new_address)
+            
 
     def sort_const(self):
         # const_value =  list(self.const.keys)
@@ -304,6 +311,7 @@ class VirtualMachine:
 
                 inst_pointer += 1
                 self.check_len_quad(inst_pointer)
+                
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
                 
@@ -438,7 +446,25 @@ class VirtualMachine:
                     self.vm_handler(jump-1,offset,offset_end)
                     pass 
                 
-            
+            #GOTOV
+            case 19:
+                condition = self.quaduples[inst_pointer][1]
+                jump = self.quaduples[inst_pointer][3]
+
+                condition_real_address = self.real_address(offset, condition)
+                #print  ("condition_real_address", condition_real_address)
+                value = mp.get_value(condition_real_address)
+                #print(value, "IP:",inst_pointer,"jump", jump)
+                if(value):
+                    self.check_len_quad(inst_pointer)
+                    self.vm_handler(jump-1,offset,offset_end)
+                    pass 
+                else:
+                    inst_pointer += 1
+                    self.check_len_quad(inst_pointer)
+                    self.vm_handler(inst_pointer,offset,offset_end)
+                    pass 
+
             #EQUAL
             case 20: 
                 left_addr = self.quaduples[inst_pointer][1]
@@ -467,6 +493,7 @@ class VirtualMachine:
                 where = self.quaduples[inst_pointer][3] 
                 
                 real_add_value = self.real_address(offset,value_a)
+                
                 real_where = self.real_address(offset,where)
             
                 value_v = mp.get_value(real_add_value)
@@ -582,8 +609,50 @@ class VirtualMachine:
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass  
 
-            #END
+            #VER-> VERIFICATION RANGE OF ARR-MAT
+            case 39:
+                value = self.quaduples[inst_pointer][1]
+                linferior = self.quaduples[inst_pointer][2]
+                lsuperior = self.quaduples[inst_pointer][3]
+
+                value_real_address = self.real_address(offset, value)
+
+                value = mp.get_value(value_real_address)
+
+                if value >= linferior and value <= lsuperior:
+                    
+                    inst_pointer += 1
+                    self.check_len_quad(inst_pointer)
+                    self.vm_handler(inst_pointer,offset,offset_end)
+                    pass
+                
+                else:
+                    print("ERROR: INDEX OUT OF RANGE")
+                    exit()
+
+            #PLUS_DIR_BASE
             case 40:
+                left_addr = self.quaduples[inst_pointer][1]
+                right_addr = self.quaduples[inst_pointer][2]
+                res = self.quaduples[inst_pointer][3] 
+                
+                left_real_address = self.real_address(offset, left_addr)
+                res_real_address = self.real_address(offset, res)
+
+                left_value = mp.get_value(left_real_address)
+                
+                value = left_value + right_addr
+                mp.set_value(res_real_address, value)
+
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
+            #END
+            case 41:
+                self.print_todo()
+
                 exit()  
 
 

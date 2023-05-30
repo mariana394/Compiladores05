@@ -122,6 +122,7 @@ class MemoryMap:
     def get_value(self,aux):
         tipo = aux[0]
         index = aux[1]
+        
 
         #Global/Local Int
         if (tipo == 0):
@@ -175,6 +176,10 @@ class MemoryMap:
         #Const char
         if(tipo == 11):
             return self.c_char[index]
+        
+        if(tipo == 12):
+            print("VALOR EN POINTER",self.pointer[index])
+            return self.pointer[index]
         
 
     
