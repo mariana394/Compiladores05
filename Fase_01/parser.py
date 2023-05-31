@@ -29,7 +29,7 @@ curr_const = None
 for_flag = False
 return_flag = False
 function_flag = False #False for normal variables, true for functions
-
+era_stack = []
 
 
 #Objects
@@ -126,9 +126,28 @@ def p_release_exp(p):
 
 def p_resources(p):
     '''resources : empty'''
-    global curr_function
+    global curr_function, era_stack
     tables.resources_handler(curr_function)
     tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont, quad.t_df_cont,quad.t_tp_cont, curr_function)
+    #SI EN NUESTRA PILA DE ERA HAY ALGO RELLENA
+    #Llamar a los recursos de curr_function
+    #Int - float- char- bool- df- 
+    res = tables.get_resources(curr_function)
+
+    if(len(era_stack) != 0):
+        for i in range(len(era_stack)):
+            #Int - t_INT
+            quad.quadruple[[era_stack[i]]] = [35, '', res[0], res[5]]
+            #FLOAT - t_FLOAT
+            quad.quadruple[[era_stack[i]]+ 1] = [35, '', res[1], res[6]]
+            #CHAR - t_CHAR
+            quad.quadruple[[era_stack[i]]+ 2] = [35, '', res[2], res[8]]
+            #BOOL - t_BOOOL
+            quad.quadruple[[era_stack[i]]+ 3] = [35, '', res[3], res[7]]
+            #DATAFRAME - t_DATAFRAME
+            quad.quadruple[[era_stack[i]]+ 4] = [35, '', res[4], res[9]]
+            #POINTER
+            quad.quadruple[[era_stack[i]]+ 5] = [35, '', '', res[10]]
     quad.reset_temp()
 
 # flag check for knowing if its is a variabel or a function
@@ -651,6 +670,7 @@ def p_check_not_void(p):
     params_len = tables.get_size_param(curr_function)
     print("entro al verificador", params_len, quad.param_cont-1)
     if(params_len > quad.param_cont-1):
+        print("PARAMETERSssssss",params_len)
         print("ERROR: MISSING PARAMETERS ")
         exit()
     #Inserts Gosub for void function
@@ -670,6 +690,7 @@ def p_verify_params(p):
     params_len = tables.get_size_param(curr_function)
     print("entro al verificador", params_len, quad.param_cont-1)
     if(params_len > quad.param_cont-1):
+        print("2.PARAMETERSssssss",params_len)
         print("ERROR: MISSING PARAMETERS ")
         exit()
     
@@ -701,7 +722,7 @@ def p_function_saver(p):
 
 def p_function_flag(p):
     '''function_flag : LPAREN'''
-    global function_flag, curr_name, return_type, return_flag
+    global function_flag, curr_name, return_type, return_flag, era_stack
     function_flag = False
     
     type= []
@@ -712,8 +733,30 @@ def p_function_flag(p):
     if (type[0] == 6):
         return_flag = True 
     era_resource = tables.get_resources(curr_name)
-    print("TEST",era_resource)
-    quad.create_era(era_resource)
+    print("TEST",len(era_resource))
+    if (len(era_resource) != 0 ):
+        quad.create_era(era_resource)
+    else:
+        #guardar donde estoy en la pila de ERAs
+        era_stack.append (quad.cont-1)
+        #Int
+        quad.quadruple.append([])
+        quad.cont += 1
+        #Float
+        quad.quadruple.append([])
+        quad.cont += 1
+        #Bool
+        quad.quadruple.append([])
+        quad.cont += 1
+        #Char
+        quad.quadruple.append([])
+        quad.cont += 1
+        #DF
+        quad.quadruple.append([])
+        quad.cont += 1
+        #POINTER
+        quad.quadruple.append([])
+        quad.cont += 1
     
 
 

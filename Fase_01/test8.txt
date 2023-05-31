@@ -9,15 +9,13 @@ char sara,name;
 function void message (int f){
     a = f + 1;
     if (a < 10) {
-        print(a);
         message(a);
         print(a);
     };
 }
 
-
 main {
-message(2);
+
 print(a);
 
 }
