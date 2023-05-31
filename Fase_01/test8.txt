@@ -3,11 +3,13 @@ var
 float c,d;
 int a,b;
 char sara,name;
+dataframe df;
 
 
 
 function void message (int f){
     a = f + 1;
+    c= 1.1;
     if (a < 10) {
         message(a);
         print(a);
@@ -15,8 +17,12 @@ function void message (int f){
 }
 
 main {
+var 
+int s,h;
+float g;
 
-print(a);
-
+c = 1.1;
+message(1);
+print(c);
 }
 end

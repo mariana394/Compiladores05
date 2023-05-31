@@ -227,18 +227,33 @@ class MemoryMap:
             self.pointer[index] = value
 
     def release_memory(self,size):
-        print("SIZE MARTES", size)
-        self.int = self.int[:-size[0]]
-        self.float = self.float[:-size[1]]
-        self.char = self.char[:-size[2]]
-        self.bool = self.bool[:-size[3]]
-        self.df = self.df[:-size[4]]
-        self.t_int = self.t_int[:-size[5]]
-        self.t_float = self.t_float[:-size[6]]
-        self.t_bool = self.t_bool[:-size[7]]
-        self.t_char = self.t_char[:-size[8]]
-        self.t_df = self.t_df[:-size[9]]
-        self.pointer = self.pointer[:-size[10]]
+        print("SIZE MARTES HH", self.int[:-size[0]])
+        if(size[0] != 0):
+            self.int = self.int[:-size[0]]
+        #print("RM INT AF", self.int)
+        if(size[1] != 0):
+            self.float = self.float[:-size[1]]
+        #print("RM FLOAT AF", self.float)
+        if(size[2] != 0):
+            self.char = self.char[:-size[2]]
+        if(size[3] != 0): 
+        #print("RM BOOL BEF", self.bool)
+            self.bool = self.bool[:-size[3]]
+        #print("RM BOOL AF", self.bool)
+        if(size[4] != 0):
+            self.df = self.df[:-size[4]]
+        if(size[5] != 0):
+            self.t_int = self.t_int[:-size[5]]
+        if(size[6] != 0):
+            self.t_float = self.t_float[:-size[6]]
+        if(size[7] != 0):
+            self.t_bool = self.t_bool[:-size[7]]
+        if(size[8] != 0):
+            self.t_char = self.t_char[:-size[8]]
+        if(size[9] != 0):
+            self.t_df = self.t_df[:-size[9]]
+        if(size[10] != 0):
+            self.pointer = self.pointer[:-size[10]]
         
 
         

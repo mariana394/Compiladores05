@@ -133,21 +133,25 @@ def p_resources(p):
     #Llamar a los recursos de curr_function
     #Int - float- char- bool- df- 
     res = tables.get_resources(curr_function)
-
+    print("MARTES NOCHE", res)
     if(len(era_stack) != 0):
         for i in range(len(era_stack)):
             #Int - t_INT
-            quad.quadruple[[era_stack[i]]] = [35, '', res[0], res[5]]
+            quad.quadruple[era_stack[i]] = [35, '', res[0], res[5]]
             #FLOAT - t_FLOAT
-            quad.quadruple[[era_stack[i]]+ 1] = [35, '', res[1], res[6]]
-            #CHAR - t_CHAR
-            quad.quadruple[[era_stack[i]]+ 2] = [35, '', res[2], res[8]]
+            quad.quadruple[era_stack[i]+ 1] = [35, '', res[1], res[6]]
+            
             #BOOL - t_BOOOL
-            quad.quadruple[[era_stack[i]]+ 3] = [35, '', res[3], res[7]]
+            quad.quadruple[era_stack[i]+ 2] = [35, '', res[3], res[7]]
+            
+            #CHAR - t_CHAR
+            quad.quadruple[era_stack[i]+ 3] = [35, '', res[2], res[8]]
+            
             #DATAFRAME - t_DATAFRAME
-            quad.quadruple[[era_stack[i]]+ 4] = [35, '', res[4], res[9]]
+            quad.quadruple[era_stack[i]+ 4] = [35, '', res[4], res[9]]
             #POINTER
-            quad.quadruple[[era_stack[i]]+ 5] = [35, '', '', res[10]]
+            quad.quadruple[era_stack[i]+ 5] = [35, '', '', res[10]]
+
     quad.reset_temp()
 
 # flag check for knowing if its is a variabel or a function
@@ -757,6 +761,8 @@ def p_function_flag(p):
         #POINTER
         quad.quadruple.append([])
         quad.cont += 1
+        quad.param_cont = 1
+
     
 
 

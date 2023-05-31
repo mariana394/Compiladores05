@@ -617,7 +617,12 @@ class VirtualMachine:
             #END FUNCTION
             case 34:
                 size = self.size_memory.pop()
+                #print("RELEASE MEMORY",size)
+                print("END FUNCTION BEFORE RELEASE MEMORY 1")
+                self.print_todo()
                 mp.release_memory(size)
+                print("END FUNCTION AFTER RELEASE MEMORY 1")
+                self.print_todo()
                 #Llama a la variable que guarda los size de memoria
                 #Usa esos size para liberar ese espacio de memoria
                 #Termina la llamada recursiva aquí
