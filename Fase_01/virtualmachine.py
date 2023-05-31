@@ -5,6 +5,7 @@
 # Virtual Machine....
 # -----------------------------------------------------------
 from memory_map import MemoryMap
+import pandas as pd 
 
 mp = MemoryMap()
 
@@ -68,7 +69,7 @@ class VirtualMachine:
         print("QUAD:\n ", self.quaduples)
         print("\n RES: ",self.resources)
         print("\n CONST: ",self.const)
-        #print(mp.res_global(self.resources[0]))
+        print("RECURSOS MAIN",mp.res_global(self.resources[0]))
         main_offset = mp.res_global(self.resources[0])
         print("MAIN OFFSET", main_offset)
         end_main = mp.res_global(self.resources[1])
@@ -119,7 +120,7 @@ class VirtualMachine:
         #DATAFRAME
         if(virtual_address >= self.g_df_init and virtual_address < self.l_i_init):
             address = (virtual_address - 7000)
-            return [3,address]
+            return [4,address]
         
          #________LOCALES________
        #INT
@@ -134,67 +135,68 @@ class VirtualMachine:
         
         #CHAR
         if(virtual_address >= self.l_c_init and virtual_address < self.l_df_init):
-            address = (virtual_address - self.l_c_init + offset[3])
+            address = (virtual_address - self.l_c_init + offset[2])
             return [2,address]
         
         #DATAFRAME
         if(virtual_address >= self.l_df_init and virtual_address < self.t_i_init):
             address = (virtual_address - self.l_df_init + offset[4])
-            return [3,address]
+            return [4,address]
         
          #________TEMPORALES________
        #INT
         if(virtual_address >= self.t_i_init and virtual_address < self.t_f_init):
             address = (virtual_address - self.t_i_init + offset[5])
-            return [4,address]
+            return [5,address]
        
        #FLOAT
         if(virtual_address >= self.t_f_init and virtual_address < self.t_c_init):
             address = (virtual_address - self.t_f_init + offset[6])
-            return [5,address]
-        
-        #BOOL
-        if(virtual_address >= self.t_b_init and virtual_address < self.c_i_init):
-            address = (virtual_address - self.t_b_init + offset[7])
             return [6,address]
         
         #CHAR
         if(virtual_address >= self.t_c_init and virtual_address < self.t_b_init):
-            address = (virtual_address - self.t_c_init + offset[8])
+            address = (virtual_address - self.t_c_init + offset[7])
             return [7,address]
+        
+        #BOOL
+        if(virtual_address >= self.t_b_init and virtual_address < self.c_i_init):
+            address = (virtual_address - self.t_b_init + offset[8])
+            return [8,address]
+        
         
         #DATAFRAME
         if(virtual_address >= self.t_df_init and virtual_address < self.t_tp_init):
             address = (virtual_address - self.t_df_init + offset[9])
-            return [8,address]
+            return [9,address]
 
         #________CONSTANTES________
         #INT
         if(virtual_address >= self.c_i_init and virtual_address < self.c_f_init):
             address = (virtual_address - self.c_i_init)
             #5 -> int Const
-            return [9, address]
+            return [11, address]
         
         #FLOAT
         if(virtual_address >= self.c_f_init and virtual_address < self.c_c_init):
             address = (virtual_address - self.c_f_init)
             #6 -> float Const
-            return [10, address]
+            return [12, address]
         
         #CHAR
         if(virtual_address >= self.c_c_init and virtual_address < self.t_df_init):
             address = (virtual_address - self.c_c_init)
             #7 -> char Const
-            return [11, address]
+            return [13, address]
         
         #__________POINTERS__________
         if(virtual_address >= self.t_tp_init and virtual_address < self.t_tp_init + 1999):
             
             address = (virtual_address - self.t_tp_init)
-            new_address = mp.get_value([12,address])
+            new_address = mp.get_value([10,address])
             
             if (new_address == None):
-                return [12, address]
+                return [10, address]
             else : 
                 return  self.real_address(offset,new_address)
             
@@ -250,9 +252,24 @@ class VirtualMachine:
                 pass
             
             #READ ->INCOMPLETO
-            case 8:
-                value_r = self.quaduples[inst_pointer][3]
-                real_read_address =  self.real_address(offset, value_r)
+            case 8: 
+                value = self.quaduples[inst_pointer][1]
+                read_address = self.quaduples[inst_pointer][3]
+
+                real_add_value = self.real_address(offset, value)
+                real_read_add = self.real_address(offset, read_address)
+
+                real_value = mp.get_value(real_add_value)
+                real_value = real_value.replace('"','')
+                real_value = real_value.replace("'",'')
+                print('real value', real_value)
+                mp.set_value(real_read_add,pd.read_csv(real_value))
+                print(pd.read_csv(real_value))
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
                 #Read a file in the same dir scope
 
             #AND
@@ -425,7 +442,7 @@ class VirtualMachine:
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
             
-             #GOTO
+            #GOTO
             case 17:
                 jump = self.quaduples[inst_pointer][3] 
                 self.check_len_quad(inst_pointer)
@@ -614,6 +631,23 @@ class VirtualMachine:
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass  
 
+            #RETURN
+            case 33:
+                value_a = self.quaduples[inst_pointer][1]
+                where = self.quaduples[inst_pointer][3] 
+                
+                real_add_value = self.real_address(offset,value_a)
+                
+                real_where = self.real_address(offset,where)
+            
+                value_v = mp.get_value(real_add_value)
+
+                mp.set_value(real_where,value_v)
+                inst_pointer += 1
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
             #END FUNCTION
             case 34:
                 size = self.size_memory.pop()
@@ -632,15 +666,16 @@ class VirtualMachine:
                 t_int = self.quaduples[inst_pointer][3]
                 g_float = self.quaduples[inst_pointer+1][2]
                 t_float = self.quaduples[inst_pointer+1][3]
-                g_bool = self.quaduples[inst_pointer+2][2]
-                t_bool = self.quaduples[inst_pointer+2][3]
-                g_char = self.quaduples[inst_pointer+3][2]
-                t_char = self.quaduples[inst_pointer+3][3]
+                g_bool = self.quaduples[inst_pointer+3][2]
+                t_bool = self.quaduples[inst_pointer+3][3]
+                g_char = self.quaduples[inst_pointer+2][2]
+                t_char = self.quaduples[inst_pointer+2][3]
                 g_df = self.quaduples[inst_pointer+4][2]
                 t_df = self.quaduples[inst_pointer+4][3]
                 t_pointer = self.quaduples[inst_pointer+5][3]
 
-                memory_size = [g_int, g_float, g_char, g_bool, g_df, t_int, t_float, t_bool, t_char, t_df, t_pointer]
+                memory_size = [g_int, g_float, g_char, g_bool, g_df, t_int, t_float, t_char, t_bool, t_df, t_pointer]
+                print('MEMORIA RECURSIVA', memory_size)
                 end_era = mp.res_global(memory_size)
                 #Guardamos el tamaño para liberar memoria en endfunc 
                 self.size_memory.append(memory_size)
@@ -669,16 +704,16 @@ class VirtualMachine:
                 left_real_address = self.real_address(offset, left_addr)
                 param_address = 0
                 print("left_real_address", left_real_address)
-                if (left_real_address[0] == 0 or left_real_address[0] == 4 or left_real_address[0] == 9):
+                if (left_real_address[0] == 0 or left_real_address[0] == 5 or left_real_address[0] == 11):
                     param_address = self.l_i_init + self.t_param_counter[0] 
                     self.t_param_counter[0] += 1
-                if (left_real_address[0] == 1 or left_real_address[0] == 5 or left_real_address[0] == 10):
+                if (left_real_address[0] == 1 or left_real_address[0] == 6 or left_real_address[0] == 12):
                     param_address = self.l_f_init + self.t_param_counter[1]
                     self.t_param_counter[1] += 1
-                if (left_real_address[0] == 2 or left_real_address[0] == 7 or left_real_address[0] == 11):
+                if (left_real_address[0] == 2 or left_real_address[0] == 7 or left_real_address[0] == 13):
                     param_address = self.l_c_init + self.t_param_counter[2]
                     self.t_param_counter[2] += 1
-                if (left_real_address[0] == 3 or left_real_address[0] == 8):
+                if (left_real_address[0] == 4 or left_real_address[0] == 9):
                     param_address = self.l_df_init + self.t_param_counter[3]
                     self.t_param_counter[3] += 1
                 print("param_address", param_address)

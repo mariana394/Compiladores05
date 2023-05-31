@@ -35,7 +35,7 @@ class DirFunc:
 		#Initialize the constant dictionary varibales
 		self.constants = {}
 		#RESOURCES
-		# 0->int 1->float 2->bool 3-> char 4->DF
+		# 0->int 1->float 2->Char 3-> Bool 4->DF
 		self.resources = [0,0,0,0,0]
 		#counter for function
 		self.func_cont = 0 
@@ -48,8 +48,8 @@ class DirFunc:
 		#if(func_name != 'global'): 
 		self.dir_func[func_name]["resources"].append(temp_i) 
 		self.dir_func[func_name]["resources"].append(temp_f) 
+		self.dir_func[func_name]["resources"].append(temp_c)
 		self.dir_func[func_name]["resources"].append(temp_b) 
-		self.dir_func[func_name]["resources"].append(temp_c) 
 		self.dir_func[func_name]["resources"].append(temp_df) 
 		self.dir_func[func_name]["resources"].append(temp_pt) 
 

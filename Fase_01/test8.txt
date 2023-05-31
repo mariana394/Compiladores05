@@ -1,15 +1,14 @@
 program TESTCORRECTO;
-var
-float c,d;
-int a,b;
-char sara,name;
-dataframe df;
-
-
 
 function void message (int f){
+    var
+    int a;
+    float c,d;
+    char sara,name, tacos;
+    dataframe df, costos, ventas, masventas, mascostos;
+    
+    df = read('testDF.csv');
     a = f + 1;
-    c= 1.1;
     if (a < 10) {
         message(a);
         print(a);
@@ -18,11 +17,13 @@ function void message (int f){
 
 main {
 var 
-int s,h;
+int s,h, k[2][3];
 float g;
 
-c = 1.1;
+s = 1;
+print(s);
 message(1);
-print(c);
+
+
 }
 end

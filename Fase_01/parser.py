@@ -69,6 +69,7 @@ def p_end(p):
     vm.set_quadruples(all_quad)
     vm.set_const(const)
     vm.set_resources(res)
+    print("RESS MAIN", res[1])
     vm.start_vm()
 
     
@@ -142,10 +143,10 @@ def p_resources(p):
             quad.quadruple[era_stack[i]+ 1] = [35, '', res[1], res[6]]
             
             #BOOL - t_BOOOL
-            quad.quadruple[era_stack[i]+ 2] = [35, '', res[3], res[7]]
+            quad.quadruple[era_stack[i]+ 3] = [35, '', res[3], res[8]]
             
             #CHAR - t_CHAR
-            quad.quadruple[era_stack[i]+ 3] = [35, '', res[2], res[8]]
+            quad.quadruple[era_stack[i]+ 2] = [35, '', res[2], res[7]]
             
             #DATAFRAME - t_DATAFRAME
             quad.quadruple[era_stack[i]+ 4] = [35, '', res[4], res[9]]
@@ -540,11 +541,9 @@ def p_end_print_np(p):
 #________________________<READ>_______________________
 def p_read(p):
     '''read : np_read LPAREN valid_exp_read read_np'''
-    print("NI LO CONOCE")
 
 def p_np_read(p):
     '''np_read : READ'''
-    print("SI LO CONOCE")
 
 def p_valid_exp_read(p):
     '''valid_exp_read : exp'''
@@ -557,8 +556,9 @@ def p_valid_exp_read(p):
 
 def p_read_np(p):
     '''read_np : RPAREN'''
-    print("SI LLEGA AL READ")
+    
     value = quad.operands_stack_pop()
+    print("SI LLEGA AL READ", value)
     quad.read_quadruple(value)
 
 #_____________________<CYCLE>_________________
@@ -823,7 +823,7 @@ def p_tag_sp(p):
 
 #_______________<EXPLORATION>________________
 def p_exploration(p):
-    '''exploration : EXPLORATION tag_sp variable explore_var np_check_size'''
+    '''exploration : EXPLORATION tag_sp variable explore_cte np_check_size'''
 
 def p_sp_param(p):
     '''sp_param : COMMA'''
@@ -838,9 +838,9 @@ def p_sp_param(p):
     special.search_sf_param(curr_function, param, tipo)
     
     
-    quad.quadruple.append([37,tipo,value,param])
+    quad.quadruple.append([37,value,'',param])
     quad.cont += 1 
-    quad.param_cont += 1
+    quad.param_cont += 19
 
 def p_np_check_size(p):
     '''np_check_size : RPAREN'''
@@ -858,7 +858,7 @@ def p_np_check_size(p):
     print("PARAMETROS", tipo , value)
 
     #
-    quad.quadruple.append([37,tipo,value,param])
+    quad.quadruple.append([37,value,'',param])
     quad.cont += 1 
     memory = quad.t_df_cont + quad.t_df_init
     quad.t_df_cont += 1
@@ -867,13 +867,8 @@ def p_np_check_size(p):
     quad.type_stack_push(5)
 
 
-def p_explore_var(p):
-    '''explore_var : sp_param variable explor_cte
-                   | empty'''
-      
-
-def p_explor_cte(p):
-    '''explor_cte : sp_param int_const_saver
+def p_explore_cte(p):
+    '''explore_cte : sp_param int_const_saver
                   | empty'''
     
     

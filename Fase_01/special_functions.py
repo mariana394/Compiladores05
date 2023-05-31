@@ -10,7 +10,7 @@ class special_functions:
     def __init__(self):
         
         self.special_func = {
-                        "exploration" : {'params': [5,3,1],},
+                        "exploration" : {'params': [5,1],},
                         "financial_state": {'params':[5,5,3,3],},
                         "dummi_regression": {'params':[5,3,2],},
                         "season_analysis": {'params':[5],},
