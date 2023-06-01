@@ -363,7 +363,7 @@ class Quadruples:
             #AND
             
             case 9:
-                print("ENTRO AL AND")
+                #print("ENTRO AL AND")
                 if (operator == 9):
                     #LLAMAR LA FUNCIÓN PARA CREAR EL CUADRUPLO
                     print('&&')

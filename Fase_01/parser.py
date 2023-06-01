@@ -347,8 +347,6 @@ def p_f_type(p):
     return_type = curr_type
     scope += 1
     
-   
-    
     #print(curr_type,scope)
 #______FUNCTION___NEURALGIC POINTS________#
 

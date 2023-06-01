@@ -784,7 +784,9 @@ class VirtualMachine:
                         # Using for loop
                         i = 1
                         go_special = self.quaduples[inst_pointer + i][0]
+                        #DATAFRAME
                         param1 = None
+                        #CONSTANTE
                         param2 = None
                         while go_special != 38:
                             print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
@@ -804,16 +806,39 @@ class VirtualMachine:
                         print('REAL ADDRESS PARAM', param1_real_address)
                         print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
                         print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
-                            
+                        param1 = mp.get_value(param1_real_address)
+                        param2 = mp.get_value(param2_real_address)
                         #IF param2 == ? ponte a hacer algo
                         
-
-                        print(self.quaduples[inst_pointer + i - 1])
+                         #TEMPORAL DATAFRAME
                         save = self.quaduples[inst_pointer + i - 1][3]
                         save_real_address = self.real_address(offset, save)
                         print('SAVE REAL ADDRESS', save_real_address, 100)
+                    
+                       
+                        print("ENTRO AL MATCH param2")
 
-                        mp.set_value(save_real_address, 1000000)
+                        match param2:
+                            #Estadisticos de posicion
+                            case 1:
+                                estad_posi = param1.describe()
+                                #estad_posi = [param1.mean(numeric_only=True),param1.median(numeric_only=True),param1.mode(numeric_only=True)]
+                                mp.set_value(save_real_address, estad_posi)
+                                print("HOLA HOLA HOLA")
+                                print(estad_posi)
+                            
+                            case 2:
+                                estad_disp = [param1.std(),param1.var(),param1.quantile([.25,.75])]
+                                print("______________ESTADÍSTICOS DE DISPERSIÓN__________")
+                                print("DESVIACIÓN ESTÁNDAR: ",estad_disp[0] )
+                                print("VARIANZA: ",estad_disp[1])
+                                print("CUARTILES: ",estad_disp[2])
+                                
+                            
+                            
+
+                        print(self.quaduples[inst_pointer + i - 1])
+                       
 
                         
                 inst_pointer += i

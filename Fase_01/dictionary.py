@@ -76,9 +76,6 @@ class Dictionary:
             'PLUS_DIR_BASE' : 40,
             #END
             'END' : 41,
-
-            
-
           
         }
         self.datalor_symbol_dictionary = {
