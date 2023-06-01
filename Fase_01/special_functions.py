@@ -19,10 +19,11 @@ class special_functions:
                         }
 
     def search_sf_param(self,func_name, param, tipo):
+        #print("VALUE PARAM MIER", param)
         if(func_name in self.special_func.keys()):
             list_param = self.special_func[func_name]['params']
             if(len(list_param) < param):
-                print("ERROR: TOO MANY PARAMETERS")
+                print("ERROR: TOO MANY PARAMETERS", len(list_param), " " , param)
                 exit()
             else: 
                 print("SPECIAL PARAM", func_name, " Param ", param, "tipo ", tipo , "tipo aqui " ,list_param[param - 1])

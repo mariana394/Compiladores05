@@ -19,11 +19,15 @@ main {
 var 
 int s,h, k[2][3];
 float g;
-
-s = 1;
-print(s);
+dataframe l, m;
+k[1][1] = 2;
+s = k[1][1];
+print('HOLA',s);
 message(1);
+l = read('testDF.csv');
+print(l);
 
-
+m = exploration(l, 1);
+print(m);
 }
 end

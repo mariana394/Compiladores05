@@ -65,20 +65,18 @@ class VirtualMachine:
 
 
     def start_vm(self):
-        print("________VIRTUAL MACHINE__________")
-        print("QUAD:\n ", self.quaduples)
-        print("\n RES: ",self.resources)
-        print("\n CONST: ",self.const)
-        print("RECURSOS MAIN",mp.res_global(self.resources[0]))
+        # print("________VIRTUAL MACHINE__________")
+        #print("QUAD:\n ", self.quaduples)
+        # print("\n RES: ",self.resources)
+        # print("\n CONST: ",self.const)
+        # print("RECURSOS MAIN",mp.res_global(self.resources[0]))
         main_offset = mp.res_global(self.resources[0])
         print("MAIN OFFSET", main_offset)
         end_main = mp.res_global(self.resources[1])
         print("END MAIN", end_main)
         self.sort_const()
-        print("____________________________________________________________")
-
+        
         self.vm_handler(0, main_offset, end_main)
-        print("____________________________________________________________")
 
         
         
@@ -235,14 +233,14 @@ class VirtualMachine:
 
     def vm_handler(self, inst_pointer, offset, offset_end):
         operation = self.quaduples[inst_pointer][0]
-        print("Curr_quad ", self.quaduples[inst_pointer] )
+       # print("Curr_quad ", self.quaduples[inst_pointer] )
         match operation:
 
             #PRINT
             case 7:
                 value_p = self.quaduples[inst_pointer][3]
                 real_print_address =  self.real_address(offset, value_p)   
-                print("PRINT ADD",real_print_address)
+               # print("PRINT ADD",real_print_address)
                 print_v = mp.get_value(real_print_address)
                 
                 print(print_v)
@@ -262,9 +260,9 @@ class VirtualMachine:
                 real_value = mp.get_value(real_add_value)
                 real_value = real_value.replace('"','')
                 real_value = real_value.replace("'",'')
-                print('real value', real_value)
+               # print('real value', real_value)
                 mp.set_value(real_read_add,pd.read_csv(real_value))
-                print(pd.read_csv(real_value))
+                #print(pd.read_csv(real_value))
                 inst_pointer += 1
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
@@ -652,10 +650,10 @@ class VirtualMachine:
             case 34:
                 size = self.size_memory.pop()
                 #print("RELEASE MEMORY",size)
-                print("END FUNCTION BEFORE RELEASE MEMORY 1")
-                self.print_todo()
+                #print("END FUNCTION BEFORE RELEASE MEMORY 1")
+                #self.print_todo()
                 mp.release_memory(size)
-                print("END FUNCTION AFTER RELEASE MEMORY 1")
+                #print("END FUNCTION AFTER RELEASE MEMORY 1")
                 self.print_todo()
                 #Llama a la variable que guarda los size de memoria
                 #Usa esos size para liberar ese espacio de memoria
@@ -675,7 +673,7 @@ class VirtualMachine:
                 t_pointer = self.quaduples[inst_pointer+5][3]
 
                 memory_size = [g_int, g_float, g_char, g_bool, g_df, t_int, t_float, t_char, t_bool, t_df, t_pointer]
-                print('MEMORIA RECURSIVA', memory_size)
+                #print('MEMORIA RECURSIVA', memory_size)
                 end_era = mp.res_global(memory_size)
                 #Guardamos el tamaño para liberar memoria en endfunc 
                 self.size_memory.append(memory_size)
@@ -703,7 +701,7 @@ class VirtualMachine:
                 left_addr = self.quaduples[inst_pointer][1]
                 left_real_address = self.real_address(offset, left_addr)
                 param_address = 0
-                print("left_real_address", left_real_address)
+                #print("left_real_address", left_real_address)
                 if (left_real_address[0] == 0 or left_real_address[0] == 5 or left_real_address[0] == 11):
                     param_address = self.l_i_init + self.t_param_counter[0] 
                     self.t_param_counter[0] += 1
@@ -716,12 +714,12 @@ class VirtualMachine:
                 if (left_real_address[0] == 4 or left_real_address[0] == 9):
                     param_address = self.l_df_init + self.t_param_counter[3]
                     self.t_param_counter[3] += 1
-                print("param_address", param_address)
+                #print("param_address", param_address)
                 param_real_address = self.real_address(offset_end, param_address)
 
                 left_value = mp.get_value(left_real_address)
                 mp.set_value(param_real_address,left_value)
-                self.print_todo()
+                #self.print_todo()
                 self.vm_handler(inst_pointer+1,offset,offset_end)
                 pass
 
@@ -768,6 +766,61 @@ class VirtualMachine:
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
+
+            case 'special':
+                special_function = self.quaduples[inst_pointer][3]
+                print("SPECIAL FUNCTION", special_function)
+
+                match special_function:
+                    case 'exploration':
+                        #Busca hasta que encuentres gospecial  
+                            #Buscar el cuadruplo que tenga 1 en self.quaduples[inst_pointer][3]
+                            #y guardarlo en param1 que es temporal del case
+                            #Buscar el cuadruplo que tenga 2 en self.quaduples[inst_pointer][3]
+                            #y guardarlo en param2 que es temporal del case
+
+                        #Codigo de python para explorar
+                        # Python3 code to iterate over a list
+                        # Using for loop
+                        i = 1
+                        go_special = self.quaduples[inst_pointer + i][0]
+                        param1 = None
+                        param2 = None
+                        while go_special != 38:
+                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
+                            go_special = self.quaduples[inst_pointer + i][0]
+                            param = self.quaduples[inst_pointer + i][3]
+                            param_value = self.quaduples[inst_pointer + i][1]
+                                 #Quiere decir que es el parametro 1
+                            if (param == 1):
+                                param1 = param_value
+                            if (param == 2):
+                                param2 = param_value
+                            i += 1
+                                #Quiere decir que es el parametro 2
+                        print ('PARAMETRO 1', param1, 'PARAMETRO 2', param2)
+                        param1_real_address = self.real_address(offset, param1)
+                        param2_real_address = self.real_address(offset, param2)
+                        print('REAL ADDRESS PARAM', param1_real_address)
+                        print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
+                        print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
+                            
+                        #IF param2 == ? ponte a hacer algo
+                        
+
+                        print(self.quaduples[inst_pointer + i - 1])
+                        save = self.quaduples[inst_pointer + i - 1][3]
+                        save_real_address = self.real_address(offset, save)
+                        print('SAVE REAL ADDRESS', save_real_address, 100)
+
+                        mp.set_value(save_real_address, 1000000)
+
+                        
+                inst_pointer += i
+                self.check_len_quad(inst_pointer)
+                self.vm_handler(inst_pointer,offset,offset_end)
+                pass
+
 
             #END
             case 41:

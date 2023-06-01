@@ -186,8 +186,10 @@ class VirtualMemory:
                         #print (address)
                         return address
                     #DATAFRAME
-                    case 6:
+                    case 5:
                         self.overflow(self.l_df_cont, self.l_df_size)
                         #return the address
                         address = self.l_df_init + self.l_df_cont
                         self.l_df_cont += size
+
+                        return address

@@ -57,11 +57,11 @@ def p_end(p):
     global curr_function
     quad.quadruple.append([41,0,0,0])
     curr_function = 'main'
-    print("RESOURCES DONE")
-    print("CURR_ FUNCTION", curr_function)
+    # print("RESOURCES DONE")
+    # print("CURR_ FUNCTION", curr_function)
     tables.resources_handler(curr_function)
     tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont, quad.t_df_cont,quad.t_tp_cont, curr_function)
-    
+    # print('TABLA DE VARS', tables.vars)
     print(quad.print_poperands())
     all_quad = quad.get_quad()
     res = tables.get_func_res()
@@ -69,7 +69,7 @@ def p_end(p):
     vm.set_quadruples(all_quad)
     vm.set_const(const)
     vm.set_resources(res)
-    print("RESS MAIN", res[1])
+    # print("RESS MAIN", res[1])
     vm.start_vm()
 
     
@@ -161,8 +161,8 @@ def check_flag_func():
     if(function_flag):
         print("ERROR: Function name used as a variable")
         exit()
-    else:
-        print("toy chiquito no puedo")
+    # else:
+    #     print("toy chiquito no puedo")
 
 
 #_________________________<LIBRERIES>_____________________________#
@@ -296,11 +296,11 @@ def p_var_id_saver(p):
         function_flag = False
     type = []
     #TEST1
-    print("false_button")
+    #print("false_button")
     quad.false_button()
-    print("variable antes ", curr_name)
+    #print("variable antes ", curr_name)
     type = tables.search_variable_existance(curr_name, scope)
-    print("variable ", curr_name, type)
+    #print("variable ", curr_name, type)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
 
@@ -834,13 +834,13 @@ def p_sp_param(p):
     tipo = quad.type_stack_pop()
     value = quad.operands_stack_pop()
     print("PARAMETROS", tipo , value)
-    print("ESTOY DENTRO DE LA COMA", tipo)
+    print("ESTOY DENTRO DE LA COMA", param)
     special.search_sf_param(curr_function, param, tipo)
     
     
     quad.quadruple.append([37,value,'',param])
     quad.cont += 1 
-    quad.param_cont += 19
+    quad.param_cont += 1
 
 def p_np_check_size(p):
     '''np_check_size : RPAREN'''
@@ -851,8 +851,8 @@ def p_np_check_size(p):
     
     tipo = quad.type_stack_pop()
     value = quad.operands_stack_pop()
-    print("ESTOY DENTRO DE LA COMA", tipo)
-
+    #print("ESTOY DENTRO DE LA COMA", tipo)
+    print("ESTOY DENTRO DEL PARENTESIS", param)
     special.search_sf_param(curr_function, param, tipo)
     
     print("PARAMETROS", tipo , value)
@@ -868,8 +868,7 @@ def p_np_check_size(p):
 
 
 def p_explore_cte(p):
-    '''explore_cte : sp_param int_const_saver
-                  | empty'''
+    '''explore_cte : sp_param int_const_saver'''
     
     
 #__________<FINANCIAL_STATE>__________

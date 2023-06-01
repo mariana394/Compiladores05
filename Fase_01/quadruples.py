@@ -353,10 +353,10 @@ class Quadruples:
         #CORRECCION Se checa si se tienen operandos en la pila, esto solo sirve para 
         #resolver los operandos de comparacion 
         if (len(self.pOperators) != 0):
-            print("TAMA;O ES DIFERENTE DE 0")
+            #print("TAMA;O ES DIFERENTE DE 0")
             operator = self.pOperators[-1]
         else:
-            print("TAMA;O ES IGUAL A 0")
+            #print("TAMA;O ES IGUAL A 0")
             operator = 0
         #print("OPERATOR",type_exp)
         match type_exp:

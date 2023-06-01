@@ -155,7 +155,7 @@ class DirFunc:
 		#Check if the variable already exists no matter the scope
 		
 		size = 1
-
+		print('VARIABLE AGREGADA' , name, scope, types, rowDim, columnDim)
 		if(self.search_variable_declaration(name, scope)):
 			print("Variable already declared",name)
 			exit()
