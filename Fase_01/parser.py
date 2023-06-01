@@ -70,7 +70,8 @@ def p_end(p):
     vm.set_const(const)
     vm.set_resources(res)
     # print("RESS MAIN", res[1])
-    vm.start_vm()
+    #____________INICIO VM___________
+    #vm.start_vm()
 
     
     #print()
@@ -114,7 +115,7 @@ def p_int_const_saver(p):
     for_flag = True
     address = tables.add_const(curr_const, type (curr_const))
     print("constante for ", curr_const)
-    
+    quad.size_stack_push(0)
     quad.operands_stack_push(address)
     quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
 
@@ -303,7 +304,8 @@ def p_var_id_saver(p):
     #print("variable ", curr_name, type)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
-
+    print("SHOW",tables.get_arr_mat_info(curr_variable, scope))
+    quad.size_stack_push(tables.get_arr_mat_info(curr_variable, scope))
     #print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
@@ -324,6 +326,7 @@ def p_index_arr_mat(p):
     global curr_dim, scope,curr_variable
     curr_dim += 1
     size = tables.get_arr_mat_info(curr_variable, scope)
+    print('CURR VARIABLE', curr_variable, scope)
     quad.arr_mat_quad(size, curr_dim)
     
 
@@ -556,6 +559,7 @@ def p_read_np(p):
     '''read_np : RPAREN'''
     
     value = quad.operands_stack_pop()
+    quad.size_stack_pop()
     print("SI LLEGA AL READ", value)
     quad.read_quadruple(value)
 
@@ -589,7 +593,8 @@ def p_for_control(p):
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
-    
+    quad.size_stack_push(tables.get_arr_mat_info(curr_name, scope))
+
 
 
 def p_for_np1(p):
@@ -653,8 +658,6 @@ def p_for_np2(p):
 #         quad.check_integer()
 #     quad.create_exp_quadruple()
     
-    
-
 #____________________________<CALL_FUNCTION>___________________________#
 def p_call_function(p):
     '''call_function : function_saver function_flag call_params check_not_void '''
@@ -731,7 +734,8 @@ def p_function_flag(p):
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
-    
+    quad.size_stack_push(tables.get_arr_mat_info(curr_name , scope))
+
     if (type[0] == 6):
         return_flag = True 
     era_resource = tables.get_resources(curr_name)
@@ -774,6 +778,7 @@ def p_check_param(p):
     '''check_param : exp'''
     global curr_function
     param = quad.operands_stack_pop()
+    quad.size_stack_pop()
     param_type = quad.type_stack_pop()
     print ("param ", param, param_type)
     tables.check_param(param_type, quad.param_cont, curr_function)
@@ -831,6 +836,7 @@ def p_sp_param(p):
     
     tipo = quad.type_stack_pop()
     value = quad.operands_stack_pop()
+    quad.size_stack_pop()
     print("PARAMETROS", tipo , value)
     print("ESTOY DENTRO DE LA COMA", param)
     special.search_sf_param(curr_function, param, tipo)
@@ -849,6 +855,7 @@ def p_np_check_size(p):
     
     tipo = quad.type_stack_pop()
     value = quad.operands_stack_pop()
+    quad.size_stack_pop()
     #print("ESTOY DENTRO DE LA COMA", tipo)
     print("ESTOY DENTRO DEL PARENTESIS", param)
     special.search_sf_param(curr_function, param, tipo)
@@ -863,6 +870,9 @@ def p_np_check_size(p):
     quad.insert_goto(38,memory)
     quad.operands_stack_push(memory)
     quad.type_stack_push(5)
+    #Is only a single dataframe 
+    quad.size_stack_push(0)
+
 
 
 def p_explore_cte(p):
@@ -1064,6 +1074,8 @@ def p_factor_cte(p):
     const_type = oracle.datalor_translator(type_test.upper())
     quad.type_stack_push(const_type)
     quad.operands_stack_push(address)
+    quad.size_stack_push(0)
+
     print('Const ',curr_name , type_test, const_type)
 
 

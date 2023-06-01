@@ -89,6 +89,7 @@ class DirFunc:
 	#add function resources
 	def add_func_resources_glob(self):
 		self.dir_func['global']['resources'].append(self.func_cont)
+
 	
 	#Get the resources from a function
 	def get_resources(self, funct_name):
@@ -140,8 +141,10 @@ class DirFunc:
 	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
 	def search_variable_existance(self, name, scope):
 		if (name in self.vars[scope]['vars'].keys()):
+			
 			return [(self.vars[scope]['vars'][name]['type']),(self.vars[scope]['vars'][name]['address'])] 
 		else:
+			
 			if (name in self.vars[0]['vars'].keys()):
 				return [self.vars[0]['vars'][name]['type'], self.vars[0]['vars'][name]['address']]
 			else:
