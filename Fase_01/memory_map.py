@@ -162,7 +162,8 @@ class MemoryMap:
        
         #__________POINTER _______
         if(tipo == 10):
-            #print("VALOR EN POINTER",self.pointer[index])
+            print("VALOR EN POINTER",self.pointer[index])
+            
             return self.pointer[index]
        
        #_______CONSTANTES__________
@@ -188,6 +189,7 @@ class MemoryMap:
         #________________GLOBAL/LOCAL_______
         #Int
         if (tipo == 0):
+
             self.int[index] = value
             
         # FLOAT
@@ -227,6 +229,7 @@ class MemoryMap:
         
         #POINTER
         if (tipo == 10):
+            print('COLOCARE EL VALOR', value, ' EN EL LUGAR ', index, ' DE LOS POINTERS')
             self.pointer[index] = value
 
     def release_memory(self,size):

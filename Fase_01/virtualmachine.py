@@ -47,7 +47,7 @@ class VirtualMachine:
         self.size_memory = []
         # 0 -> int, 1 -> Float, 2 -> Char , 3 -> DF
         self.t_param_counter = [0,0,0,0]
-    
+        self.dir_base = False
        
        
     
@@ -193,7 +193,7 @@ class VirtualMachine:
             address = (virtual_address - self.t_tp_init)
             new_address = mp.get_value([10,address])
             
-            if (new_address == None):
+            if (self.dir_base):
                 return [10, address]
             else : 
                 return  self.real_address(offset,new_address)
@@ -444,7 +444,10 @@ class VirtualMachine:
             case 17:
                 jump = self.quaduples[inst_pointer][3] 
                 self.check_len_quad(inst_pointer)
+                self.print_todo()
+
                 self.vm_handler(jump-1,offset,offset_end)
+                
                 pass
 
             #GOTOF
@@ -515,8 +518,14 @@ class VirtualMachine:
                 real_add_value = self.real_address(offset,value_a)
                 
                 real_where = self.real_address(offset,where)
-            
+                
+                if(where >= 33000):
+                    print('estoy por poner un valor de pointer')
+
                 value_v = mp.get_value(real_add_value)
+                
+                
+
 
                 mp.set_value(real_where,value_v)
                 inst_pointer += 1
@@ -750,6 +759,7 @@ class VirtualMachine:
 
             #PLUS_DIR_BASE
             case 40:
+                self.dir_base = True
                 left_addr = self.quaduples[inst_pointer][1]
                 right_addr = self.quaduples[inst_pointer][2]
                 res = self.quaduples[inst_pointer][3] 
@@ -758,10 +768,13 @@ class VirtualMachine:
                 res_real_address = self.real_address(offset, res)
 
                 left_value = mp.get_value(left_real_address)
-                
+                print("el valor de la dirección izquierda es 2:", left_value)
                 value = left_value + right_addr
+                print('LUGAR DEL POINTER ES: ', res)
+                print('EL LUGAR QUE OCUPARE CON', value, 'ES DEL POINTER', res_real_address)
                 mp.set_value(res_real_address, value)
-
+                self.print_todo()
+                self.dir_base = False
                 inst_pointer += 1
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
