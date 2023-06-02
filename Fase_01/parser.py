@@ -25,6 +25,7 @@ curr_dim = 0 #por si las moscas
 curr_temp = 0
 g_test = 10
 curr_variable = ''
+curr_non_atomic_variable = ''
 curr_const = None
 for_flag = False
 return_flag = False
@@ -71,7 +72,7 @@ def p_end(p):
     vm.set_resources(res)
     # print("RESS MAIN", res[1])
     #____________INICIO VM___________
-    #vm.start_vm()
+    vm.start_vm()
 
     
     #print()
@@ -278,12 +279,10 @@ def p_var_s_dimesions(p):
 
 
 def p_variable(p):
-    '''variable : var_id_saver variable_array clear_dimension'''
+    '''variable : var_id_saver variable_array clear_dimension '''
     
 def p_clear_dimension(p):
     '''clear_dimension : empty'''
-    global curr_dim
-    curr_dim = 0
     quad.release_false_button()
 
 def p_var_id_saver(p):
@@ -309,25 +308,54 @@ def p_var_id_saver(p):
     #print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
-    '''variable_array : LSQBRACKET index_arr_mat RSQBRACKET variable_matrix
+    '''variable_array : save_var exp index_arr_mat variable_matrix
                       | empty'''
     check_flag_func()
-    
-    
-        
+
+def p_save_var (p):
+    '''save_var : LSQBRACKET'''
+    global curr_non_atomic_variable
+    print('ESTOY DENTRO DEL PRIMER CORCHETE')
+    curr_non_atomic_variable = curr_variable
     
 def p_variable_matrix(p):
-    '''variable_matrix : LSQBRACKET index_arr_mat RSQBRACKET
+    '''variable_matrix : test exp index_arr_mat
                        | empty'''
 
+def p_test (p):
+    '''test : LSQBRACKET'''
+    print('ESTOY DENTRO DEL SEGUNDO CORCHETE')
 
 def p_index_arr_mat(p):
-    '''index_arr_mat : exp'''
-    global curr_dim, scope,curr_variable
+    '''index_arr_mat : RSQBRACKET'''
+    global curr_dim, scope,curr_variable, curr_non_atomic_variable
     curr_dim += 1
-    size = tables.get_arr_mat_info(curr_variable, scope)
-    print('CURR VARIABLE', curr_variable, scope)
-    quad.arr_mat_quad(size, curr_dim)
+    size = tables.get_arr_mat_info(curr_non_atomic_variable, scope)
+    if (len(size) == 2):
+        if (curr_dim == 1):
+            quad.arr_mat_quad(size, curr_dim)
+        if (curr_dim == 2):
+            quad.arr_mat_quad(size, curr_dim)
+            curr_dim = 0
+
+
+    else: 
+        quad.arr_mat_quad(size, curr_dim)
+        curr_dim = 0
+
+    #si len(size ) = 2 es matriz
+        #if(curr dim == 1 )
+            #cuadruplos de matrices para dim 1
+        #if(curr dim == 2 )
+            #cuadruplos de matrices para dim 2
+    #sino (quiere decir que es un arreglo) entonces
+        #cuadruplos de arreglos 
+        #dim = 0
+
+    #curr_dim += 1
+    #print('CURR DIM', curr_dim)
+    #print('CURR MATRIZ', curr_non_atomic_variable, scope)
+    #quad.arr_mat_quad(size, curr_dim)
     
 
     

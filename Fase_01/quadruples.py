@@ -629,10 +629,11 @@ class Quadruples:
         #Check if type is integer
         self.check_integer()
         self.pTypes.pop()
-        print("SIZE", size)
+        print("SIZE DOS", size)
         if (curr_dim == 1):
             #ARRAY
             if (len(size) == 4):
+                print('ESTOY HACIENDO CUADRUPLOS DE ARRAY')
                 s1 = self.operands_stack_pop()
                 self.size_stack_pop()
                 self.quadruple.append([39,s1,size[0],size[1]])
@@ -657,6 +658,8 @@ class Quadruples:
                 
             #MATRIX
             if (len(size) == 2):
+                print('ESTOY HACIENDO CUADRUPLOS DE MATRIX 1 ')
+
                 s1 = self.operands_stack_pop()
                 self.size_stack_pop()
                 self.quadruple.append([39,s1,size[0][0],size[0][1]])
@@ -673,6 +676,8 @@ class Quadruples:
                 self.size_stack_push(0)
         #MATRIX
         if (curr_dim == 2):
+            print('ESTOY HACIENDO CUADRUPLOS DE MATRIX 2 ')
+
             s2 = self.operands_stack_pop()
             self.size_stack_pop()
             print("problema", size)
