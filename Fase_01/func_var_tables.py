@@ -76,6 +76,15 @@ class DirFunc:
 			self.dir_func[name]["params"] = []
 			#Creation of a place that saves where to function quadruples start
 			self.dir_func[name]["resources"] = []
+
+			match type:
+				case "int":
+					self.dir_func["global"]["resources"][0] += 1
+				case "float":
+					self.dir_func["global"]["resources"][1] += 1
+				case "char":
+					self.dir_func["global"]["resources"][2] += 1
+					
 			if (name != "main"):
 				self.dir_func[name]["start"] = start
 
@@ -140,6 +149,8 @@ class DirFunc:
 		
 	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
 	def search_variable_existance(self, name, scope):
+		print('ESTOY BUSCANDO LA FUNCION ', name, ' EN ', scope)
+		print(self.vars)
 		if (name in self.vars[scope]['vars'].keys()):
 			
 			return [(self.vars[scope]['vars'][name]['type']),(self.vars[scope]['vars'][name]['address'])] 

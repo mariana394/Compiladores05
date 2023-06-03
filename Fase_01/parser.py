@@ -363,7 +363,7 @@ def p_index_arr_mat(p):
 #
 #Program functions 
 def p_program_function(p):
-    '''program_function : FUNCTION resources f_type id_saver func_creator  LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function
+    '''program_function : FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function
                         | empty'''
 
 
@@ -387,7 +387,7 @@ def p_func_creator(p):
     curr_function = curr_name
     start = quad.cont_place()
     print ("func_creator", curr_function, scope, curr_type, start)
-    tables.add_vars(curr_function,0,return_type)
+    tables.add_vars(curr_function,0,return_type, 0,0)
     tables.add_function(curr_name,scope,curr_type, start)
 
 
@@ -445,6 +445,7 @@ def p_return_quad(p):
     #Needs to be used address instead only name
     address = []
     address = tables.search_variable_existance(curr_function, 0)
+    print('ADDRESS', address, curr_function)
     quad.return_quad(return_type, address[1])
 
 # Void function for empty path
@@ -762,8 +763,9 @@ def p_function_flag(p):
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
-    quad.size_stack_push(tables.get_arr_mat_info(curr_name , scope))
-
+    print("SIZE DE FUNC", tables.get_arr_mat_info(curr_name , 0))
+    quad.size_stack_push(tables.get_arr_mat_info(curr_name , 0))
+    
     if (type[0] == 6):
         return_flag = True 
     era_resource = tables.get_resources(curr_name)

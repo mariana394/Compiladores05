@@ -257,14 +257,17 @@ class Quadruples:
 
     #_________________________ASSIGN__________________#
     def assign_quadruple(self):
-        #print(self.pOperators, self.pOperands)
+        print(self.pOperators, self.pOperands, self.pSize)
        #POP from the tables for assigning it to the quadruple
         operator = self.operators_stack_pop()
         operandR = self.operands_stack_pop()
         size_opR = self.size_stack_pop()
         result = self.operands_stack_pop()
         size_result = self.size_stack_pop()
-        if(size_opR != 0 or size_result !=0):
+        print("DATOS",size_opR, size_result)
+        if(size_opR != 0 or size_result !=0 and size_opR != None):
+            print("DATOS2",size_opR, size_result)
+
             print("ERROR: ONLY ATOMIC ASSIGNS ARE ALLOWED")
             exit()
 

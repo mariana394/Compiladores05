@@ -1,7 +1,7 @@
 program TESTCORRECTO;
 
 function void fillmat (int a){
-    print('hola');
+    print('hola');+
 }
     
 main {
@@ -19,6 +19,7 @@ for(i = 0 to 2){
 
     };
 };
+
 for(i = 0 to 2){
     for(j = 0 to 2){
         a[i][j] =  i + j;

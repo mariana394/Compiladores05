@@ -1,0 +1,15 @@
+program sort;
+
+main {
+var
+int a[8],i, j, h, k;
+
+for (i = 0 to 7){
+    a[i] = i;
+};
+j = a[0];
+k = a[7];
+
+
+}
+end
