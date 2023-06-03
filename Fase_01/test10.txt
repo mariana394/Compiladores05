@@ -6,7 +6,7 @@ function void fillmat (int a){
     
 main {
 var
-int a[3][3],b[3][3],c[3][3],i, j, h, k;
+int a[3][3],b[3][3],l,c[3][3],i, j, h, k;
 
 i = 0;
 j = 0;
@@ -15,7 +15,7 @@ b[i][j] = 3;
 
 for(i = 0 to 2){
     for(j = 0 to 2){
-        b[i][j] =  i + j;
+        b[i][j] =  i * j;
 
     };
 };
@@ -28,12 +28,12 @@ for(i = 0 to 2){
 
 
 for(i = 0 to 2){
-    h = 0;
     for(j = 0 to 2){
-        h = a[i][j] * b[j][i] + h;
-        print('matrizmult',h);
-        print (a[i][j], b[j][i]);
-        
+        h = 0;
+        for(k = 0 to 2){
+            h = h + a[j][k] * b[k][i];
+        };
+        c [j][i] = h; 
     };
 };
 

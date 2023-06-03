@@ -6,7 +6,8 @@
 # -----------------------------------------------------------
 from memory_map import MemoryMap
 import pandas as pd 
-
+import sys
+sys.setrecursionlimit(2000)
 mp = MemoryMap()
 
 class VirtualMachine:
@@ -228,7 +229,7 @@ class VirtualMachine:
     def check_len_quad(self, inst_pointer):
         if(inst_pointer >= len(self.quaduples)):
             print("END OF FILE")
-            self.print_todo()
+            #self.print_todo()
             exit()
 
     def vm_handler(self, inst_pointer, offset, offset_end):
@@ -444,7 +445,7 @@ class VirtualMachine:
             case 17:
                 jump = self.quaduples[inst_pointer][3] 
                 self.check_len_quad(inst_pointer)
-                self.print_todo()
+                #self.print_todo()
 
                 self.vm_handler(jump-1,offset,offset_end)
                 
@@ -663,7 +664,7 @@ class VirtualMachine:
                 #self.print_todo()
                 mp.release_memory(size)
                 #print("END FUNCTION AFTER RELEASE MEMORY 1")
-                self.print_todo()
+                #self.print_todo()
                 #Llama a la variable que guarda los size de memoria
                 #Usa esos size para liberar ese espacio de memoria
                 #Termina la llamada recursiva aquí
@@ -773,7 +774,7 @@ class VirtualMachine:
                 print('LUGAR DEL POINTER ES: ', res)
                 print('EL LUGAR QUE OCUPARE CON', value, 'ES DEL POINTER', res_real_address)
                 mp.set_value(res_real_address, value)
-                self.print_todo()
+                #self.print_todo()
                 self.dir_base = False
                 inst_pointer += 1
                 self.check_len_quad(inst_pointer)

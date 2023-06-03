@@ -123,12 +123,12 @@ class MemoryMap:
 
         #Global/Local Int
         if (tipo == 0):
-            print("GET INT", self.int[index])
+            #print("GET INT", self.int[index])
             return self.int[index]
         
         #Global/Local Float
         if (tipo == 1):
-            print("GET FLOAT", self.float[index])
+            #print("GET FLOAT", self.float[index])
             return self.float[index]
         
         #Global/Local Char
@@ -185,7 +185,7 @@ class MemoryMap:
     def set_value(self, aux, value):
         tipo = aux[0]
         index = aux[1]
-        print("SET VALUE", tipo, index, value)
+        #print("SET VALUE", tipo, index, value)
         #________________GLOBAL/LOCAL_______
         #Int
         if (tipo == 0):
