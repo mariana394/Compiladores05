@@ -1,23 +1,29 @@
 program fibonacci;
 
 function int fibo (int n){
-    print('enfillmat', n);
+    var
+    int a, b;
     if (n == 0 || n == 1){
-        n = 1;
+        n = n;
+        print(n);
+    }else{
+        b = fibo(n - 2);
+        a = fibo(n - 1);
+        n = a + b;
+        print(n);
     };
-    return fibo(n - 1);
+    return n;
     
 }
     
 main {
 var
-int i, j, h, k;
+int i, j, k, h[10];
 
 j = 0;
+h[1] = 2; 
+k = fibo (9);
 
-k = fibo (0);
-
-print(k);
 
 }
 end
