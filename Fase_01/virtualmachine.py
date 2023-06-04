@@ -849,7 +849,6 @@ class VirtualMachine:
                                 print("CUARTILES: ",estad_disp[2])
                                 
                     case 'financial_state':
-                        print('sabado')
                         i = 1
                         go_special = self.quaduples[inst_pointer + i][0]
                         #DATAFRAME
@@ -930,6 +929,44 @@ class VirtualMachine:
 
                         print(self.quaduples[inst_pointer + i - 1])
                        
+                    case 'season_analysis':
+                        i = 1
+                        go_special = self.quaduples[inst_pointer + i][0]
+                        #DATAFRAME
+                        param1 = None
+                        #CONSTANTE
+                        param2 = None
+                        while go_special != 38:
+                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
+                            go_special = self.quaduples[inst_pointer + i][0]
+                            param = self.quaduples[inst_pointer + i][3]
+                            param_value = self.quaduples[inst_pointer + i][1]
+                                 #Quiere decir que es el parametro 1
+                            if (param == 1):
+                                ventas = param_value
+                            i += 1
+                                #Quiere decir que es el parametro 2
+                        ventas_real_address = self.real_address(offset, ventas)
+                        ventas = mp.get_value(ventas_real_address)
+                      
+                        #TEMPORAL DATAFRAME
+                        save = self.quaduples[inst_pointer + i - 1][3]
+                        save_real_address = self.real_address(offset, save)
+                        
+                        ventas['Fecha'] = ventas['Fecha'].apply(pd.Timestamp)
+
+                        # Agregar una columna "Mes" que contenga solo el mes de la fecha
+                        ventas['Mes'] = ventas['Fecha'].dt.month
+
+                        # Agrupar por mes y producto 
+                        ventas_por_mes = ventas.groupby(['Mes', 'Producto'])['Total'].sum().reset_index()
+
+                        # El producto estrella
+                        productos_mas_vendidos_por_mes = ventas_por_mes.loc[ventas_por_mes.groupby('Mes')['Total'].idxmax()]
+
+                        print('PRODUCTOS MAS VENDIDOS POR MES:')
+                        print('-----------------')
+                        print(productos_mas_vendidos_por_mes)
 
                         
                 inst_pointer += i

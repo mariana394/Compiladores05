@@ -31,6 +31,7 @@ ventas = read('ventas.csv');
 initial = '1/05/2023';
 final = '30/05/2023';
 print(l);
+m = season_analysis(ventas);
 m = financial_state(costos,ventas,initial,final);
 m = exploration(l, 1);
 print(m);
