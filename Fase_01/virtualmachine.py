@@ -7,11 +7,14 @@
 from memory_map import MemoryMap
 import pandas as pd 
 import sys
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import statsmodels.api as sm
 sys.setrecursionlimit(2000)
 mp = MemoryMap()
 
 class VirtualMachine:
-    
+     
     def __init__(self) :
       
         self.quaduples = []
@@ -49,6 +52,7 @@ class VirtualMachine:
         # 0 -> int, 1 -> Float, 2 -> Char , 3 -> DF
         self.t_param_counter = [0,0,0,0]
         self.dir_base = False
+        self.model = 0 
        
        
     
@@ -934,8 +938,7 @@ class VirtualMachine:
                         go_special = self.quaduples[inst_pointer + i][0]
                         #DATAFRAME
                         param1 = None
-                        #CONSTANTE
-                        param2 = None
+                        
                         while go_special != 38:
                             print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
                             go_special = self.quaduples[inst_pointer + i][0]
@@ -968,7 +971,99 @@ class VirtualMachine:
                         print('-----------------')
                         print(productos_mas_vendidos_por_mes)
 
+                    case 'dummi_regression':
+                        i = 1
+                        go_special = self.quaduples[inst_pointer + i][0]
+                        #DATAFRAME
+                        ventas= None
+                        #META
+                        meta = None
+                        #umbral de correlacion
+                        umbral =None
+                        while go_special != 38:
+                            go_special = self.quaduples[inst_pointer + i][0]
+                            param = self.quaduples[inst_pointer + i][3]
+                            param_value = self.quaduples[inst_pointer + i][1]
+                                 #Quiere decir que es el parametro 1
+                            if (param == 1):
+                                ventas = param_value
+                            if (param == 2):
+                                meta = param_value
+                            if(param == 3):
+                                umbral = param_value
+
+                            i += 1
+                    
+                        ventas_real_address = self.real_address(offset, ventas)
+                        meta_real_address = self.real_address(offset, meta)
+                        umbral_real_address = self.real_address(offset, umbral)
+                        # print('REAL ADDRESS PARAM', param1_real_address)
+                        # print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
+                        # print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
+                        ventas = mp.get_value(ventas_real_address)
+                        meta = mp.get_value(meta_real_address)
+                        umbral = mp.get_value(umbral_real_address)
                         
+                        #Matriz de correlacion
+                        print('MATRIZ DE CORRELACION')
+                        print('-----------------')
+                        matriz_corr = ventas.corr(numeric_only=True)
+                        print(matriz_corr)
+
+                        #filtrar por el umbral
+                        #limpiar el data set
+                        ventas = ventas.dropna()
+                        #ENTRENAMIENRO
+                        X = ventas[['Precio unitario', 'Cantidad']]
+                        #outcome
+                        y = ventas[meta]
+                        #20% para test 80% para train
+
+                        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=50)
+                        #correr el modelo
+                        model = LinearRegression()
+                        model.fit(X_train, y_train)
+
+                        #Predecir
+                        y_pred = model.predict(X_test)
+
+                        #metricas
+                        metrica = model.score(X_test, y_test)
+                       
+                        print('Modelo entrenado con ',  metrica, ' de confianza')
+
+                        
+                         #TEMPORAL DATAFRAME
+                        save = self.quaduples[inst_pointer + i - 1][3]
+                        save_real_address = self.real_address(offset, save)
+                        print('SAVE REAL ADDRESS', save_real_address, 100)
+                    
+                    # case 'model_prediction':
+                    #     i = 1
+                    #     go_special = self.quaduples[inst_pointer + i][0]
+                    #     #DATAFRAME
+                    #     param1 = None
+                        
+                    #     while go_special != 38:
+                    #         print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
+                    #         go_special = self.quaduples[inst_pointer + i][0]
+                    #         param = self.quaduples[inst_pointer + i][3]
+                    #         param_value = self.quaduples[inst_pointer + i][1]
+                    #              #Quiere decir que es el parametro 1
+                    #         if (param == 1):
+                    #             predecir = param_value
+                    #         i += 1
+                    #             #Quiere decir que es el parametro 2
+                    #     predecir_real_address = self.real_address(offset, predecir)
+                    #     predecir = mp.get_value(predecir_real_address)
+                      
+                    #     #asegurarnos de que todos los datos son numericos
+                    #     y_pred = model.predict(predecir.select_dtypes(include=['float', 'int']))
+
+                    #     print('PREDICCION:')
+                    #     print('-----------------')
+                    #     print(y_pred)
+
                 inst_pointer += i
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)

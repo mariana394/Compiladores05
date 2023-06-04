@@ -925,23 +925,20 @@ def p_trend_prediction(p):
 
 #_____________<DUMMI_PREDICTION>__________________
 def p_dummi_regression(p):
-    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param variable dr_array dr_int np_check_size'''
+    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size'''
+    print("sabado",p[1])
 
-def p_dr_array(p):
-    '''dr_array : COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET
-                | empty'''
+# def p_dr_array_mp(p):
+#     '''dr_array_mp : CTE_CHAR'''
 
-def p_dr_array_mp(p):
-    '''dr_array_mp : COMMA CTE_CHAR dr_array_mp
-                   | empty'''
 
-def p_dr_int(p):
-    '''dr_int : COMMA int_const_saver
-              | empty'''
+# def p_dr_float(p):
+#     '''dr_int : CTE_FLOAT'''
+#     print("sabado",p[1])
     
 #____________<MODEL_PREDICT>___________
 def p_model_predict(p):
-    '''model_predict : MODEL_PREDICT tag_sp variable sp_param variable np_check_size'''
+    '''model_predict : MODEL_PREDICT tag_sp variable np_check_size'''
 
 
 #__________________________________<EXP>___________________________
