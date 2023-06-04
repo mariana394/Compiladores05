@@ -234,6 +234,7 @@ class Quadruples:
     #_________________CHECKERS______________________#
                 
     def check_bool(self):
+        print("PILA DE OPERANDOS", self.pTypes)
         if(self.pTypes[-1] != '4'):
             print('Bool type was expected')
             exit()
