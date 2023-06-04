@@ -1,0 +1,181 @@
+﻿Fecha,Cliente,Producto,Cantidad,Precio unitario,Total,Método de pago,Vendedor
+1/01/23,Juan Pérez,Camiseta,2,15.00,30.00,Tarjeta,Ana
+2/01/23,María López,Zapatos,1,50.00,50.00,Efectivo,Juan
+3/01/23,Pedro Gómez,Pantalones,3,25.00,75.00,Transferencia,María
+4/01/23,Laura Sánchez,Camiseta,1,15.00,15.00,Tarjeta,Ana
+5/01/23,Carlos Ramírez,Camiseta,2,15.00,30.00,Efectivo,Juan
+6/01/23,Juan Pérez,Pantalones,1,30.00,30.00,Tarjeta,Ana
+7/01/23,María López,Zapatos,2,50.00,100.00,Transferencia,María
+8/01/23,Laura Sánchez,Camiseta,3,15.00,45.00,Efectivo,Juan
+9/01/23,Carlos Ramírez,Pantalones,2,30.00,60.00,Tarjeta,Ana
+10/01/23,Juan Pérez,Camiseta,1,15.00,15.00,Efectivo,Juan
+11/01/23,Laura Sánchez,Zapatos,1,50.00,50.00,Transferencia,María
+12/01/23,María López,Pantalones,4,30.00,120.00,Tarjeta,Ana
+13/01/23,Juan Pérez,Camiseta,2,15.00,30.00,Efectivo,Juan
+14/01/23,Laura Sánchez,Zapatos,1,50.00,50.00,Tarjeta,Ana
+15/01/23,Carlos Ramírez,Pantalones,3,30.00,90.00,Transferencia,María
+16/01/23,Juan Pérez,Camiseta,2,15.00,30.00,Tarjeta,Ana
+17/01/23,María López,Zapatos,3,50.00,150.00,Efectivo,Juan
+18/01/23,Pedro Gómez,Pantalones,4,25.00,100.00,Transferencia,María
+19/01/23,Laura Sánchez,Camiseta,2,15.00,30.00,Tarjeta,Ana
+20/01/23,Carlos Ramírez,Camiseta,5,15.00,75.00,Efectivo,Juan
+21/01/23,Juan Pérez,Pantalones,5,30.00,150.00,Tarjeta,Ana
+22/01/23,María López,Zapatos,5,50.00,250.00,Transferencia,María
+23/01/23,Laura Sánchez,Camiseta,3,15.00,45.00,Efectivo,Juan
+24/01/23,Carlos Ramírez,Pantalones,1,30.00,30.00,Tarjeta,Ana
+25/01/23,Juan Pérez,Camiseta,2,15.00,30.00,Efectivo,Juan
+26/01/23,Laura Sánchez,Zapatos,3,50.00,150.00,Transferencia,María
+27/01/23,María López,Pantalones,3,30.00,90.00,Tarjeta,Ana
+28/01/23,Juan Pérez,Camiseta,2,15.00,30.00,Efectivo,Juan
+29/01/23,Laura Sánchez,Zapatos,5,50.00,250.00,Tarjeta,Ana
+30/01/23,Carlos Ramírez,Pantalones,1,30.00,30.00,Transferencia,María
+1/02/23,Juan Pérez,Camiseta,1,15.00,15.00,Tarjeta,Ana
+2/02/23,María López,Zapatos,1,50.00,50.00,Efectivo,Juan
+3/02/23,Pedro Gómez,Pantalones,2,25.00,50.00,Transferencia,María
+4/02/23,Laura Sánchez,Camiseta,3,15.00,45.00,Tarjeta,Ana
+5/02/23,Carlos Ramírez,Camiseta,3,15.00,45.00,Efectivo,Juan
+6/02/23,Juan Pérez,Pantalones,5,30.00,150.00,Tarjeta,Ana
+7/02/23,María López,Zapatos,2,50.00,100.00,Transferencia,María
+8/02/23,Laura Sánchez,Camiseta,1,15.00,15.00,Efectivo,Juan
+9/02/23,Carlos Ramírez,Pantalones,2,30.00,60.00,Tarjeta,Ana
+10/02/23,Juan Pérez,Camiseta,4,15.00,60.00,Efectivo,Juan
+11/02/23,Laura Sánchez,Zapatos,2,50.00,100.00,Transferencia,María
+12/02/23,María López,Pantalones,3,30.00,90.00,Tarjeta,Ana
+13/02/23,Juan Pérez,Camiseta,5,15.00,75.00,Efectivo,Juan
+14/02/23,Laura Sánchez,Zapatos,4,50.00,200.00,Tarjeta,Ana
+15/02/23,Carlos Ramírez,Pantalones,3,30.00,90.00,Transferencia,María
+16/02/23,Juan Pérez,Camiseta,3,15.00,45.00,Tarjeta,Ana
+17/02/23,María López,Zapatos,2,50.00,100.00,Efectivo,Juan
+18/02/23,Pedro Gómez,Pantalones,3,25.00,75.00,Transferencia,María
+19/02/23,Laura Sánchez,Camiseta,2,15.00,30.00,Tarjeta,Ana
+20/02/23,Carlos Ramírez,Camiseta,2,15.00,30.00,Efectivo,Juan
+21/02/23,Juan Pérez,Pantalones,1,30.00,30.00,Tarjeta,Ana
+22/02/23,María López,Zapatos,3,50.00,150.00,Transferencia,María
+23/02/23,Laura Sánchez,Camiseta,3,15.00,45.00,Efectivo,Juan
+24/02/23,Carlos Ramírez,Pantalones,1,30.00,30.00,Tarjeta,Ana
+25/02/23,Juan Pérez,Camiseta,3,15.00,45.00,Efectivo,Juan
+26/02/23,Laura Sánchez,Zapatos,4,50.00,200.00,Transferencia,María
+27/02/23,María López,Pantalones,3,30.00,90.00,Tarjeta,Ana
+28/02/23,Juan Pérez,Camiseta,5,15.00,75.00,Efectivo,Juan
+1/03/23,Laura Sánchez,Zapatos,4,50.00,200.00,Tarjeta,Ana
+2/03/23,Carlos Ramírez,Pantalones,1,30.00,30.00,Transferencia,María
+3/03/23,Juan Pérez,Camiseta,4,15.00,60.00,Tarjeta,Ana
+1/03/23,María López,Zapatos,3,50.00,150.00,Efectivo,Juan
+2/03/23,Pedro Gómez,Pantalones,3,25.00,75.00,Transferencia,María
+3/03/23,Laura Sánchez,Camiseta,3,15.00,45.00,Tarjeta,Ana
+4/03/23,Carlos Ramírez,Camiseta,4,15.00,60.00,Efectivo,Juan
+5/03/23,Juan Pérez,Pantalones,3,30.00,90.00,Tarjeta,Ana
+6/03/23,María López,Zapatos,3,50.00,150.00,Transferencia,María
+7/03/23,Laura Sánchez,Camiseta,3,15.00,45.00,Efectivo,Juan
+8/03/23,Carlos Ramírez,Pantalones,2,30.00,60.00,Tarjeta,Ana
+9/03/23,Juan Pérez,Camiseta,4,15.00,60.00,Efectivo,Juan
+10/03/23,Laura Sánchez,Zapatos,5,50.00,250.00,Transferencia,María
+11/03/23,María López,Pantalones,4,30.00,120.00,Tarjeta,Ana
+12/03/23,Juan Pérez,Camiseta,3,15.00,45.00,Efectivo,Juan
+13/03/23,Laura Sánchez,Zapatos,5,50.00,250.00,Tarjeta,Ana
+14/03/23,Carlos Ramírez,Pantalones,3,30.00,90.00,Transferencia,María
+15/03/23,Juan Pérez,Camiseta,2,15.00,30.00,Tarjeta,Ana
+16/03/23,María López,Zapatos,5,50.00,250.00,Efectivo,Juan
+17/03/23,Pedro Gómez,Pantalones,1,25.00,25.00,Transferencia,María
+18/03/23,Laura Sánchez,Camiseta,1,15.00,15.00,Tarjeta,Ana
+19/03/23,Carlos Ramírez,Camiseta,1,15.00,15.00,Efectivo,Juan
+20/03/23,Juan Pérez,Pantalones,4,30.00,120.00,Tarjeta,Ana
+21/03/23,María López,Zapatos,2,50.00,100.00,Transferencia,María
+22/03/23,Laura Sánchez,Camiseta,4,15.00,60.00,Efectivo,Juan
+23/03/23,Carlos Ramírez,Pantalones,3,30.00,90.00,Tarjeta,Ana
+24/03/23,Juan Pérez,Camiseta,5,15.00,75.00,Efectivo,Juan
+25/03/23,Laura Sánchez,Zapatos,3,50.00,150.00,Transferencia,María
+26/03/23,María López,Pantalones,1,30.00,30.00,Tarjeta,Ana
+27/03/23,Juan Pérez,Camiseta,4,15.00,60.00,Efectivo,Juan
+28/03/23,Laura Sánchez,Zapatos,1,50.00,50.00,Tarjeta,Ana
+29/03/23,Carlos Ramírez,Pantalones,2,30.00,60.00,Transferencia,María
+30/03/23,Juan Pérez,Camiseta,1,15.00,15.00,Tarjeta,Ana
+31/03/23,María López,Zapatos,1,50.00,50.00,Efectivo,Juan
+1/04/23,Pedro Gómez,Pantalones,5,25.00,125.00,Transferencia,María
+2/04/23,Laura Sánchez,Camiseta,3,15.00,45.00,Tarjeta,Ana
+3/04/23,Carlos Ramírez,Camiseta,4,15.00,60.00,Efectivo,Juan
+4/04/23,Juan Pérez,Pantalones,2,30.00,60.00,Tarjeta,Ana
+5/04/23,María López,Zapatos,5,50.00,250.00,Transferencia,María
+6/04/23,Laura Sánchez,Camiseta,4,15.00,60.00,Efectivo,Juan
+7/04/23,Carlos Ramírez,Pantalones,4,30.00,120.00,Tarjeta,Ana
+8/04/23,Juan Pérez,Camiseta,4,15.00,60.00,Efectivo,Juan
+9/04/23,Laura Sánchez,Zapatos,3,50.00,150.00,Transferencia,María
+10/04/23,María López,Pantalones,2,30.00,60.00,Tarjeta,Ana
+11/04/23,Juan Pérez,Camiseta,5,15.00,75.00,Efectivo,Juan
+12/04/23,Laura Sánchez,Zapatos,4,50.00,200.00,Tarjeta,Ana
+13/04/23,Carlos Ramírez,Pantalones,2,30.00,60.00,Transferencia,María
+14/04/23,Juan Pérez,Camiseta,3,15.00,45.00,Tarjeta,Ana
+15/04/23,María López,Zapatos,3,50.00,150.00,Efectivo,Juan
+16/04/23,Pedro Gómez,Pantalones,2,25.00,50.00,Transferencia,María
+17/04/23,Laura Sánchez,Camiseta,5,15.00,75.00,Tarjeta,Ana
+18/04/23,Carlos Ramírez,Camiseta,5,15.00,75.00,Efectivo,Juan
+19/04/23,Juan Pérez,Pantalones,4,30.00,120.00,Tarjeta,Ana
+20/04/23,María López,Zapatos,2,50.00,100.00,Transferencia,María
+21/04/23,Laura Sánchez,Camiseta,1,15.00,15.00,Efectivo,Juan
+22/04/23,Carlos Ramírez,Pantalones,1,30.00,30.00,Tarjeta,Ana
+23/04/23,Juan Pérez,Camiseta,2,15.00,30.00,Efectivo,Juan
+24/04/23,Laura Sánchez,Zapatos,5,50.00,250.00,Transferencia,María
+25/04/23,María López,Pantalones,5,30.00,150.00,Tarjeta,Ana
+26/04/23,Juan Pérez,Camiseta,5,15.00,75.00,Efectivo,Juan
+27/04/23,Laura Sánchez,Zapatos,1,50.00,50.00,Tarjeta,Ana
+28/04/23,Carlos Ramírez,Pantalones,2,30.00,60.00,Transferencia,María
+29/04/23,Juan Pérez,Camiseta,1,15.00,15.00,Tarjeta,Ana
+30/04/23,María López,Zapatos,4,50.00,200.00,Efectivo,Juan
+1/05/23,Pedro Gómez,Pantalones,5,25.00,125.00,Transferencia,María
+2/05/23,Laura Sánchez,Camiseta,2,15.00,30.00,Tarjeta,Ana
+3/05/23,Carlos Ramírez,Camiseta,4,15.00,60.00,Efectivo,Juan
+4/05/23,Juan Pérez,Pantalones,5,30.00,150.00,Tarjeta,Ana
+5/05/23,María López,Zapatos,1,50.00,50.00,Transferencia,María
+6/05/23,Laura Sánchez,Camiseta,4,15.00,60.00,Efectivo,Juan
+7/05/23,Carlos Ramírez,Pantalones,4,30.00,120.00,Tarjeta,Ana
+8/05/23,Juan Pérez,Camiseta,4,15.00,60.00,Efectivo,Juan
+9/05/23,Laura Sánchez,Zapatos,2,50.00,100.00,Transferencia,María
+10/05/23,María López,Pantalones,5,30.00,150.00,Tarjeta,Ana
+11/05/23,Juan Pérez,Camiseta,5,15.00,75.00,Efectivo,Juan
+12/05/23,Laura Sánchez,Zapatos,2,50.00,100.00,Tarjeta,Ana
+13/05/23,Carlos Ramírez,Pantalones,1,30.00,30.00,Transferencia,María
+14/05/23,Juan Pérez,Camiseta,3,15.00,45.00,Tarjeta,Ana
+15/05/23,María López,Zapatos,3,50.00,150.00,Efectivo,Juan
+16/05/23,Pedro Gómez,Pantalones,1,25.00,25.00,Transferencia,María
+17/05/23,Laura Sánchez,Camiseta,1,15.00,15.00,Tarjeta,Ana
+18/05/23,Carlos Ramírez,Camiseta,2,15.00,30.00,Efectivo,Juan
+19/05/23,Juan Pérez,Pantalones,5,30.00,150.00,Tarjeta,Ana
+20/05/23,María López,Zapatos,4,50.00,200.00,Transferencia,María
+21/05/23,Laura Sánchez,Camiseta,4,15.00,60.00,Efectivo,Juan
+22/05/23,Carlos Ramírez,Pantalones,5,30.00,150.00,Tarjeta,Ana
+23/05/23,Juan Pérez,Camiseta,3,15.00,45.00,Efectivo,Juan
+24/05/23,Laura Sánchez,Zapatos,3,50.00,150.00,Transferencia,María
+25/05/23,María López,Pantalones,2,30.00,60.00,Tarjeta,Ana
+26/05/23,Juan Pérez,Camiseta,2,15.00,30.00,Efectivo,Juan
+27/05/23,Laura Sánchez,Zapatos,4,50.00,200.00,Tarjeta,Ana
+28/05/23,Carlos Ramírez,Pantalones,4,30.00,120.00,Transferencia,María
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,

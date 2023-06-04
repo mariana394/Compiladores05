@@ -848,7 +848,84 @@ class VirtualMachine:
                                 print("VARIANZA: ",estad_disp[1])
                                 print("CUARTILES: ",estad_disp[2])
                                 
-                            
+                    case 'financial_state':
+                        print('sabado')
+                        i = 1
+                        go_special = self.quaduples[inst_pointer + i][0]
+                        #DATAFRAME
+                        costos = None
+                        ventas= None
+                        #fechas
+                        initial = None
+                        final = None
+                        while go_special != 38:
+                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
+                            go_special = self.quaduples[inst_pointer + i][0]
+                            param = self.quaduples[inst_pointer + i][3]
+                            param_value = self.quaduples[inst_pointer + i][1]
+                                 #Quiere decir que es el parametro 1
+                            if (param == 1):
+                                costos = param_value
+                            if (param == 2):
+                                ventas = param_value
+                            if(param == 3):
+                                initial= param_value
+                            if(param == 4):
+                                final= param_value
+
+                            i += 1
+                    
+                        costos_real_address = self.real_address(offset, costos)
+                        ventas_real_address = self.real_address(offset, ventas)
+                        initial_real_address = self.real_address(offset, initial)
+                        final_real_address = self.real_address(offset, final)
+                        # print('REAL ADDRESS PARAM', param1_real_address)
+                        # print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
+                        # print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
+                        costos = mp.get_value(costos_real_address)
+                        ventas = mp.get_value(ventas_real_address)
+                        initial = mp.get_value(initial_real_address)
+                        final = mp.get_value(final_real_address)
+                        
+                        
+                         #TEMPORAL DATAFRAME
+                        save = self.quaduples[inst_pointer + i - 1][3]
+                        save_real_address = self.real_address(offset, save)
+                        print('SAVE REAL ADDRESS', save_real_address, 100)
+                    
+                        initial = pd.Timestamp(initial)
+                        final = pd.Timestamp(final)
+                        print("ENTRO AL MATCH param2")
+                        
+                        costos['Fecha'] = costos['Fecha'].apply(pd.Timestamp)
+                        ventas['Fecha'] = ventas['Fecha'].apply(pd.Timestamp)
+
+                        costos_filtrado = costos[(costos['Fecha']>= initial) & (costos['Fecha'] <= final)]
+                        ventas_filtrado = ventas[(ventas['Fecha'] >= initial) & (ventas['Fecha'] <= final)]
+
+                        # Calcular el total de costos por categoría
+                        costos_filtrado = costos.groupby('Categoría')['Costo'].sum()
+
+                        # Calcular el total de ventas por producto
+                        ventas_filtrado = ventas.groupby('Producto')['Total'].sum()
+
+                        # Calcular el total de ventas
+                        total_ventas = ventas_filtrado.sum()
+
+                        # Calcular el margen de contribución
+                        margen_contribucion = total_ventas - costos_filtrado.sum()
+
+                        # Calcular el porcentaje de margen de contribución
+                        porcentaje_margen = (margen_contribucion / total_ventas) * 100
+
+                        # Imprimir el estado financiero
+                        print('Estado Financiero')
+                        print('-----------------')
+                        print('Total Ventas:', total_ventas)
+                        print('Costos por Categoría:')
+                        print(costos_filtrado)
+                        print('Margen de Contribución:', margen_contribucion)
+                        print('Porcentaje de Margen de Contribución:', porcentaje_margen, '%')        
                             
 
                         print(self.quaduples[inst_pointer + i - 1])
