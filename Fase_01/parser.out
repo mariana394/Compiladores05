@@ -140,10 +140,10 @@ Rule 130   exploration -> EXPLORATION tag_sp variable explore_cte np_check_size
 Rule 131   sp_param -> COMMA
 Rule 132   np_check_size -> RPAREN
 Rule 133   explore_cte -> sp_param int_const_saver
-Rule 134   financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param variable np_check_size
+Rule 134   financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp sp_param exp np_check_size
 Rule 135   season_analysis -> SEASON_ANALYSIS tag_sp variable np_check_size
-Rule 136   trend_prediction -> TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size
-Rule 137   dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size
+Rule 136   trend_prediction -> TREND_PREDICTION tag_sp variable np_check_size
+Rule 137   dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param exp sp_param exp np_check_size
 Rule 138   model_predict -> MODEL_PREDICT tag_sp variable np_check_size
 Rule 139   exp -> t_exp release_exp exp_or
 Rule 140   exp_or -> exp_keep_or exp
@@ -196,8 +196,8 @@ ASSIGN               : 77
 CHAR                 : 21 53
 COLON                : 
 COMMA                : 27 31 60 88 116 131
-CTE_CHAR             : 137 180
-CTE_FLOAT            : 137 178
+CTE_CHAR             : 180
+CTE_FLOAT            : 178
 CTE_INT              : 6 38 179
 DATAFRAME            : 22
 DATE                 : 23
@@ -278,7 +278,7 @@ end_assign           : 73
 end_condition        : 79
 end_function         : 49
 end_print_np         : 85
-exp                  : 42 45 63 74 79 86 94 98 101 115 140 175
+exp                  : 42 45 63 74 79 86 94 98 101 115 134 134 137 137 140 175
 exp_keep_or          : 140
 exp_many             : 113 116
 exp_or               : 139
@@ -308,7 +308,7 @@ id_saver             : 26 27 30 31 41 49 58 60 102
 import_library       : 10
 index_arr_mat        : 42 45
 inner_body           : 49 68 70 71
-int_const_saver      : 104 133 136 136 136
+int_const_saver      : 104 133
 keep_and             : 144
 keep_assign          : 73 101
 m_exp                : 147 148 157
@@ -342,7 +342,7 @@ s_type               : 30 58 60
 save_var             : 42
 season_analysis      : 126
 seed                 : 98
-sp_param             : 133 134 134 134 136 136 136 137 137
+sp_param             : 133 134 134 134 137 137
 special_function     : 75
 specialf_assign      : 73
 statement            : 71
@@ -368,7 +368,7 @@ var_s_matrix         : 34
 var_s_type           : 16
 var_s_type2          : 30 31
 var_type             : 17 24
-variable             : 73 130 134 134 134 134 135 136 137 138 173
+variable             : 73 130 134 134 135 136 137 138 173
 variable_array       : 39
 variable_matrix      : 42
 verify_params        : 108
@@ -1509,10 +1509,10 @@ state 95
     (92) read -> . np_read LPAREN valid_exp_read read_np
     (143) t_exp -> . expression release_exp t_exp_and
     (130) exploration -> . EXPLORATION tag_sp variable explore_cte np_check_size
-    (134) financial_state -> . FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param variable np_check_size
-    (137) dummi_regression -> . DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size
+    (134) financial_state -> . FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp sp_param exp np_check_size
+    (137) dummi_regression -> . DUMMI_REGRESSION tag_sp variable sp_param exp sp_param exp np_check_size
     (135) season_analysis -> . SEASON_ANALYSIS tag_sp variable np_check_size
-    (136) trend_prediction -> . TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size
+    (136) trend_prediction -> . TREND_PREDICTION tag_sp variable np_check_size
     (138) model_predict -> . MODEL_PREDICT tag_sp variable np_check_size
     (93) np_read -> . READ
     (147) expression -> . m_exp release_exp expression_comp
@@ -1537,13 +1537,13 @@ state 95
     EXPLORATION     shift and go to state 134
     FINANCIAL_STATE shift and go to state 135
     DUMMI_REGRESSION shift and go to state 136
-    SEASON_ANALYSIS shift and go to state 139
-    TREND_PREDICTION shift and go to state 140
-    MODEL_PREDICT   shift and go to state 141
-    READ            shift and go to state 142
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    SEASON_ANALYSIS shift and go to state 137
+    TREND_PREDICTION shift and go to state 138
+    MODEL_PREDICT   shift and go to state 139
+    READ            shift and go to state 140
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
@@ -1561,14 +1561,14 @@ state 95
     model_predict                  shift and go to state 130
     np_read                        shift and go to state 131
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -1617,24 +1617,24 @@ state 97
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     exp                            shift and go to state 154
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -1665,9 +1665,9 @@ state 98
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
@@ -1676,15 +1676,15 @@ state 98
     exp                            shift and go to state 157
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -1718,9 +1718,9 @@ state 99
     (5) id_saver -> . ID empty
 
     RPAREN          reduce using rule 4 (empty -> .)
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
@@ -1731,15 +1731,15 @@ state 99
     exp                            shift and go to state 161
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     id_saver                       shift and go to state 83
 
@@ -1809,24 +1809,24 @@ state 102
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     exp                            shift and go to state 164
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -2238,7 +2238,7 @@ state 134
 
 state 135
 
-    (134) financial_state -> FINANCIAL_STATE . tag_sp variable sp_param variable sp_param variable sp_param variable np_check_size
+    (134) financial_state -> FINANCIAL_STATE . tag_sp variable sp_param variable sp_param exp sp_param exp np_check_size
     (129) tag_sp -> . LPAREN
 
     LPAREN          shift and go to state 183
@@ -2247,7 +2247,7 @@ state 135
 
 state 136
 
-    (137) dummi_regression -> DUMMI_REGRESSION . tag_sp variable sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size
+    (137) dummi_regression -> DUMMI_REGRESSION . tag_sp variable sp_param exp sp_param exp np_check_size
     (129) tag_sp -> . LPAREN
 
     LPAREN          shift and go to state 183
@@ -2256,56 +2256,6 @@ state 136
 
 state 137
 
-    (180) factor_cte -> CTE_CHAR .
-
-    POWER           reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    MULTIPLY        reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    DIVIDE          reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    MODULE          reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    PLUS            reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    MINUS           reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    GTHAN           reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    EQUAL           reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    NOTEQUAL        reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    LTHAN           reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    GORE            reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    LORE            reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    AND             reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    OR              reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    SEMICOLON       reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    RPAREN          reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    COMMA           reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    RSQBRACKET      reduce using rule 180 (factor_cte -> CTE_CHAR .)
-    TO              reduce using rule 180 (factor_cte -> CTE_CHAR .)
-
-
-state 138
-
-    (178) factor_cte -> CTE_FLOAT .
-
-    POWER           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    MULTIPLY        reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    DIVIDE          reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    MODULE          reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    PLUS            reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    MINUS           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    GTHAN           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    EQUAL           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    NOTEQUAL        reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    LTHAN           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    GORE            reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    LORE            reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    AND             reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    OR              reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    SEMICOLON       reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    RPAREN          reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    COMMA           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    RSQBRACKET      reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-    TO              reduce using rule 178 (factor_cte -> CTE_FLOAT .)
-
-
-state 139
-
     (135) season_analysis -> SEASON_ANALYSIS . tag_sp variable np_check_size
     (129) tag_sp -> . LPAREN
 
@@ -2313,16 +2263,16 @@ state 139
 
     tag_sp                         shift and go to state 186
 
-state 140
+state 138
 
-    (136) trend_prediction -> TREND_PREDICTION . tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size
+    (136) trend_prediction -> TREND_PREDICTION . tag_sp variable np_check_size
     (129) tag_sp -> . LPAREN
 
     LPAREN          shift and go to state 183
 
     tag_sp                         shift and go to state 187
 
-state 141
+state 139
 
     (138) model_predict -> MODEL_PREDICT . tag_sp variable np_check_size
     (129) tag_sp -> . LPAREN
@@ -2331,14 +2281,14 @@ state 141
 
     tag_sp                         shift and go to state 188
 
-state 142
+state 140
 
     (93) np_read -> READ .
 
     LPAREN          reduce using rule 93 (np_read -> READ .)
 
 
-state 143
+state 141
 
     (147) expression -> m_exp . release_exp expression_comp
     (8) release_exp -> . empty
@@ -2361,7 +2311,7 @@ state 143
     release_exp                    shift and go to state 189
     empty                          shift and go to state 179
 
-state 144
+state 142
 
     (156) m_exp -> term . release_exp m_exp_sr
     (8) release_exp -> . empty
@@ -2386,7 +2336,7 @@ state 144
     release_exp                    shift and go to state 190
     empty                          shift and go to state 179
 
-state 145
+state 143
 
     (161) term -> sub_factor . release_exp term_pc
     (8) release_exp -> . empty
@@ -2414,7 +2364,7 @@ state 145
     release_exp                    shift and go to state 191
     empty                          shift and go to state 179
 
-state 146
+state 144
 
     (167) sub_factor -> factor . release_exp sub_factor_pc
     (8) release_exp -> . empty
@@ -2443,7 +2393,7 @@ state 146
     release_exp                    shift and go to state 192
     empty                          shift and go to state 179
 
-state 147
+state 145
 
     (171) factor -> factor_exp .
 
@@ -2468,7 +2418,7 @@ state 147
     TO              reduce using rule 171 (factor -> factor_exp .)
 
 
-state 148
+state 146
 
     (172) factor -> factor_cte .
 
@@ -2493,7 +2443,7 @@ state 148
     TO              reduce using rule 172 (factor -> factor_cte .)
 
 
-state 149
+state 147
 
     (174) factor -> call_function .
 
@@ -2518,7 +2468,7 @@ state 149
     TO              reduce using rule 174 (factor -> call_function .)
 
 
-state 150
+state 148
 
     (175) factor_exp -> false_button . exp release_false_button
     (139) exp -> . t_exp release_exp exp_or
@@ -2542,29 +2492,54 @@ state 150
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
-    false_button                   shift and go to state 150
+    false_button                   shift and go to state 148
     exp                            shift and go to state 193
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
+    call_function                  shift and go to state 147
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
 
-state 151
+state 149
+
+    (178) factor_cte -> CTE_FLOAT .
+
+    POWER           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    MULTIPLY        reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    DIVIDE          reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    MODULE          reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    PLUS            reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    MINUS           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    GTHAN           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    EQUAL           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    NOTEQUAL        reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    LTHAN           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    GORE            reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    LORE            reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    AND             reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    OR              reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    SEMICOLON       reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    RPAREN          reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    COMMA           reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    RSQBRACKET      reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+    TO              reduce using rule 178 (factor_cte -> CTE_FLOAT .)
+
+
+state 150
 
     (179) factor_cte -> CTE_INT .
 
@@ -2587,6 +2562,31 @@ state 151
     COMMA           reduce using rule 179 (factor_cte -> CTE_INT .)
     RSQBRACKET      reduce using rule 179 (factor_cte -> CTE_INT .)
     TO              reduce using rule 179 (factor_cte -> CTE_INT .)
+
+
+state 151
+
+    (180) factor_cte -> CTE_CHAR .
+
+    POWER           reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    MULTIPLY        reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    DIVIDE          reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    MODULE          reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    PLUS            reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    MINUS           reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    GTHAN           reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    EQUAL           reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    NOTEQUAL        reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    LTHAN           reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    GORE            reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    LORE            reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    AND             reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    OR              reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    SEMICOLON       reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    RPAREN          reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    COMMA           reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    RSQBRACKET      reduce using rule 180 (factor_cte -> CTE_CHAR .)
+    TO              reduce using rule 180 (factor_cte -> CTE_CHAR .)
 
 
 state 152
@@ -2979,9 +2979,9 @@ state 180
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
@@ -2989,15 +2989,15 @@ state 180
     exp                            shift and go to state 220
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -3044,7 +3044,7 @@ state 183
 
 state 184
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp . variable sp_param variable sp_param variable sp_param variable np_check_size
+    (134) financial_state -> FINANCIAL_STATE tag_sp . variable sp_param variable sp_param exp sp_param exp np_check_size
     (39) variable -> . var_id_saver variable_array clear_dimension
     (41) var_id_saver -> . id_saver
     (5) id_saver -> . ID empty
@@ -3057,7 +3057,7 @@ state 184
 
 state 185
 
-    (137) dummi_regression -> DUMMI_REGRESSION tag_sp . variable sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size
+    (137) dummi_regression -> DUMMI_REGRESSION tag_sp . variable sp_param exp sp_param exp np_check_size
     (39) variable -> . var_id_saver variable_array clear_dimension
     (41) var_id_saver -> . id_saver
     (5) id_saver -> . ID empty
@@ -3083,7 +3083,7 @@ state 186
 
 state 187
 
-    (136) trend_prediction -> TREND_PREDICTION tag_sp . variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size
+    (136) trend_prediction -> TREND_PREDICTION tag_sp . variable np_check_size
     (39) variable -> . var_id_saver variable_array clear_dimension
     (41) var_id_saver -> . id_saver
     (5) id_saver -> . ID empty
@@ -3270,9 +3270,9 @@ state 194
     (5) id_saver -> . ID empty
 
     RPAREN          reduce using rule 4 (empty -> .)
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
@@ -3283,15 +3283,15 @@ state 194
     exp                            shift and go to state 161
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     id_saver                       shift and go to state 83
 
@@ -3390,9 +3390,9 @@ state 203
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
@@ -3400,15 +3400,15 @@ state 203
     exp                            shift and go to state 161
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -3505,24 +3505,24 @@ state 207
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     exp                            shift and go to state 270
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -3631,24 +3631,24 @@ state 216
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     exp                            shift and go to state 278
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -3726,23 +3726,23 @@ state 222
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     t_exp                          shift and go to state 281
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -3783,7 +3783,7 @@ state 225
 
 state 226
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp variable . sp_param variable sp_param variable sp_param variable np_check_size
+    (134) financial_state -> FINANCIAL_STATE tag_sp variable . sp_param variable sp_param exp sp_param exp np_check_size
     (131) sp_param -> . COMMA
 
     COMMA           shift and go to state 284
@@ -3792,7 +3792,7 @@ state 226
 
 state 227
 
-    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable . sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size
+    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable . sp_param exp sp_param exp np_check_size
     (131) sp_param -> . COMMA
 
     COMMA           shift and go to state 284
@@ -3810,12 +3810,12 @@ state 228
 
 state 229
 
-    (136) trend_prediction -> TREND_PREDICTION tag_sp variable . sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size
-    (131) sp_param -> . COMMA
+    (136) trend_prediction -> TREND_PREDICTION tag_sp variable . np_check_size
+    (132) np_check_size -> . RPAREN
 
-    COMMA           shift and go to state 284
+    RPAREN          shift and go to state 288
 
-    sp_param                       shift and go to state 289
+    np_check_size                  shift and go to state 289
 
 state 230
 
@@ -3860,21 +3860,21 @@ state 232
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     m_exp                          shift and go to state 291
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -3998,21 +3998,21 @@ state 241
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     m_exp                          shift and go to state 292
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -4099,20 +4099,20 @@ state 246
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     term                           shift and go to state 293
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -4214,19 +4214,19 @@ state 252
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     sub_factor                     shift and go to state 294
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -4386,9 +4386,9 @@ state 261
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
@@ -4397,15 +4397,15 @@ state 261
     exp                            shift and go to state 157
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -4510,24 +4510,24 @@ state 267
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     exp                            shift and go to state 303
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -4602,24 +4602,24 @@ state 271
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
     exp                            shift and go to state 306
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
@@ -4760,14 +4760,14 @@ state 284
     CTE_INT         reduce using rule 131 (sp_param -> COMMA .)
     RPAREN          reduce using rule 131 (sp_param -> COMMA .)
     ID              reduce using rule 131 (sp_param -> COMMA .)
-    CTE_CHAR        reduce using rule 131 (sp_param -> COMMA .)
-    COMMA           reduce using rule 131 (sp_param -> COMMA .)
     CTE_FLOAT       reduce using rule 131 (sp_param -> COMMA .)
+    CTE_CHAR        reduce using rule 131 (sp_param -> COMMA .)
+    LPAREN          reduce using rule 131 (sp_param -> COMMA .)
 
 
 state 285
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param . variable sp_param variable sp_param variable np_check_size
+    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param . variable sp_param exp sp_param exp np_check_size
     (39) variable -> . var_id_saver variable_array clear_dimension
     (41) var_id_saver -> . id_saver
     (5) id_saver -> . ID empty
@@ -4780,10 +4780,49 @@ state 285
 
 state 286
 
-    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param . CTE_CHAR sp_param CTE_FLOAT np_check_size
+    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param . exp sp_param exp np_check_size
+    (139) exp -> . t_exp release_exp exp_or
+    (143) t_exp -> . expression release_exp t_exp_and
+    (147) expression -> . m_exp release_exp expression_comp
+    (156) m_exp -> . term release_exp m_exp_sr
+    (161) term -> . sub_factor release_exp term_pc
+    (167) sub_factor -> . factor release_exp sub_factor_pc
+    (171) factor -> . factor_exp
+    (172) factor -> . factor_cte
+    (173) factor -> . variable
+    (174) factor -> . call_function
+    (175) factor_exp -> . false_button exp release_false_button
+    (178) factor_cte -> . CTE_FLOAT
+    (179) factor_cte -> . CTE_INT
+    (180) factor_cte -> . CTE_CHAR
+    (39) variable -> . var_id_saver variable_array clear_dimension
+    (106) call_function -> . function_saver function_flag call_params check_not_void
+    (176) false_button -> . LPAREN
+    (41) var_id_saver -> . id_saver
+    (111) function_saver -> . ID empty
+    (5) id_saver -> . ID empty
 
-    CTE_CHAR        shift and go to state 316
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
+    LPAREN          shift and go to state 132
+    ID              shift and go to state 82
 
+    variable                       shift and go to state 119
+    exp                            shift and go to state 316
+    t_exp                          shift and go to state 124
+    expression                     shift and go to state 133
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
+    var_id_saver                   shift and go to state 79
+    function_saver                 shift and go to state 152
+    id_saver                       shift and go to state 83
 
 state 287
 
@@ -4801,16 +4840,10 @@ state 288
 
 state 289
 
-    (136) trend_prediction -> TREND_PREDICTION tag_sp variable sp_param . int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size
-    (6) int_const_saver -> . CTE_INT
-    (7) int_const_saver -> . empty
-    (4) empty -> .
+    (136) trend_prediction -> TREND_PREDICTION tag_sp variable np_check_size .
 
-    CTE_INT         shift and go to state 313
-    COMMA           reduce using rule 4 (empty -> .)
+    SEMICOLON       reduce using rule 136 (trend_prediction -> TREND_PREDICTION tag_sp variable np_check_size .)
 
-    int_const_saver                shift and go to state 317
-    empty                          shift and go to state 314
 
 state 290
 
@@ -4833,7 +4866,7 @@ state 291
     RSQBRACKET      reduce using rule 4 (empty -> .)
     TO              reduce using rule 4 (empty -> .)
 
-    release_exp                    shift and go to state 318
+    release_exp                    shift and go to state 317
     empty                          shift and go to state 179
 
 state 292
@@ -4968,11 +5001,11 @@ state 298
     (81) condition2 -> . empty
     (4) empty -> .
 
-    ELSE            shift and go to state 320
+    ELSE            shift and go to state 319
     SEMICOLON       reduce using rule 4 (empty -> .)
 
-    condition2                     shift and go to state 319
-    empty                          shift and go to state 321
+    condition2                     shift and go to state 318
+    empty                          shift and go to state 320
 
 state 299
 
@@ -5021,7 +5054,7 @@ state 303
 
     RSQBRACKET      shift and go to state 206
 
-    index_arr_mat                  shift and go to state 322
+    index_arr_mat                  shift and go to state 321
 
 state 304
 
@@ -5034,8 +5067,8 @@ state 304
     CTE_INT         shift and go to state 313
     RPAREN          reduce using rule 4 (empty -> .)
 
-    for_end                        shift and go to state 323
-    int_const_saver                shift and go to state 324
+    for_end                        shift and go to state 322
+    int_const_saver                shift and go to state 323
     empty                          shift and go to state 314
 
 state 305
@@ -5050,7 +5083,7 @@ state 306
 
     (98) while -> DO seed body WHILE LPAREN exp . RPAREN SEMICOLON gotoV
 
-    RPAREN          shift and go to state 325
+    RPAREN          shift and go to state 324
 
 
 state 307
@@ -5086,7 +5119,7 @@ state 307
     ID              shift and go to state 82
 
     id_saver                       shift and go to state 83
-    inner_body                     shift and go to state 326
+    inner_body                     shift and go to state 325
     statement                      shift and go to state 66
     empty                          shift and go to state 67
     assign                         shift and go to state 68
@@ -5118,7 +5151,7 @@ state 309
     FLOAT           shift and go to state 27
     CHAR            shift and go to state 28
 
-    s_type                         shift and go to state 327
+    s_type                         shift and go to state 326
 
 state 310
 
@@ -5146,7 +5179,6 @@ state 313
     (6) int_const_saver -> CTE_INT .
 
     RPAREN          reduce using rule 6 (int_const_saver -> CTE_INT .)
-    COMMA           reduce using rule 6 (int_const_saver -> CTE_INT .)
 
 
 state 314
@@ -5154,37 +5186,27 @@ state 314
     (7) int_const_saver -> empty .
 
     RPAREN          reduce using rule 7 (int_const_saver -> empty .)
-    COMMA           reduce using rule 7 (int_const_saver -> empty .)
 
 
 state 315
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable . sp_param variable sp_param variable np_check_size
+    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable . sp_param exp sp_param exp np_check_size
+    (131) sp_param -> . COMMA
+
+    COMMA           shift and go to state 284
+
+    sp_param                       shift and go to state 327
+
+state 316
+
+    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param exp . sp_param exp np_check_size
     (131) sp_param -> . COMMA
 
     COMMA           shift and go to state 284
 
     sp_param                       shift and go to state 328
 
-state 316
-
-    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR . sp_param CTE_FLOAT np_check_size
-    (131) sp_param -> . COMMA
-
-    COMMA           shift and go to state 284
-
-    sp_param                       shift and go to state 329
-
 state 317
-
-    (136) trend_prediction -> TREND_PREDICTION tag_sp variable sp_param int_const_saver . sp_param int_const_saver sp_param int_const_saver np_check_size
-    (131) sp_param -> . COMMA
-
-    COMMA           shift and go to state 284
-
-    sp_param                       shift and go to state 330
-
-state 318
 
     (148) expression_comp -> expression_comp_2 m_exp release_exp .
 
@@ -5197,14 +5219,14 @@ state 318
     TO              reduce using rule 148 (expression_comp -> expression_comp_2 m_exp release_exp .)
 
 
-state 319
+state 318
 
     (79) condition -> IF LPAREN exp RPAREN condition_GOTOF body condition2 . SEMICOLON end_condition
 
-    SEMICOLON       shift and go to state 331
+    SEMICOLON       shift and go to state 329
 
 
-state 320
+state 319
 
     (80) condition2 -> ELSE . condition_GOTO body
     (83) condition_GOTO -> . empty
@@ -5212,17 +5234,17 @@ state 320
 
     LBRACKET        reduce using rule 4 (empty -> .)
 
-    condition_GOTO                 shift and go to state 332
-    empty                          shift and go to state 333
+    condition_GOTO                 shift and go to state 330
+    empty                          shift and go to state 331
 
-state 321
+state 320
 
     (81) condition2 -> empty .
 
     SEMICOLON       reduce using rule 81 (condition2 -> empty .)
 
 
-state 322
+state 321
 
     (45) variable_matrix -> test exp index_arr_mat .
 
@@ -5248,30 +5270,30 @@ state 322
     TO              reduce using rule 45 (variable_matrix -> test exp index_arr_mat .)
 
 
-state 323
+state 322
 
     (101) for -> FOR LPAREN for_control keep_assign exp for_np1 for_end . body for_np2
     (70) body -> . LBRACKET inner_body RBRACKET
 
     LBRACKET        shift and go to state 168
 
-    body                           shift and go to state 334
+    body                           shift and go to state 332
 
-state 324
+state 323
 
     (104) for_end -> int_const_saver . RPAREN
 
-    RPAREN          shift and go to state 335
+    RPAREN          shift and go to state 333
 
 
-state 325
+state 324
 
     (98) while -> DO seed body WHILE LPAREN exp RPAREN . SEMICOLON gotoV
 
-    SEMICOLON       shift and go to state 336
+    SEMICOLON       shift and go to state 334
 
 
-state 326
+state 325
 
     (49) program_function -> FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body . return end_function program_function
     (63) return -> . return_np exp return_quad SEMICOLON
@@ -5280,57 +5302,116 @@ state 326
     (67) empty_path_return -> . empty
     (4) empty -> .
 
-    RETURN          shift and go to state 340
+    RETURN          shift and go to state 338
     RBRACKET        reduce using rule 4 (empty -> .)
 
-    return                         shift and go to state 337
-    return_np                      shift and go to state 338
-    empty_path_return              shift and go to state 339
-    empty                          shift and go to state 341
+    return                         shift and go to state 335
+    return_np                      shift and go to state 336
+    empty_path_return              shift and go to state 337
+    empty                          shift and go to state 339
 
-state 327
+state 326
 
     (60) param2 -> COMMA s_type . id_saver add_params param2
     (5) id_saver -> . ID empty
 
     ID              shift and go to state 36
 
-    id_saver                       shift and go to state 342
+    id_saver                       shift and go to state 340
+
+state 327
+
+    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param . exp sp_param exp np_check_size
+    (139) exp -> . t_exp release_exp exp_or
+    (143) t_exp -> . expression release_exp t_exp_and
+    (147) expression -> . m_exp release_exp expression_comp
+    (156) m_exp -> . term release_exp m_exp_sr
+    (161) term -> . sub_factor release_exp term_pc
+    (167) sub_factor -> . factor release_exp sub_factor_pc
+    (171) factor -> . factor_exp
+    (172) factor -> . factor_cte
+    (173) factor -> . variable
+    (174) factor -> . call_function
+    (175) factor_exp -> . false_button exp release_false_button
+    (178) factor_cte -> . CTE_FLOAT
+    (179) factor_cte -> . CTE_INT
+    (180) factor_cte -> . CTE_CHAR
+    (39) variable -> . var_id_saver variable_array clear_dimension
+    (106) call_function -> . function_saver function_flag call_params check_not_void
+    (176) false_button -> . LPAREN
+    (41) var_id_saver -> . id_saver
+    (111) function_saver -> . ID empty
+    (5) id_saver -> . ID empty
+
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
+    LPAREN          shift and go to state 132
+    ID              shift and go to state 82
+
+    variable                       shift and go to state 119
+    exp                            shift and go to state 341
+    t_exp                          shift and go to state 124
+    expression                     shift and go to state 133
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
+    var_id_saver                   shift and go to state 79
+    function_saver                 shift and go to state 152
+    id_saver                       shift and go to state 83
 
 state 328
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param . variable sp_param variable np_check_size
+    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param exp sp_param . exp np_check_size
+    (139) exp -> . t_exp release_exp exp_or
+    (143) t_exp -> . expression release_exp t_exp_and
+    (147) expression -> . m_exp release_exp expression_comp
+    (156) m_exp -> . term release_exp m_exp_sr
+    (161) term -> . sub_factor release_exp term_pc
+    (167) sub_factor -> . factor release_exp sub_factor_pc
+    (171) factor -> . factor_exp
+    (172) factor -> . factor_cte
+    (173) factor -> . variable
+    (174) factor -> . call_function
+    (175) factor_exp -> . false_button exp release_false_button
+    (178) factor_cte -> . CTE_FLOAT
+    (179) factor_cte -> . CTE_INT
+    (180) factor_cte -> . CTE_CHAR
     (39) variable -> . var_id_saver variable_array clear_dimension
+    (106) call_function -> . function_saver function_flag call_params check_not_void
+    (176) false_button -> . LPAREN
     (41) var_id_saver -> . id_saver
+    (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    ID              shift and go to state 36
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
+    LPAREN          shift and go to state 132
+    ID              shift and go to state 82
 
-    variable                       shift and go to state 343
+    variable                       shift and go to state 119
+    exp                            shift and go to state 342
+    t_exp                          shift and go to state 124
+    expression                     shift and go to state 133
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
+    function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
 
 state 329
-
-    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR sp_param . CTE_FLOAT np_check_size
-
-    CTE_FLOAT       shift and go to state 344
-
-
-state 330
-
-    (136) trend_prediction -> TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param . int_const_saver sp_param int_const_saver np_check_size
-    (6) int_const_saver -> . CTE_INT
-    (7) int_const_saver -> . empty
-    (4) empty -> .
-
-    CTE_INT         shift and go to state 313
-    COMMA           reduce using rule 4 (empty -> .)
-
-    int_const_saver                shift and go to state 345
-    empty                          shift and go to state 314
-
-state 331
 
     (79) condition -> IF LPAREN exp RPAREN condition_GOTOF body condition2 SEMICOLON . end_condition
     (84) end_condition -> . empty
@@ -5344,42 +5425,42 @@ state 331
     RBRACKET        reduce using rule 4 (empty -> .)
     RETURN          reduce using rule 4 (empty -> .)
 
-    end_condition                  shift and go to state 346
-    empty                          shift and go to state 347
+    end_condition                  shift and go to state 343
+    empty                          shift and go to state 344
 
-state 332
+state 330
 
     (80) condition2 -> ELSE condition_GOTO . body
     (70) body -> . LBRACKET inner_body RBRACKET
 
     LBRACKET        shift and go to state 168
 
-    body                           shift and go to state 348
+    body                           shift and go to state 345
 
-state 333
+state 331
 
     (83) condition_GOTO -> empty .
 
     LBRACKET        reduce using rule 83 (condition_GOTO -> empty .)
 
 
-state 334
+state 332
 
     (101) for -> FOR LPAREN for_control keep_assign exp for_np1 for_end body . for_np2
     (105) for_np2 -> . SEMICOLON
 
-    SEMICOLON       shift and go to state 350
+    SEMICOLON       shift and go to state 347
 
-    for_np2                        shift and go to state 349
+    for_np2                        shift and go to state 346
 
-state 335
+state 333
 
     (104) for_end -> int_const_saver RPAREN .
 
     LBRACKET        reduce using rule 104 (for_end -> int_const_saver RPAREN .)
 
 
-state 336
+state 334
 
     (98) while -> DO seed body WHILE LPAREN exp RPAREN SEMICOLON . gotoV
     (100) gotoV -> . empty
@@ -5393,19 +5474,19 @@ state 336
     RBRACKET        reduce using rule 4 (empty -> .)
     RETURN          reduce using rule 4 (empty -> .)
 
-    gotoV                          shift and go to state 351
-    empty                          shift and go to state 352
+    gotoV                          shift and go to state 348
+    empty                          shift and go to state 349
 
-state 337
+state 335
 
     (49) program_function -> FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body return . end_function program_function
     (57) end_function -> . RBRACKET
 
-    RBRACKET        shift and go to state 354
+    RBRACKET        shift and go to state 351
 
-    end_function                   shift and go to state 353
+    end_function                   shift and go to state 350
 
-state 338
+state 336
 
     (63) return -> return_np . exp return_quad SEMICOLON
     (139) exp -> . t_exp release_exp exp_or
@@ -5429,36 +5510,36 @@ state 338
     (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    CTE_FLOAT       shift and go to state 138
-    CTE_INT         shift and go to state 151
-    CTE_CHAR        shift and go to state 137
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
     LPAREN          shift and go to state 132
     ID              shift and go to state 82
 
-    exp                            shift and go to state 355
+    exp                            shift and go to state 352
     t_exp                          shift and go to state 124
     expression                     shift and go to state 133
-    m_exp                          shift and go to state 143
-    term                           shift and go to state 144
-    sub_factor                     shift and go to state 145
-    factor                         shift and go to state 146
-    factor_exp                     shift and go to state 147
-    factor_cte                     shift and go to state 148
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
     variable                       shift and go to state 119
-    call_function                  shift and go to state 149
-    false_button                   shift and go to state 150
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
     function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
 
-state 339
+state 337
 
     (64) return -> empty_path_return .
 
     RBRACKET        reduce using rule 64 (return -> empty_path_return .)
 
 
-state 340
+state 338
 
     (65) return_np -> RETURN .
 
@@ -5469,14 +5550,14 @@ state 340
     ID              reduce using rule 65 (return_np -> RETURN .)
 
 
-state 341
+state 339
 
     (67) empty_path_return -> empty .
 
     RBRACKET        reduce using rule 67 (empty_path_return -> empty .)
 
 
-state 342
+state 340
 
     (60) param2 -> COMMA s_type id_saver . add_params param2
     (62) add_params -> . empty
@@ -5485,37 +5566,28 @@ state 342
     COMMA           reduce using rule 4 (empty -> .)
     RPAREN          reduce using rule 4 (empty -> .)
 
-    add_params                     shift and go to state 356
+    add_params                     shift and go to state 353
     empty                          shift and go to state 276
 
-state 343
+state 341
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable . sp_param variable np_check_size
+    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp . sp_param exp np_check_size
     (131) sp_param -> . COMMA
 
     COMMA           shift and go to state 284
 
-    sp_param                       shift and go to state 357
+    sp_param                       shift and go to state 354
 
-state 344
+state 342
 
-    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR sp_param CTE_FLOAT . np_check_size
+    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param exp sp_param exp . np_check_size
     (132) np_check_size -> . RPAREN
 
     RPAREN          shift and go to state 288
 
-    np_check_size                  shift and go to state 358
+    np_check_size                  shift and go to state 355
 
-state 345
-
-    (136) trend_prediction -> TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver . sp_param int_const_saver np_check_size
-    (131) sp_param -> . COMMA
-
-    COMMA           shift and go to state 284
-
-    sp_param                       shift and go to state 359
-
-state 346
+state 343
 
     (79) condition -> IF LPAREN exp RPAREN condition_GOTOF body condition2 SEMICOLON end_condition .
 
@@ -5528,7 +5600,7 @@ state 346
     RETURN          reduce using rule 79 (condition -> IF LPAREN exp RPAREN condition_GOTOF body condition2 SEMICOLON end_condition .)
 
 
-state 347
+state 344
 
     (84) end_condition -> empty .
 
@@ -5541,14 +5613,14 @@ state 347
     RETURN          reduce using rule 84 (end_condition -> empty .)
 
 
-state 348
+state 345
 
     (80) condition2 -> ELSE condition_GOTO body .
 
     SEMICOLON       reduce using rule 80 (condition2 -> ELSE condition_GOTO body .)
 
 
-state 349
+state 346
 
     (101) for -> FOR LPAREN for_control keep_assign exp for_np1 for_end body for_np2 .
 
@@ -5561,7 +5633,7 @@ state 349
     RETURN          reduce using rule 101 (for -> FOR LPAREN for_control keep_assign exp for_np1 for_end body for_np2 .)
 
 
-state 350
+state 347
 
     (105) for_np2 -> SEMICOLON .
 
@@ -5574,7 +5646,7 @@ state 350
     RETURN          reduce using rule 105 (for_np2 -> SEMICOLON .)
 
 
-state 351
+state 348
 
     (98) while -> DO seed body WHILE LPAREN exp RPAREN SEMICOLON gotoV .
 
@@ -5587,7 +5659,7 @@ state 351
     RETURN          reduce using rule 98 (while -> DO seed body WHILE LPAREN exp RPAREN SEMICOLON gotoV .)
 
 
-state 352
+state 349
 
     (100) gotoV -> empty .
 
@@ -5600,7 +5672,7 @@ state 352
     RETURN          reduce using rule 100 (gotoV -> empty .)
 
 
-state 353
+state 350
 
     (49) program_function -> FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body return end_function . program_function
     (49) program_function -> . FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function
@@ -5610,10 +5682,10 @@ state 353
     FUNCTION        shift and go to state 17
     MAIN            reduce using rule 4 (empty -> .)
 
-    program_function               shift and go to state 360
+    program_function               shift and go to state 356
     empty                          shift and go to state 18
 
-state 354
+state 351
 
     (57) end_function -> RBRACKET .
 
@@ -5621,7 +5693,7 @@ state 354
     MAIN            reduce using rule 57 (end_function -> RBRACKET .)
 
 
-state 355
+state 352
 
     (63) return -> return_np exp . return_quad SEMICOLON
     (66) return_quad -> . empty
@@ -5629,10 +5701,10 @@ state 355
 
     SEMICOLON       reduce using rule 4 (empty -> .)
 
-    return_quad                    shift and go to state 361
-    empty                          shift and go to state 362
+    return_quad                    shift and go to state 357
+    empty                          shift and go to state 358
 
-state 356
+state 353
 
     (60) param2 -> COMMA s_type id_saver add_params . param2
     (60) param2 -> . COMMA s_type id_saver add_params param2
@@ -5642,105 +5714,109 @@ state 356
     COMMA           shift and go to state 309
     RPAREN          reduce using rule 4 (empty -> .)
 
-    param2                         shift and go to state 363
+    param2                         shift and go to state 359
     empty                          shift and go to state 310
 
-state 357
+state 354
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param . variable np_check_size
+    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp sp_param . exp np_check_size
+    (139) exp -> . t_exp release_exp exp_or
+    (143) t_exp -> . expression release_exp t_exp_and
+    (147) expression -> . m_exp release_exp expression_comp
+    (156) m_exp -> . term release_exp m_exp_sr
+    (161) term -> . sub_factor release_exp term_pc
+    (167) sub_factor -> . factor release_exp sub_factor_pc
+    (171) factor -> . factor_exp
+    (172) factor -> . factor_cte
+    (173) factor -> . variable
+    (174) factor -> . call_function
+    (175) factor_exp -> . false_button exp release_false_button
+    (178) factor_cte -> . CTE_FLOAT
+    (179) factor_cte -> . CTE_INT
+    (180) factor_cte -> . CTE_CHAR
     (39) variable -> . var_id_saver variable_array clear_dimension
+    (106) call_function -> . function_saver function_flag call_params check_not_void
+    (176) false_button -> . LPAREN
     (41) var_id_saver -> . id_saver
+    (111) function_saver -> . ID empty
     (5) id_saver -> . ID empty
 
-    ID              shift and go to state 36
+    CTE_FLOAT       shift and go to state 149
+    CTE_INT         shift and go to state 150
+    CTE_CHAR        shift and go to state 151
+    LPAREN          shift and go to state 132
+    ID              shift and go to state 82
 
-    variable                       shift and go to state 364
+    variable                       shift and go to state 119
+    exp                            shift and go to state 360
+    t_exp                          shift and go to state 124
+    expression                     shift and go to state 133
+    m_exp                          shift and go to state 141
+    term                           shift and go to state 142
+    sub_factor                     shift and go to state 143
+    factor                         shift and go to state 144
+    factor_exp                     shift and go to state 145
+    factor_cte                     shift and go to state 146
+    call_function                  shift and go to state 147
+    false_button                   shift and go to state 148
     var_id_saver                   shift and go to state 79
+    function_saver                 shift and go to state 152
     id_saver                       shift and go to state 83
 
-state 358
+state 355
 
-    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size .
+    (137) dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param exp sp_param exp np_check_size .
 
-    SEMICOLON       reduce using rule 137 (dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size .)
+    SEMICOLON       reduce using rule 137 (dummi_regression -> DUMMI_REGRESSION tag_sp variable sp_param exp sp_param exp np_check_size .)
 
 
-state 359
-
-    (136) trend_prediction -> TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param . int_const_saver np_check_size
-    (6) int_const_saver -> . CTE_INT
-    (7) int_const_saver -> . empty
-    (4) empty -> .
-
-    CTE_INT         shift and go to state 313
-    RPAREN          reduce using rule 4 (empty -> .)
-
-    int_const_saver                shift and go to state 365
-    empty                          shift and go to state 314
-
-state 360
+state 356
 
     (49) program_function -> FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function .
 
     MAIN            reduce using rule 49 (program_function -> FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function .)
 
 
-state 361
+state 357
 
     (63) return -> return_np exp return_quad . SEMICOLON
 
-    SEMICOLON       shift and go to state 366
+    SEMICOLON       shift and go to state 361
 
 
-state 362
+state 358
 
     (66) return_quad -> empty .
 
     SEMICOLON       reduce using rule 66 (return_quad -> empty .)
 
 
-state 363
+state 359
 
     (60) param2 -> COMMA s_type id_saver add_params param2 .
 
     RPAREN          reduce using rule 60 (param2 -> COMMA s_type id_saver add_params param2 .)
 
 
-state 364
+state 360
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param variable . np_check_size
+    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp sp_param exp . np_check_size
     (132) np_check_size -> . RPAREN
 
     RPAREN          shift and go to state 288
 
-    np_check_size                  shift and go to state 367
+    np_check_size                  shift and go to state 362
 
-state 365
-
-    (136) trend_prediction -> TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver . np_check_size
-    (132) np_check_size -> . RPAREN
-
-    RPAREN          shift and go to state 288
-
-    np_check_size                  shift and go to state 368
-
-state 366
+state 361
 
     (63) return -> return_np exp return_quad SEMICOLON .
 
     RBRACKET        reduce using rule 63 (return -> return_np exp return_quad SEMICOLON .)
 
 
-state 367
+state 362
 
-    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param variable np_check_size .
+    (134) financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp sp_param exp np_check_size .
 
-    SEMICOLON       reduce using rule 134 (financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param variable np_check_size .)
-
-
-state 368
-
-    (136) trend_prediction -> TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size .
-
-    SEMICOLON       reduce using rule 136 (trend_prediction -> TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size .)
+    SEMICOLON       reduce using rule 134 (financial_state -> FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp sp_param exp np_check_size .)
 

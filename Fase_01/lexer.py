@@ -151,6 +151,7 @@ def t_CTE_CHAR(t):
     t.value = str(t.value)    
     return t
 
+
 #ID
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'

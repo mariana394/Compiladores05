@@ -5,11 +5,28 @@
 # Virtual Machine....
 # -----------------------------------------------------------
 from memory_map import MemoryMap
-import pandas as pd 
-import sys
+#PYTHON
+import pandas as pd
+import matplotlib.pyplot as plt 
+import pandas as pd
+from datetime import date
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import statsmodels.api as sm
+import seaborn as sns
+
+from statsmodels.tsa.stattools import adfuller
+from pmdarima import auto_arima
+from pandas.plotting import autocorrelation_plot
+
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+
+import matplotlib.pyplot as plt
+from matplotlib import pyplot
+import sys
+
+
 sys.setrecursionlimit(2000)
 mp = MemoryMap()
 
@@ -52,7 +69,7 @@ class VirtualMachine:
         # 0 -> int, 1 -> Float, 2 -> Char , 3 -> DF
         self.t_param_counter = [0,0,0,0]
         self.dir_base = False
-        self.model = 0 
+        self.model = None
        
        
     
@@ -844,13 +861,22 @@ class VirtualMachine:
                                 mp.set_value(save_real_address, estad_posi)
                                 print("HOLA HOLA HOLA")
                                 print(estad_posi)
-                            
+                                inst_pointer += i
+                                self.check_len_quad(inst_pointer)
+                                self.vm_handler(inst_pointer,offset,offset_end)
+                                pass
+
                             case 2:
                                 estad_disp = [param1.std(),param1.var(),param1.quantile([.25,.75])]
                                 print("______________ESTADÍSTICOS DE DISPERSIÓN__________")
                                 print("DESVIACIÓN ESTÁNDAR: ",estad_disp[0] )
                                 print("VARIANZA: ",estad_disp[1])
                                 print("CUARTILES: ",estad_disp[2])
+                                inst_pointer += i
+                                self.check_len_quad(inst_pointer)
+                                self.vm_handler(inst_pointer,offset,offset_end)
+                                pass
+
                                 
                     case 'financial_state':
                         i = 1
@@ -932,6 +958,10 @@ class VirtualMachine:
                             
 
                         print(self.quaduples[inst_pointer + i - 1])
+                        inst_pointer += i
+                        self.check_len_quad(inst_pointer)
+                        self.vm_handler(inst_pointer,offset,offset_end)
+                        pass
                        
                     case 'season_analysis':
                         i = 1
@@ -970,12 +1000,81 @@ class VirtualMachine:
                         print('PRODUCTOS MAS VENDIDOS POR MES:')
                         print('-----------------')
                         print(productos_mas_vendidos_por_mes)
+                        ventas = ventas.drop('Mes', axis=1)
+                        inst_pointer += i
+                        self.check_len_quad(inst_pointer)
+                        self.vm_handler(inst_pointer,offset,offset_end)
+                        pass
+
+                    case 'trend_prediction':
+                        i = 1
+                        go_special = self.quaduples[inst_pointer + i][0]
+                        #DATAFRAME
+                        param1 = None
+                        
+                        while go_special != 38:
+                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
+                            go_special = self.quaduples[inst_pointer + i][0]
+                            param = self.quaduples[inst_pointer + i][3]
+                            param_value = self.quaduples[inst_pointer + i][1]
+                                 #Quiere decir que es el parametro 1
+                            if (param == 1):
+                                data_arima = param_value
+                            i += 1
+                                #Quiere decir que es el parametro 2
+                        data_arima_real_address = self.real_address(offset, data_arima)
+                        data_arima = mp.get_value(data_arima_real_address)
+                      
+                        #TEMPORAL DATAFRAME
+                        save = self.quaduples[inst_pointer + i - 1][3]
+                        save_real_address = self.real_address(offset, save)
+                        print("arima",data_arima)
+                        #CALCULAR LOS VALORES DE P,D,Q QUE SE ADECUAN A LOS DATOS
+                        stepwise_fit = auto_arima(data_arima['Sales'], trace=True,suppress_warnings=True)
+                        p = stepwise_fit.order[0]
+                        d = stepwise_fit.order[1]
+                        q = stepwise_fit.order[2]
+
+                        #DATOS PARA EL MODELO
+                        X = data_arima.values
+                        size = int(len(X) * 0.66)
+                        train, test = X[0:size], X[size:len(X)]
+                        history = [x for x in train]
+                        predictions = list()
+
+                        #EJECUTAR LA PREDICCION
+                        for t in range(len(test)):
+                            model = sm.tsa.ARIMA(history, order=(p,q,d))
+                            model_fit = model.fit()
+                            output = model_fit.forecast()
+                            yhat = output[0]
+                            predictions.append(yhat)
+                            obs = test[t]
+                            history.append(obs)
+                            #print('predicted=%f, expected=%f' % (yhat, obs))
+                        
+                        #MEDICIONES
+                        rmse = sqrt(mean_squared_error(test, predictions))
+                        print('Test RMSE: %.3f' % rmse)
+                        #GRAFICAR RESULTADO
+                        print('PREDICCION-ARIMA:')
+                        pyplot.plot(test)
+                        pyplot.plot(predictions, color='red')
+                        #pyplot.show()
+                        plt.savefig('grafica.png', dpi=300)  # Ruta y nombre del archivo de imagen
+
+                       
+                        inst_pointer += i
+                        self.check_len_quad(inst_pointer)
+                        self.vm_handler(inst_pointer,offset,offset_end)
+                        pass
+
 
                     case 'dummi_regression':
                         i = 1
                         go_special = self.quaduples[inst_pointer + i][0]
                         #DATAFRAME
-                        ventas= None
+                        ventas_rl= None
                         #META
                         meta = None
                         #umbral de correlacion
@@ -986,7 +1085,8 @@ class VirtualMachine:
                             param_value = self.quaduples[inst_pointer + i][1]
                                  #Quiere decir que es el parametro 1
                             if (param == 1):
-                                ventas = param_value
+                                ventas_rl = param_value
+                                
                             if (param == 2):
                                 meta = param_value
                             if(param == 3):
@@ -994,80 +1094,95 @@ class VirtualMachine:
 
                             i += 1
                     
-                        ventas_real_address = self.real_address(offset, ventas)
-                        meta_real_address = self.real_address(offset, meta)
+                        ventas_real_address = self.real_address(offset, ventas_rl)
                         umbral_real_address = self.real_address(offset, umbral)
                         # print('REAL ADDRESS PARAM', param1_real_address)
                         # print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
                         # print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
-                        ventas = mp.get_value(ventas_real_address)
-                        meta = mp.get_value(meta_real_address)
+                        ventas_rl = mp.get_value(ventas_real_address)
+                        ventas_rl = ventas_rl.drop('Mes', axis=1)
+
+                        print("domingo", ventas_rl)
                         umbral = mp.get_value(umbral_real_address)
                         
                         #Matriz de correlacion
                         print('MATRIZ DE CORRELACION')
                         print('-----------------')
-                        matriz_corr = ventas.corr(numeric_only=True)
+                        matriz_corr = ventas_rl.corr(numeric_only=True)
                         print(matriz_corr)
 
                         #filtrar por el umbral
                         #limpiar el data set
-                        ventas = ventas.dropna()
+                        # ventas_rl = ventas_rl.dropna()
+                        
                         #ENTRENAMIENRO
-                        X = ventas[['Precio unitario', 'Cantidad']]
-                        #outcome
-                        y = ventas[meta]
+                        df_umbral = matriz_corr[(abs(matriz_corr) > umbral) & (matriz_corr != 1)].dropna(axis=0, how='all').dropna(axis=1, how='all').columns
+                        X = ventas_rl[['Cantidad', 'Precio unitario']]
+
+                        
+                       
+                        y = ventas_rl['Total']
                         #20% para test 80% para train
 
                         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=50)
                         #correr el modelo
-                        model = LinearRegression()
-                        model.fit(X_train, y_train)
+                        print("entrenamiento",X_train)
+                        self.model = LinearRegression()
+                        self.model.fit(X_train, y_train)
 
-                        #Predecir
-                        y_pred = model.predict(X_test)
+                        # #Predecir
+                        # y_pred = self.model.predict(X_test)
 
-                        #metricas
-                        metrica = model.score(X_test, y_test)
+                        # #metricas
+                        # # metrica = self.model.score(X_test, y_test)
                        
-                        print('Modelo entrenado con ',  metrica, ' de confianza')
-
-                        
-                         #TEMPORAL DATAFRAME
-                        save = self.quaduples[inst_pointer + i - 1][3]
-                        save_real_address = self.real_address(offset, save)
-                        print('SAVE REAL ADDRESS', save_real_address, 100)
+                        # print('Modelo entrenado con ',  metrica, ' de confianza')
+                        inst_pointer += i
+                        self.check_len_quad(inst_pointer)
+                        self.vm_handler(inst_pointer,offset,offset_end)
+                        pass
                     
-                    # case 'model_prediction':
-                    #     i = 1
-                    #     go_special = self.quaduples[inst_pointer + i][0]
-                    #     #DATAFRAME
-                    #     param1 = None
+                    case 'model_predict':
+                        i = 1
+                        go_special = self.quaduples[inst_pointer + i][0]
+                        #DATAFRAME
+                        param1 = None
                         
-                    #     while go_special != 38:
-                    #         print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
-                    #         go_special = self.quaduples[inst_pointer + i][0]
-                    #         param = self.quaduples[inst_pointer + i][3]
-                    #         param_value = self.quaduples[inst_pointer + i][1]
-                    #              #Quiere decir que es el parametro 1
-                    #         if (param == 1):
-                    #             predecir = param_value
-                    #         i += 1
-                    #             #Quiere decir que es el parametro 2
-                    #     predecir_real_address = self.real_address(offset, predecir)
-                    #     predecir = mp.get_value(predecir_real_address)
-                      
-                    #     #asegurarnos de que todos los datos son numericos
-                    #     y_pred = model.predict(predecir.select_dtypes(include=['float', 'int']))
+                        while go_special != 38:
+                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
+                            go_special = self.quaduples[inst_pointer + i][0]
+                            param = self.quaduples[inst_pointer + i][3]
+                            param_value = self.quaduples[inst_pointer + i][1]
+                                 #Quiere decir que es el parametro 1
+                            if (param == 1):
+                                predecir = param_value
+                            i += 1
+                                #Quiere decir que es el parametro 2
+                        predecir_real_address = self.real_address(offset, predecir)
+                        predecir = mp.get_value(predecir_real_address)
+                        #asegurarnos de que todos los datos son numericos
+                        # predecir = predecir.dropna()
+                        
+                        print("domingo pred", predecir.select_dtypes(include=['float', 'int']))
 
-                    #     print('PREDICCION:')
-                    #     print('-----------------')
-                    #     print(y_pred)
 
-                inst_pointer += i
-                self.check_len_quad(inst_pointer)
-                self.vm_handler(inst_pointer,offset,offset_end)
-                pass
+                        y_pred = self.model.predict(predecir.select_dtypes(include=['float', 'int']))
+                        predecir['Prediccion_Total'] = y_pred
+                        print("domingo pred", y_pred)
+                        today = date.today().strftime("%Y-%m-%d")
+
+                        file_name = f'prediccion_{today}.xlsx'
+
+                        predecir.to_excel(file_name, index=False)
+
+                        print('PREDICCION:')
+                        print('-----------------')
+                        print('El archivo ha sido creado con exito!')
+
+                        inst_pointer += i
+                        self.check_len_quad(inst_pointer)
+                        self.vm_handler(inst_pointer,offset,offset_end)
+                        pass
 
 
             #END

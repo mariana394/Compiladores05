@@ -911,7 +911,7 @@ def p_explore_cte(p):
     
 #__________<FINANCIAL_STATE>__________
 def p_financial_state(p):
-    '''financial_state : FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param variable np_check_size'''
+    '''financial_state : FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp sp_param exp np_check_size'''
 
 #___________<SEASON_ANALYSIS>_______
 def p_season_analysis(p):
@@ -921,11 +921,11 @@ def p_season_analysis(p):
 
 #_____________<TREND_PREDICTION>_____________
 def p_trend_prediction(p):
-    '''trend_prediction : TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size'''
+    '''trend_prediction : TREND_PREDICTION tag_sp variable np_check_size'''
 
 #_____________<DUMMI_PREDICTION>__________________
 def p_dummi_regression(p):
-    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param CTE_CHAR sp_param CTE_FLOAT np_check_size'''
+    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param exp sp_param exp np_check_size'''
     print("sabado",p[1])
 
 # def p_dr_array_mp(p):

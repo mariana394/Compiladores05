@@ -190,7 +190,7 @@ class MemoryMap:
         #Int
         if (tipo == 0):
 
-            self.int[index] = value
+            self.int[index] = int(value)
             
         # FLOAT
         if(tipo == 1):

@@ -14,7 +14,7 @@ class special_functions:
                         "financial_state": {'params':[5,5,3,3],},
                         "dummi_regression": {'params':[5,3,2],},
                         "season_analysis": {'params':[5],},
-                        "trend_prediction": {'params':[5,1,1,1],},
+                        "trend_prediction": {'params':[5],},
                         "model_predict": {'params':[5,5],},
                         }
 

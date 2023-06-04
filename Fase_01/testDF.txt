@@ -19,7 +19,7 @@ main {
 var 
 int s,h, k[2][3];
 float g;
-dataframe l, m, costos, ventas;
+dataframe l, m, costos, ventas, predecir,arima;
 char initial, final;
 k[1][1] = 2;
 s = k[1][1];
@@ -28,13 +28,17 @@ message(1);
 l = read('test2.csv');
 costos = read('costoscategorias.csv');
 ventas = read('ventas.csv');
+predecir = read('predecirr.csv');
 initial = '1/05/2023';
 final = '30/05/2023';
+arima = read('arimamodel.csv');
 print(l);
 m = season_analysis(ventas);
-m = financial_state(costos,ventas,initial,final);
+m = financial_state(costos,ventas,'1/05/2023',final);
+m = dummi_regression(ventas,'Total',0.5);
+m = trend_prediction(arima);
 m = exploration(l, 1);
-m = dummi_regression(ventas,'precio',0.5);
+m = model_predict(predecir);
 print(m);
 }
 end
