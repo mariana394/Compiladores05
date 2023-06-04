@@ -31,7 +31,7 @@ ventas = read('ventas.csv');
 predecir = read('predecirr.csv');
 initial = '1/05/2023';
 final = '30/05/2023';
-arima = read('arimamodel.csv');
+arima = read('arima_model.csv');
 print(l);
 m = season_analysis(ventas);
 m = financial_state(costos,ventas,'1/05/2023',final);

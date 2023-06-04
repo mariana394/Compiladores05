@@ -1024,11 +1024,12 @@ class VirtualMachine:
                                 #Quiere decir que es el parametro 2
                         data_arima_real_address = self.real_address(offset, data_arima)
                         data_arima = mp.get_value(data_arima_real_address)
-                      
+                        print('arima domingo', data_arima)
                         #TEMPORAL DATAFRAME
                         save = self.quaduples[inst_pointer + i - 1][3]
                         save_real_address = self.real_address(offset, save)
-                        print("arima",data_arima)
+                        arima = data_arima
+                        data_arima = data_arima.set_index(['Month'])
                         #CALCULAR LOS VALORES DE P,D,Q QUE SE ADECUAN A LOS DATOS
                         stepwise_fit = auto_arima(data_arima['Sales'], trace=True,suppress_warnings=True)
                         p = stepwise_fit.order[0]
@@ -1058,10 +1059,25 @@ class VirtualMachine:
                         print('Test RMSE: %.3f' % rmse)
                         #GRAFICAR RESULTADO
                         print('PREDICCION-ARIMA:')
-                        pyplot.plot(test)
-                        pyplot.plot(predictions, color='red')
+                        pyplot.plot(test, label='historico')
+                        pyplot.plot(predictions, color='red', label ='prediccion')
+                        plt.xlabel('Mes')
+                        plt.ylabel('Ventas')
+                        plt.legend()
+                        plt.title('Pronostico de Ventas')
+                        today = date.today().strftime("%Y-%m-%d")
+                        df = pd.DataFrame(test, columns=['Historico'])
+                        df['Prediccion'] = predictions
+                        file_name = f'pronostico_ventas_{today}.xlsx'
+                        df.to_excel(file_name, index=False)
+
+                        print('PREDICCION:')
+                        print('-----------------')
+                        print('El archivo ha sido creado con exito!')
+                        image_name = f'pronostico_de_ventas_{today}.png'
                         #pyplot.show()
-                        plt.savefig('grafica.png', dpi=300)  # Ruta y nombre del archivo de imagen
+
+                        plt.savefig(image_name, dpi=300)  # Ruta y nombre del archivo de imagen
 
                        
                         inst_pointer += i
