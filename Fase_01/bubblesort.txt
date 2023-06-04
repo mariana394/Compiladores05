@@ -1,0 +1,26 @@
+program factorial;
+
+main {
+var
+int list[10], i,j, value ;
+
+for (i = 0 to 9){
+    list[i] = (i * 8) % 9;
+};
+
+
+
+for (i = 0 to 9){
+    for(j = 1 to 9){
+        if (list[j-(1)] > list[j]){
+            value = list[j-(1)];
+            list[j-(1)] = list[j];
+            list[j] = value;
+        };
+    };
+};
+
+
+
+}
+end

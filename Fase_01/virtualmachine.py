@@ -7,7 +7,7 @@
 from memory_map import MemoryMap
 import pandas as pd 
 import sys
-sys.setrecursionlimit(2000)
+sys.setrecursionlimit(3000)
 mp = MemoryMap()
 
 class VirtualMachine:
