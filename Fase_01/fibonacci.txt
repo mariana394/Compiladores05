@@ -18,10 +18,9 @@ function int fibo (int n){
     
 main {
 var
-int i, j, k, h[10];
+int i, j, k;
 
 j = 0;
-h[1] = 2; 
 k = fibo (9);
 
 

@@ -18,8 +18,8 @@ class special_functions:
                         "model_predict": {'params':[5,5],},
                         }
 
+    #Function to search and check parameters of special functions
     def search_sf_param(self,func_name, param, tipo):
-        #print("VALUE PARAM MIER", param)
         if(func_name in self.special_func.keys()):
             list_param = self.special_func[func_name]['params']
             if(len(list_param) < param):

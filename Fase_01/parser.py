@@ -42,7 +42,7 @@ vm = VirtualMachine()
 
 
 
-
+#Inside this section we can find the main structure of a datalord program
 #__________________________<PROGRAM>_________________________
 def p_program(p):
     '''program : PROGRAM ID goto_main program_vars program_function program_main end '''
@@ -53,6 +53,10 @@ def p_goto_main(p):
     tables.add_const(1,type(1))
     quad.insert_goto(16)
 
+
+#This rule is the end of the program syntaxis and the begining of the virtual machine
+#it sends the data structures to the virtual machine and starts it
+#__________________________<END>_________________________
 def p_end(p):
     '''end : END '''
     global curr_function
@@ -67,7 +71,7 @@ def p_end(p):
     vm.set_quadruples(all_quad)
     vm.set_const(const)
     vm.set_resources(res)
-    #____________INICIO VM___________
+    #____________VM START___________
     vm.start_vm()
 
 
@@ -142,7 +146,7 @@ def check_flag_func():
 
 
 #__________________________VARIABLES____________________
-#Uso de las variables en el programa
+#Rules for program variables
 def p_var_type(p):
     '''var_type : var_c_type
                 | var_s_type'''
@@ -151,6 +155,9 @@ def p_program_vars(p):
     '''program_vars : VAR var_type  
                     | empty'''
 
+#Each type rule saves it in a global function to be used in the semantic cube
+#or in the quadruples
+#_______________________<TYPE>______________________________
 def p_s_type(p):
     '''s_type : INT 
               | FLOAT
@@ -176,12 +183,13 @@ def p_var_c_type2(p):
     '''var_c_type2 : COMMA id_saver add_c_var var_c_type2
                    | empty'''
     
+#Saves the variable in the corresponding table    
+#____NEURALGIC POINT______#
 def p_add_c_var(p):
     '''add_c_var : empty'''
     global curr_type, curr_name, scope
     tables.add_vars(curr_name,scope,curr_type)
     
-#------Será necesario saber el tamaño de las variables tipo array??------#
 def p_var_s_type(p):
     '''var_s_type : s_type id_saver var_s_array add_s_var var_s_type2 SEMICOLON var_multiple'''
 
@@ -199,7 +207,6 @@ def p_add_s_var(p):
     curr_columns = 0
     curr_rows = 0
   
-#----var_s_dimensions era anteriormente CTE_INT y funcionaba bien-----#
 def p_var_s_array(p):
     '''var_s_array : LSQBRACKET var_s_dimesions RSQBRACKET var_s_matrix 
                    | empty'''
@@ -234,6 +241,9 @@ def p_clear_dimension(p):
     '''clear_dimension : empty'''
     quad.release_false_button()
 
+#Searches for the variable in function table to set a global flag
+#push its info in the stacks
+#____NEURALGIC POINT______#
 def p_var_id_saver(p):
     ''' var_id_saver : id_saver'''    
     global curr_name, scope, function_flag, curr_variable
@@ -264,7 +274,9 @@ def p_variable_matrix(p):
     '''variable_matrix : LSQBRACKET exp index_arr_mat
                        | empty'''
 
-
+#Make sure which kind of variable is being used (array or matrix)
+#and creates the corresponding quadruple
+#____NEURALGIC POINT______#
 def p_index_arr_mat(p):
     '''index_arr_mat : RSQBRACKET'''
     global curr_dim, scope,curr_variable, curr_non_atomic_variable
@@ -277,7 +289,6 @@ def p_index_arr_mat(p):
         if (curr_dim == 2):
             quad.arr_mat_quad(size, curr_dim)
             curr_dim = 0
-
 
     else: 
         quad.arr_mat_quad(size, curr_dim)
@@ -293,7 +304,7 @@ def p_program_function(p):
                         | empty'''
 
 
-#type of funtion return
+#Saves the function type in the corresponding global variable
 def p_f_type(p):
     '''f_type : INT 
               | FLOAT
@@ -304,8 +315,9 @@ def p_f_type(p):
     return_type = curr_type
     scope += 1
     
+#Creates a global variable with the name of the function
+#and adds it to the function table
 #______FUNCTION___NEURALGIC POINTS________#
-
 def p_func_creator(p):
     '''func_creator : empty'''
     global scope, curr_function, curr_type, curr_name
@@ -314,13 +326,12 @@ def p_func_creator(p):
     tables.add_vars(curr_function,0,return_type, 0,0)
     tables.add_function(curr_name,scope,curr_type, start)
 
-
+#Creates the quadruple for end function
 def p_end_function(p):
     '''end_function : RBRACKET'''
 
     quad.end_func_quad()
     
-#_____________________________________________________
 
 #_________________________<PARAM>__________________________#
 def p_param(p):
@@ -330,6 +341,9 @@ def p_param(p):
 def p_param2(p):
     '''param2 : COMMA s_type id_saver add_params param2
               | empty'''
+
+#Creates new variables with the name of the parameters
+#and adds them to the variable table and the parameter list
 #________PARAMS NEURALGIC POINTS___________________________
 def p_add_params(p):
     '''add_params : empty'''
@@ -342,6 +356,7 @@ def p_return(p):
     '''return : return_np exp return_quad SEMICOLON
               | empty_path_return'''
 
+#Checks if the function is void or not
 def p_return_np(p):
     '''return_np : RETURN'''
     global return_type
@@ -350,11 +365,10 @@ def p_return_np(p):
         exit()
     
         
-
+#Creates the quadruple for return
 def p_return_quad(p):
     '''return_quad : empty'''
     global return_type, curr_function
-    #Needs to be used address instead only name
     address = []
     address = tables.search_variable_existance(curr_function, 0)
     quad.return_quad(return_type, address[1])
@@ -374,6 +388,9 @@ def p_empty_path_return(p):
 def p_program_main(p):
     '''program_main :  main_id LBRACKET program_vars inner_body RBRACKET'''
 
+# Fills the main jump (first quadruple) with its current quad place
+# adds the main function to the function table
+# and increase the scope
 def p_main_id(p): 
     '''main_id : MAIN resources '''
     global scope, curr_function
@@ -425,17 +442,19 @@ def p_condition2(p):
     '''condition2 : ELSE condition_GOTO body
                  | empty'''
 
-# Neuralgic point 1
+# Creates the quadruple for the GOTO False
 def p_condition_GOTOF(p):   
     '''condition_GOTOF : empty'''
     quad.jump_stack_push()
     quad.insert_goto(18)
 
-#Neuralgic point 2
+# Creates the quadruple for the GOTO
 def p_condition_GOTO(p):   
     '''condition_GOTO : empty'''
     quad.insert_goto(17)
 
+# Creates the quadruple for the end of the condition
+# filling the goto or gotof quadruple
 def p_end_condition(p):
     '''end_condition : empty'''
     jump = quad.jump_stack_pop()
@@ -458,6 +477,7 @@ def p_print_many2(p):
     '''print_many2 : COMMA print_many_np print_many
                    | empty'''
     
+#Creates the quadruple for print
 def p_print_many_np(p):
     '''print_many_np : empty'''
     quad.print_quadruple()
@@ -471,7 +491,7 @@ def p_end_print_np(p):
 def p_read(p):
     '''read : READ LPAREN valid_exp_read read_np'''
 
-
+#Checks if the parameter is a char
 def p_valid_exp_read(p):
     '''valid_exp_read : exp'''
     #CHECK TOP OF THE STACK
@@ -496,12 +516,12 @@ def p_cycle(p):
 def p_while(p):
     '''while : DO seed body WHILE LPAREN exp RPAREN SEMICOLON gotoV'''
 
-#neuralgic point 1 (guardar la semilla de a donde regreso)
+#Save the current quad place for the seed
 def p_seed(p):
     '''seed : empty'''
     quad.jump_seed()
     
-#Neuralgic point 2
+#Creates the quadruple for the GOTO True
 def p_gotoV(p):
     '''gotoV : empty'''
     quad.insert_goto(19)
@@ -511,6 +531,7 @@ def p_gotoV(p):
 def p_for(p):
     '''for : FOR LPAREN for_control keep_assign exp for_np1 for_end body for_np2'''
 
+#Saves the current variable in stack
 def p_for_control(p):
     '''for_control : id_saver'''
     global curr_name, scope 
@@ -520,12 +541,12 @@ def p_for_control(p):
     quad.size_stack_push(tables.get_arr_mat_info(curr_name, scope))
 
 
-
+#Creates the control var for the for
 def p_for_np1(p):
     '''for_np1 :  TO'''
     quad.control_var()
 
-
+#Saves the seed for the for and saves the final var
 def p_for_end(p):
      '''for_end : int_const_saver RPAREN'''
      quad.final_var()
@@ -535,7 +556,7 @@ def p_for_end(p):
      quad.insert_goto(18)
      quad.jump_stack_push()
 
-
+#Creates the quadruples for the end of the for
 def p_for_np2(p):
     '''for_np2 : SEMICOLON'''
     quad.end_for()
@@ -544,6 +565,8 @@ def p_for_np2(p):
 def p_call_function(p):
     '''call_function : function_saver function_flag call_params check_not_void '''
 
+#Creates the quadruple for the GOSUB
+#after checking type of function and validate it
 def p_check_not_void(p):
     '''check_not_void : RPAREN'''
     global return_flag, curr_function
@@ -567,6 +590,7 @@ def p_check_not_void(p):
 def p_call_void_function(p):
     '''call_void_function : function_saver function_flag call_params verify_params check_void'''
 
+#Verify that params are not less then the requiered by the function
 def p_verify_params(p):
     '''verify_params : RPAREN'''
     global curr_function 
@@ -575,6 +599,8 @@ def p_verify_params(p):
         print("ERROR: MISSING PARAMETERS ")
         exit()
     
+#Creates the quadruple for the GOSUB
+#after checking type of function and validate it
 def p_check_void(p):
     '''check_void : SEMICOLON'''
     global return_flag, curr_function
@@ -602,6 +628,8 @@ def p_function_saver(p):
     #the function does not exist and will continue if it does
 
 
+#Creates the quadruples for ERA but if it is a recursive function
+#it will create the quadruple in blank and save the position for future filling
 def p_function_flag(p):
     '''function_flag : LPAREN'''
     global function_flag, curr_name, return_type, return_flag, era_stack
@@ -643,12 +671,12 @@ def p_function_flag(p):
 
     
 
-
 def p_call_params(p):
     '''call_params : check_param exp_many 
                    | empty'''
     
-
+#Creates the quadruple for the param
+#after cheching if the param are adecuated for the function
 #_________EXP_______
 def p_check_param(p):
     '''check_param : exp'''
@@ -702,6 +730,7 @@ def p_tag_sp(p):
 def p_exploration(p):
     '''exploration : EXPLORATION tag_sp variable explore_cte np_check_size'''
 
+#Checks params for special functions
 def p_sp_param(p):
     '''sp_param : COMMA'''
     global curr_function
@@ -718,6 +747,8 @@ def p_sp_param(p):
     quad.cont += 1 
     quad.param_cont += 1
 
+#Check last param for special functions
+#and creates the quadruple for go special
 def p_np_check_size(p):
     '''np_check_size : RPAREN'''
     global curr_function
@@ -774,8 +805,7 @@ def p_model_predict(p):
 #__________________________________<EXP>___________________________
 def p_exp(p):
     '''exp : t_exp release_exp exp_or'''
-#CORRECCION :  SE CAMBIO DE LUGAR release_exp
-#ANTERIORMENTE ESTABA ABAJO \/
+
 def p_exp_or(p):
     '''exp_or : exp_keep_or  exp
               | empty'''
@@ -910,7 +940,7 @@ def p_release_false_button(p):
     quad.release_false_button()
 
 #_______NEURALGIC POINT_____ END PARENTESIS
-
+#Saves all constants to the constant table and pushes the address to the operands stack
 def p_factor_cte(p):
     '''factor_cte : CTE_FLOAT
                   | CTE_INT
