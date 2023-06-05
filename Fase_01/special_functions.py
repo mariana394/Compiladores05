@@ -26,7 +26,6 @@ class special_functions:
                 print("ERROR: TOO MANY PARAMETERS", len(list_param), " " , param)
                 exit()
             else: 
-                print("SPECIAL PARAM", func_name, " Param ", param, "tipo ", tipo , "tipo aqui " ,list_param[param - 1])
                 if(list_param[param - 1] != tipo):
                     print("ERROR: TYPE MISTMATCH")
                     exit()

@@ -63,6 +63,7 @@ def p_end(p):
     all_quad = quad.get_quad()
     res = tables.get_func_res()
     const = tables.constants
+    quad.print_quadruples()
     vm.set_quadruples(all_quad)
     vm.set_const(const)
     vm.set_resources(res)

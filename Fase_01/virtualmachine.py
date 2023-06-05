@@ -801,6 +801,7 @@ class VirtualMachine:
                                 mp.set_value(save_real_address, estad_posi)
                                 print("\n_____ESTADÍSTICOS DESCRIPTIVOS________\n")
                                 print(estad_posi)
+                                print("\n")
                                 inst_pointer += i
                                 self.check_len_quad(inst_pointer)
                                 self.vm_handler(inst_pointer,offset,offset_end)
@@ -808,23 +809,23 @@ class VirtualMachine:
 
                             case 2:
                                 estad_disp = [param1.mode(numeric_only = True),param1.median(numeric_only = True),param1.var(numeric_only = True)]
-                                print("______________ESTADÍSTICOS DE DISPERSIÓN__________")
-                                print("\nMODA:\n",estad_disp[0] )
-                                print("\nMEDIANA:\n",estad_disp[1])
-                                print("\nVARIANZA:\n ",estad_disp[2])
+                                print("\n____________________________ESTADÍSTICOS DE DISPERSIÓN________________________\n")
+                                print("\n_____MODA____:\n",estad_disp[0] )
+                                print("\n___MEDIANA____:\n",estad_disp[1])
+                                print("\n___VARIANZA:___\n ",estad_disp[2])
                                 inst_pointer += i
                                 self.check_len_quad(inst_pointer)
                                 self.vm_handler(inst_pointer,offset,offset_end)
                                 pass
 
                             case 3:   
-                                print("______________ASIMETRIA-KURTOSIS__________")                           
+                                print("\n____________________________ASIMETRIA-CURTOSIS________________________")                           
                                 numeric_columns = param1.select_dtypes(include=['int', 'float']).columns
                                 for column in numeric_columns:
                                     skewness = skew(param1[column])
                                     kurt = kurtosis(param1[column])
-                                    print("Asimetría de", column, ":", skewness)
-                                    print("Curtosis de", column, ":", kurt)
+                                    print("\nASIMETRÍA DE ", column, ":", skewness)
+                                    print("CURTOSIS DE ", column, ":", kurt)
                                 
                                 inst_pointer += i
                                 self.check_len_quad(inst_pointer)
@@ -896,13 +897,13 @@ class VirtualMachine:
                         porcentaje_margen = (margen_contribucion / total_ventas) * 100
 
                         # Imprimir el estado financiero
-                        print('Estado Financiero')
-                        print('-----------------')
+                      
+                        print('\n_______________________ESTADO FINANCIERO___________________')
                         print('Total Ventas:', total_ventas)
                         print('Costos por Categoría:')
                         print(costos_filtrado)
                         print('Margen de Contribución:', margen_contribucion)
-                        print('Porcentaje de Margen de Contribución:', porcentaje_margen, '%')        
+                        print('Porcentaje de Margen de Contribución:', porcentaje_margen, '%\n')        
                             
 
                         inst_pointer += i
@@ -943,9 +944,10 @@ class VirtualMachine:
                         # El producto estrella
                         productos_mas_vendidos_por_mes = ventas_por_mes.loc[ventas_por_mes.groupby('Mes')['Total'].idxmax()]
 
-                        print('PRODUCTOS MAS VENDIDOS POR MES:')
-                        print('-----------------')
+                        
+                        print('\n______________________PRODUCTOS MÁS VENDIDOS POR MES:________________________\n')
                         print(productos_mas_vendidos_por_mes)
+                        print('\n')
                         ventas = ventas.drop('Mes', axis=1)
                         inst_pointer += i
                         self.check_len_quad(inst_pointer)
@@ -999,9 +1001,8 @@ class VirtualMachine:
                         
                         #MEDICIONES
                         rmse = sqrt(mean_squared_error(test, predictions))
-                        print('Test RMSE: %.3f' % rmse)
+                        #print('MÉTRICAS DEL MODELO: %.3f' % rmse)
                         #GRAFICAR RESULTADO
-                        print('PREDICCION-ARIMA:')
                         pyplot.plot(test, label='historico')
                         pyplot.plot(predictions, color='red', label ='prediccion')
                         plt.xlabel('Mes')
@@ -1014,9 +1015,9 @@ class VirtualMachine:
                         file_name = f'pronostico_ventas_{today}.xlsx'
                         df.to_excel(file_name, index=False)
 
-                        print('PREDICCION:')
-                        print('-----------------')
-                        print('El archivo ha sido creado con exito!')
+                        
+                        print('\n_____________________PREDICCIÓN ARIMA:_____________________')
+                        print('El archivo y la imagen para el resultado de la función trend_prediction ha sido creado con exito!')
                         image_name = f'pronostico_de_ventas_{today}.png'
                         #pyplot.show()
 
@@ -1057,10 +1058,10 @@ class VirtualMachine:
                         meta = mp.get_value(meta_real_address)
                         
                         #Matriz de correlacion
-                        print('MATRIZ DE CORRELACION')
-                        print('-----------------')
+                        print('_____________________MATRIZ DE CORRELACIÓN_____________________\n')
                         matriz_corr = ventas_rl.corr(numeric_only=True)
                         print(matriz_corr)
+                        print("\n")
 
                         #filtrar por el umbral
                         #limpiar el data set
@@ -1115,9 +1116,9 @@ class VirtualMachine:
 
                         predecir.to_excel(file_name, index=False)
 
-                        print('PREDICCION:')
-                        print('-----------------')
-                        print('El archivo ha sido creado con exito!')
+                 
+                        print('\n_____________________PREDICCIÓN-MODELO REGRESIÓN LINEAL:_____________________\n')
+                        print('El archivo con los resultados del modelo ha sido creado con exito!\n')
 
                         inst_pointer += i
                         self.check_len_quad(inst_pointer)
