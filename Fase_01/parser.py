@@ -63,7 +63,6 @@ def p_end(p):
     all_quad = quad.get_quad()
     res = tables.get_func_res()
     const = tables.constants
-    tables.print()
     vm.set_quadruples(all_quad)
     vm.set_const(const)
     vm.set_resources(res)
@@ -364,7 +363,7 @@ def p_empty_path_return(p):
     '''empty_path_return : empty'''
     global return_type
     if(return_type == 'void'):
-        print("okay")
+        pass
     else:
         print("ERROR: FUNCTION MUST HAVE RETURN STATEMENT")
         exit()

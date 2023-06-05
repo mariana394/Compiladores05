@@ -59,27 +59,18 @@ class VirtualMachine:
     
     def set_quadruples(self, quad):
         self.quaduples = quad
-        print("SET QUAD", self.quaduples)
 
     def set_resources (self, res):
         self.resources = res
-        print("SET RES", self.resources)
     
     def set_const (self, const):
         self.const = const
-        print("SET CONST", const)
 
 
     def start_vm(self):
-        # print("________VIRTUAL MACHINE__________")
-        #print("QUAD:\n ", self.quaduples)
-        # print("\n RES: ",self.resources)
-        # print("\n CONST: ",self.const)
-        # print("RECURSOS MAIN",mp.res_global(self.resources[0]))
+
         main_offset = mp.res_global(self.resources[0])
-        print("MAIN OFFSET", main_offset)
         end_main = mp.res_global(self.resources[1])
-        print("END MAIN", end_main)
         self.sort_const()
         
         self.vm_handler(0, main_offset, end_main)
@@ -216,9 +207,7 @@ class VirtualMachine:
         char_list = []
         const_value = list(self.const.keys())
 
-        print( "Const", const_value)
         for i in range(len(const_value)):
-            #print(type(const_value[i]).__name__)
             
             if ((type(const_value[i]).__name__) == 'int'):
                 int_list.append(const_value[i])
@@ -234,19 +223,16 @@ class VirtualMachine:
     def check_len_quad(self, inst_pointer):
         if(inst_pointer >= len(self.quaduples)):
             print("END OF FILE")
-            #self.print_todo()
             exit()
 
     def vm_handler(self, inst_pointer, offset, offset_end):
         operation = self.quaduples[inst_pointer][0]
-       # print("Curr_quad ", self.quaduples[inst_pointer] )
         match operation:
 
             #PRINT
             case 7:
                 value_p = self.quaduples[inst_pointer][3]
                 real_print_address =  self.real_address(offset, value_p)   
-               # print("PRINT ADD",real_print_address)
                 print_v = mp.get_value(real_print_address)
                 
                 print(print_v)
@@ -266,9 +252,7 @@ class VirtualMachine:
                 real_value = mp.get_value(real_add_value)
                 real_value = real_value.replace('"','')
                 real_value = real_value.replace("'",'')
-               # print('real value', real_value)
                 mp.set_value(real_read_add,pd.read_csv(real_value))
-                #print(pd.read_csv(real_value))
                 inst_pointer += 1
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
@@ -437,7 +421,6 @@ class VirtualMachine:
 
                 left_value = mp.get_value(left_real_address)
                 right_value = mp.get_value(right_real_address)
-                #print("power", left_value, right_value)
                 value = pow(left_value,right_value)
                 mp.set_value(res_real_address, value)
 
@@ -450,7 +433,6 @@ class VirtualMachine:
             case 17:
                 jump = self.quaduples[inst_pointer][3] 
                 self.check_len_quad(inst_pointer)
-                #self.print_todo()
 
                 self.vm_handler(jump-1,offset,offset_end)
                 
@@ -462,7 +444,6 @@ class VirtualMachine:
                 jump = self.quaduples[inst_pointer][3]
                 
                 condition_real_address = self.real_address(offset, condition)
-                #print  ("condition_real_address", condition_real_address)
                 value = mp.get_value(condition_real_address)
 
                 if(value):
@@ -481,9 +462,7 @@ class VirtualMachine:
                 jump = self.quaduples[inst_pointer][3]
 
                 condition_real_address = self.real_address(offset, condition)
-                #print  ("condition_real_address", condition_real_address)
                 value = mp.get_value(condition_real_address)
-                #print(value, "IP:",inst_pointer,"jump", jump)
                 if(value):
                     self.check_len_quad(inst_pointer)
                     self.vm_handler(jump-1,offset,offset_end)
@@ -508,7 +487,6 @@ class VirtualMachine:
                 right_value = mp.get_value(right_real_address)
                 
                 value = left_value == right_value
-                #print("EQUAL ==", value, res_real_address)
                 mp.set_value(res_real_address, value)
 
                 inst_pointer += 1
@@ -524,14 +502,8 @@ class VirtualMachine:
                 real_add_value = self.real_address(offset,value_a)
                 
                 real_where = self.real_address(offset,where)
-                
-                if(where >= 33000):
-                    print('estoy por poner un valor de pointer')
 
                 value_v = mp.get_value(real_add_value)
-                
-                
-
 
                 mp.set_value(real_where,value_v)
                 inst_pointer += 1
@@ -664,15 +636,9 @@ class VirtualMachine:
             #END FUNCTION
             case 34:
                 size = self.size_memory.pop()
-                #print("RELEASE MEMORY",size)
-                #print("END FUNCTION BEFORE RELEASE MEMORY 1")
-                #self.print_todo()
+
                 mp.release_memory(size)
-                #print("END FUNCTION AFTER RELEASE MEMORY 1")
-                #self.print_todo()
-                #Llama a la variable que guarda los size de memoria
-                #Usa esos size para liberar ese espacio de memoria
-                #Termina la llamada recursiva aquí
+
             #ERA
             case 35:
                 g_int = self.quaduples[inst_pointer][2]
@@ -688,7 +654,6 @@ class VirtualMachine:
                 t_pointer = self.quaduples[inst_pointer+5][3]
 
                 memory_size = [g_int, g_float, g_char, g_bool, g_df, t_int, t_float, t_char, t_bool, t_df, t_pointer]
-                #print('MEMORIA RECURSIVA', memory_size)
                 end_era = mp.res_global(memory_size)
                 #Guardamos el tamaño para liberar memoria en endfunc 
                 self.size_memory.append(memory_size)
@@ -697,10 +662,7 @@ class VirtualMachine:
                 inst_pointer += 6
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
-                #Llama al tamaño y crea el espacio en memoria
-                #Salto de +6 en cuadruplos
-                #Transformar las duplas de los ERA en una lista para
-                #asignar memoria
+
 
             #GOSUB
             case 36:
@@ -716,7 +678,6 @@ class VirtualMachine:
                 left_addr = self.quaduples[inst_pointer][1]
                 left_real_address = self.real_address(offset, left_addr)
                 param_address = 0
-                #print("left_real_address", left_real_address)
                 if (left_real_address[0] == 0 or left_real_address[0] == 5 or left_real_address[0] == 11):
                     param_address = self.l_i_init + self.t_param_counter[0] 
                     self.t_param_counter[0] += 1
@@ -729,12 +690,10 @@ class VirtualMachine:
                 if (left_real_address[0] == 4 or left_real_address[0] == 9):
                     param_address = self.l_df_init + self.t_param_counter[3]
                     self.t_param_counter[3] += 1
-                #print("param_address", param_address)
                 param_real_address = self.real_address(offset_end, param_address)
 
                 left_value = mp.get_value(left_real_address)
                 mp.set_value(param_real_address,left_value)
-                #self.print_todo()
                 self.vm_handler(inst_pointer+1,offset,offset_end)
                 pass
 
@@ -774,12 +733,8 @@ class VirtualMachine:
                 res_real_address = self.real_address(offset, res)
 
                 left_value = mp.get_value(left_real_address)
-                print("el valor de la dirección izquierda es 2:", left_value)
                 value = left_value + right_addr
-                print('LUGAR DEL POINTER ES: ', res)
-                print('EL LUGAR QUE OCUPARE CON', value, 'ES DEL POINTER', res_real_address)
                 mp.set_value(res_real_address, value)
-                #self.print_todo()
                 self.dir_base = False
                 inst_pointer += 1
                 self.check_len_quad(inst_pointer)
@@ -804,7 +759,6 @@ class VirtualMachine:
                 import matplotlib.pyplot as plt
                 from matplotlib import pyplot
                 special_function = self.quaduples[inst_pointer][3]
-                print("SPECIAL FUNCTION", special_function)
 
                 match special_function:
                     case 'exploration':
@@ -824,7 +778,6 @@ class VirtualMachine:
                         #CONSTANTE
                         param2 = None
                         while go_special != 38:
-                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
@@ -835,12 +788,8 @@ class VirtualMachine:
                                 param2 = param_value
                             i += 1
                                 #Quiere decir que es el parametro 2
-                        print ('PARAMETRO 1', param1, 'PARAMETRO 2', param2)
                         param1_real_address = self.real_address(offset, param1)
                         param2_real_address = self.real_address(offset, param2)
-                        print('REAL ADDRESS PARAM', param1_real_address)
-                        print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
-                        print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
                         param1 = mp.get_value(param1_real_address)
                         param2 = mp.get_value(param2_real_address)
                         #IF param2 == ? ponte a hacer algo
@@ -848,19 +797,13 @@ class VirtualMachine:
                          #TEMPORAL DATAFRAME
                         save = self.quaduples[inst_pointer + i - 1][3]
                         save_real_address = self.real_address(offset, save)
-                        print('SAVE REAL ADDRESS', save_real_address, 100)
                     
-                       
-                        print("ENTRO AL MATCH param2")
-
                         match param2:
                             #Estadisticos de posicion
                             case 1:
                                 estad_posi = param1.describe()
                                 #estad_posi = [param1.mean(numeric_only=True),param1.median(numeric_only=True),param1.mode(numeric_only=True)]
                                 mp.set_value(save_real_address, estad_posi)
-                                print("HOLA HOLA HOLA")
-                                print(estad_posi)
                                 inst_pointer += i
                                 self.check_len_quad(inst_pointer)
                                 self.vm_handler(inst_pointer,offset,offset_end)
@@ -888,7 +831,6 @@ class VirtualMachine:
                         initial = None
                         final = None
                         while go_special != 38:
-                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
@@ -908,9 +850,7 @@ class VirtualMachine:
                         ventas_real_address = self.real_address(offset, ventas)
                         initial_real_address = self.real_address(offset, initial)
                         final_real_address = self.real_address(offset, final)
-                        # print('REAL ADDRESS PARAM', param1_real_address)
-                        # print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
-                        # print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
+                        
                         costos = mp.get_value(costos_real_address)
                         ventas = mp.get_value(ventas_real_address)
                         initial = mp.get_value(initial_real_address)
@@ -920,11 +860,9 @@ class VirtualMachine:
                          #TEMPORAL DATAFRAME
                         save = self.quaduples[inst_pointer + i - 1][3]
                         save_real_address = self.real_address(offset, save)
-                        print('SAVE REAL ADDRESS', save_real_address, 100)
                     
                         initial = pd.Timestamp(initial)
                         final = pd.Timestamp(final)
-                        print("ENTRO AL MATCH param2")
                         
                         costos['Fecha'] = costos['Fecha'].apply(pd.Timestamp)
                         ventas['Fecha'] = ventas['Fecha'].apply(pd.Timestamp)
@@ -955,9 +893,7 @@ class VirtualMachine:
                         print(costos_filtrado)
                         print('Margen de Contribución:', margen_contribucion)
                         print('Porcentaje de Margen de Contribución:', porcentaje_margen, '%')        
-                            
 
-                        print(self.quaduples[inst_pointer + i - 1])
                         inst_pointer += i
                         self.check_len_quad(inst_pointer)
                         self.vm_handler(inst_pointer,offset,offset_end)
@@ -970,7 +906,6 @@ class VirtualMachine:
                         param1 = None
                         
                         while go_special != 38:
-                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
@@ -1013,7 +948,6 @@ class VirtualMachine:
                         param1 = None
                         
                         while go_special != 38:
-                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
@@ -1024,7 +958,6 @@ class VirtualMachine:
                                 #Quiere decir que es el parametro 2
                         data_arima_real_address = self.real_address(offset, data_arima)
                         data_arima = mp.get_value(data_arima_real_address)
-                        print('arima domingo', data_arima)
                         #TEMPORAL DATAFRAME
                         save = self.quaduples[inst_pointer + i - 1][3]
                         save_real_address = self.real_address(offset, save)
@@ -1052,7 +985,6 @@ class VirtualMachine:
                             predictions.append(yhat)
                             obs = test[t]
                             history.append(obs)
-                            #print('predicted=%f, expected=%f' % (yhat, obs))
                         
                         #MEDICIONES
                         rmse = sqrt(mean_squared_error(test, predictions))
@@ -1108,13 +1040,9 @@ class VirtualMachine:
                     
                         ventas_real_address = self.real_address(offset, ventas_rl)
                         meta_real_address = self.real_address(offset, meta)
-                        # print('REAL ADDRESS PARAM', param1_real_address)
-                        # print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
-                        # print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
                         ventas_rl = mp.get_value(ventas_real_address)
                         ventas_rl = ventas_rl.drop('Mes', axis=1)
 
-                        print("domingo", ventas_rl)
                         meta = mp.get_value(meta_real_address)
                         
                         #Matriz de correlacion
@@ -1141,13 +1069,6 @@ class VirtualMachine:
                         self.model = LinearRegression()
                         self.model.fit(X_train, y_train)
 
-                        # #Predecir
-                        # y_pred = self.model.predict(X_test)
-
-                        # #metricas
-                        # # metrica = self.model.score(X_test, y_test)
-                       
-                        # print('Modelo entrenado con ',  metrica, ' de confianza')
                         inst_pointer += i
                         self.check_len_quad(inst_pointer)
                         self.vm_handler(inst_pointer,offset,offset_end)
@@ -1160,7 +1081,6 @@ class VirtualMachine:
                         param1 = None
                         
                         while go_special != 38:
-                            print('CUADRUPLO ACTUAL', self.quaduples[inst_pointer + i])
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
@@ -1174,12 +1094,9 @@ class VirtualMachine:
                         #asegurarnos de que todos los datos son numericos
                         # predecir = predecir.dropna()
                         
-                        print("domingo pred", predecir.select_dtypes(include=['float', 'int']))
-
 
                         y_pred = self.model.predict(predecir.select_dtypes(include=['float', 'int']))
                         predecir['Prediccion_Total'] = y_pred
-                        print("domingo pred", y_pred)
                         today = date.today().strftime("%Y-%m-%d")
 
                         file_name = f'prediccion_{today}.xlsx'

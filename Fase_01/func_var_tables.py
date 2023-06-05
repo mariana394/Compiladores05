@@ -121,7 +121,6 @@ class DirFunc:
 			if(num_param > len(params)):
 				print("ERROR: INVALID ARGUMENT")
 				exit()
-			print('ANTES DEL ERROR')
 			param_type =  params[num_param-1]
 			if(int(tipo) != param_type):
 				#print("TIPO", type(tipo), "PARAM", type(param_type))
@@ -149,8 +148,6 @@ class DirFunc:
 		
 	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
 	def search_variable_existance(self, name, scope):
-		print('ESTOY BUSCANDO LA FUNCION ', name, ' EN ', scope)
-		print(self.vars)
 		if (name in self.vars[scope]['vars'].keys()):
 			
 			return [(self.vars[scope]['vars'][name]['type']),(self.vars[scope]['vars'][name]['address'])] 
@@ -169,7 +166,6 @@ class DirFunc:
 		#Check if the variable already exists no matter the scope
 		
 		size = 1
-		print('VARIABLE AGREGADA' , name, scope, types, rowDim, columnDim)
 		if(self.search_variable_declaration(name, scope)):
 			print("Variable already declared",name)
 			exit()
@@ -193,11 +189,9 @@ class DirFunc:
 
 				newVar = {name: { 'type': tipo, 'size': 0,'address': self.memory_num}}
 				self.vars[scope]['vars'].update(newVar)
-				print("tipo normal ", tipo)
 				if (tipo != 6):
 					self.resources[tipo - 1] += 1
 				
-				#print(self.vars.values())
 			else:
 				# MATRIX
 				if(rowDim != 0 and columnDim != 0):
@@ -219,10 +213,8 @@ class DirFunc:
 					
 					newVar = {name: { 'type': tipo, 'size': [[0,rowDim-1,m1,1],[0,columnDim-1,offset_end,None]],'address': self.memory_num}}
 					self.vars[scope]['vars'].update(newVar)
-					print("tipo matriz", tipo)
 					self.resources[tipo -1] += rowDim * columnDim
 
-					#print(self.vars.values())
 				
 				#ARRAY
 				else:
@@ -231,7 +223,6 @@ class DirFunc:
 					k = self.add_const(0, type(0))
 					newVar = {name: { 'type': tipo, 'size': [0,rowDim-1,k,None],'address': self.memory_num}}
 					self.vars[scope]['vars'].update(newVar)
-					#print(self.vars.values())
 					self.resources[tipo - 1] += rowDim
 		
 
@@ -243,18 +234,12 @@ class DirFunc:
 			print('Size must be greater than 0')
 			exit()
 
-			
-			#print('DEBUG' , self.vars[scope].values())
-		#print(self.vars[scope]['vars'].keys())	
-		#print(self.vars[scope]['vars'].values())	
 		
 
 	#ADD PARAMS
 	def add_params(self, func_name, type):
 		tipo = dic.datalor_translator(str(type).upper())
-		print("QUE TIPO MANDAS", tipo)
 		self.dir_func[func_name]['params'].append(tipo)
-		#print(self.dir_func.values())
 
 
 
@@ -289,8 +274,6 @@ class DirFunc:
 
 		else:
 			return self.constants[value]['address']
-			# print(self.constants.keys())
-			# print(self.constants.values())
 	
 	#_______________Array calculus______________________#
 	def get_arr_mat_info(self, name, scope): 
@@ -304,7 +287,6 @@ class DirFunc:
 	#___________________________RESOURES HANDLER____________________#
 	def resources_handler(self,func_name):
 		#Assgin function resources
-		#print ("recursos por funcion", func_name,  self.resources)
 		self.dir_func[func_name]["resources"] = self.resources
 		#Reset variable resource counter
 		self.resources = [0,0,0,0,0]

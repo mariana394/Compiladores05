@@ -208,7 +208,6 @@ class Dictionary:
 
     #CHECK SEMANTICS
     def oracle_cmddwtm(self, left, right, operator ):
-        print(left, right, operator)
         if(left in self.semantics.keys()):
             if(right in self.semantics[left]):
                 if(operator in self.semantics[left][right]):
