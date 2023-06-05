@@ -95,7 +95,7 @@ class Quadruples:
     def cont_place(self):
         return self.cont
 
-    #FONDO FALSO 
+    #False bottom
     def false_button(self):
         self.pOperators.append('(')
     
@@ -114,26 +114,29 @@ class Quadruples:
         exp_type = self.type_stack_pop()
         exp = self.operands_stack_pop()
         self.size_stack_pop()
-        #Se elige el valor y tipo para la variable de control
+        #Generates a control variable and its type
         vControl = self.pOperands[-1]
         control_type = self.pTypes[-1]
-        #Se genera un espacio en memoria para la variable de control
+        #Creates a place to save the control variable
         place = self.t_i_cont + self.t_i_init
         if (self.t_i_cont > self.t_i_size):
             print("ERROR: STACK OVERFLOW")
             exit()
         self.t_i_cont += 1
-        #Fin de asignacion de memoria
-        #Se revisa si es posible la asignacion del ID y la expresion
+        
+        #Check for type mismatch
         res = oracle.oracle_cmddwtm(str(exp_type),str(control_type),'21')
         if (res != '1'):
             print("ERROR: TYPE MISMATCH")
             exit()
         else:
+            #Generates a quadruple for the value assisgnment to the control variable
             self.quadruple.append([21, exp, '', vControl])
             self.cont += 1
+            #Generates a quadruple for the assignment of the control variable
             self.quadruple.append([21, vControl, '', place])
             self.cont += 1
+            #Pushes the control variable to the operands stack
             self.operands_stack_push(place)
             self.size_stack_push(0)
             self.type_stack_push(control_type)
@@ -145,13 +148,12 @@ class Quadruples:
         exp_type = self.type_stack_pop()
         exp = self.operands_stack_pop()
         self.size_stack_pop()
-        #Se genera un espacio en memoria para la variable Final
+        #Generates a place for final variable 
         place = self.t_i_cont + self.t_i_init
         if (self.t_i_cont > self.t_i_size):
             print("ERROR: STACK OVERFLOW")
             exit()
         self.t_i_cont += 1
-        #Fin de asignacion de memoria
         igual = self.operators_stack_pop()
         self.quadruple.append([21, exp, '', place])
         self.cont += 1
@@ -159,7 +161,7 @@ class Quadruples:
         self.type_stack_push(exp_type)
         self.size_stack_push(0)
 
-        #DUPLICAR LOS DATOS DE LA VARIABLE DE CONTROL Y LA VARIABLE FINAL
+        #Duplicate data for control variable and final variable
         vcontrol = self.pOperands[-2]
         control_type = self.pTypes[-2]
         self.operands_stack_push(vcontrol)
@@ -167,23 +169,23 @@ class Quadruples:
         self.size_stack_push(0)
 
 
-
+    #Create the quadruples for increasing  the control variable
+    #and fill the jump for the condition
     def end_for(self):
         vControl = self.operands_stack_pop()
         vControl_type = self.type_stack_pop()
         self.size_stack_pop()
-        #Se genera un espacio para el incremento del la variable de control
+        #A place is generated for the increment of the control variable
         place = self.t_i_cont + self.t_i_init
         if (self.t_i_cont > self.t_i_size):
             print("ERROR: STACK OVERFLOW")
             exit()
         self.t_i_cont += 1
-        #Fin de asignacion de memoria
-        #Se obtiene el lugar de donde se obtuvo el valor de la variable de control
+        #Get the place where the value of the control variable was stored
         idfrom = self.operands_stack_pop()
         idfrom_type = self.type_stack_pop()
         self.size_stack_pop()
-        #17000 because is the place where 1 is stored
+        #25000 because is the place where 1 is stored
         self.quadruple.append([11, vControl, 25000, place])
         self.cont += 1
         self.quadruple.append([21, place, '', vControl])
@@ -199,16 +201,6 @@ class Quadruples:
         self.fill(fin-1, self.cont)
 
         
-        
-    #Function for creating quadruples
-    def create_quadruple(self, operator, operandR, result = None, operandL = None):
-        #CHECK SEMANTICS
-        operator = oracle.datalor_translator(operator)
-        operandR = oracle.datalor_translator()
-        result = oracle.datalor_dictionary(result)
-        operandL = oracle.datalor_translator(operandL)
-
-
         #oracle.semantics
     #______________________GENERIC FUNCT QUADRUPLE____________________#
     #Function to reset the temp values, which means you can use the same temp variables in other scope
@@ -220,6 +212,7 @@ class Quadruples:
         self.t_df_cont = 0
         self.t_tp_cont = 0 
 
+    #Functions to check each type at validation
     #_________________CHECKERS______________________#
                 
     def check_bool(self):
@@ -252,13 +245,13 @@ class Quadruples:
             exit()
 
 
-       #POP to the types
+        #POP to the types
         typeR = self.type_stack_pop()
         typeRes = self.type_stack_pop()
         #ASK THE ORACLE IF MDDWTM
 
         oracle_answer = oracle.oracle_cmddwtm(str(typeRes),str(typeR),str(operator))
-       #CREATING THE CUADRUPLE
+        #CREATING THE CUADRUPLE
         self.quadruple.append([operator, operandR,'',result])
         self.cont += 1
         
@@ -281,16 +274,12 @@ class Quadruples:
         self.pTypes.append(type_result)
 
         #ASK SIZE
-        #Bothe are variadbles
+        #Both are variables
         
         if(size_right != 0 or size_left != 0):
             print("ERROR: ONLY ATOMIC SIZES ARE AVAILABLE FOR EXPRESSIONS ")
             exit()
-        
-
-        
-
-        
+ 
         match type_result:
             #INTEGER
             case '1':
@@ -345,11 +334,9 @@ class Quadruples:
                     self.size_stack_push(0)
 
 
+    #Creates the call for each type of expresion and its priority
     def create_exp_quadruple(self, type_exp):
     
-
-        #CORRECCION Se checa si se tienen operandos en la pila, esto solo sirve para 
-        #resolver los operandos de comparacion 
         if (len(self.pOperators) != 0):
             operator = self.pOperators[-1]
         else:
@@ -359,7 +346,6 @@ class Quadruples:
             
             case 9:
                 if (operator == 9):
-                    #LLAMAR LA FUNCIÓN PARA CREAR EL CUADRUPLO
                     self.inner_quad_exp()
             #OR
             case 10:
@@ -388,8 +374,6 @@ class Quadruples:
     def insert_goto(self, goto_Type, func = None):
         # 1 -> gotofalso 18 | 2 -> gotverdadero  19| 3 -> GOTO 17
         
-        #CORRECCION: SE AGREGO "CONDITION" PARA QUE LOS CUADRUPLOS DE GOTO TENGAN UNA CONDICION
-        #EN EL CASO DE GOTO SIMPLE NO SE TIENE UNA CONDICION POR LO CUAL NO SE AGREGA NADA
         
         match goto_Type:
 
@@ -401,15 +385,12 @@ class Quadruples:
                 
             #GOTO
             case 17:
-                #ANOTACIONES: POR EL MOMENTO SOLO ESTA PENSADO PARA EL IF
                 false = self.jump_stack_pop()
                 # save where i am for got to
                 self.pJumps.append(self.cont-1)
                 self.quadruple.append([17,'','' , ''])
                 self.cont += 1
                 self.fill(false, self.cont)
-                
-
 
             #GOTOF
             case 18:
@@ -421,7 +402,6 @@ class Quadruples:
                 self.quadruple.append([18,condition,'' , ''])
                 self.cont += 1
                 #self.operators_stack_pop()
-               
 
             #____GOTOV___
             case 19:
@@ -445,6 +425,7 @@ class Quadruples:
                 self.cont += 1
 
 
+    #Creates the cuadruples for ERA and start params count
     def create_era(self,resources):
         era_int = resources[0]
         era_float = resources[1] 
@@ -475,6 +456,7 @@ class Quadruples:
         
         self.param_cont = 1
     
+    #Creates the cuadruples and avoid it to return not atomic values 
     def return_quad(self,return_type, function_place = None):
         #CHECK 
         exp = self.operands_stack_pop()
@@ -493,10 +475,12 @@ class Quadruples:
             print("ERROR: No match in return type")
             exit()
 
+    #Creates the cuadruples for the end of a function
     def end_func_quad(self):
         self.quadruple.append([34, '','', ''])
         self.cont+=1
     
+    #Creates a for print quadruple
     def print_quadruple(self):
         printvalue = self.operands_stack_pop()
         tipo = self.type_stack_pop()
@@ -517,11 +501,8 @@ class Quadruples:
         
         self.cont+=1
         
-    # PREGUNTAR QUE SE HACE  CON EL READ 
-    # SE TENÍA PENSADO USAR EL READ PARA EL TIPO LEER DATAFRAME
-    #     
+    #Creates a for read quadruple
     def read_quadruple(self, value):
-        #Create read quad
         address = self.t_df_cont + self.t_df_init
         if (self.t_df_cont > self.t_df_size):
             print("ERROR: STACK OVERFLOW")
@@ -615,7 +596,7 @@ class Quadruples:
             self.operands_stack_push(pointer)
             self.size_stack_push(0)
 
-
+    #Function for print stacks, only for debugging purposes
     def print_poperands(self):
         
         self.print_quadruples()
@@ -629,7 +610,8 @@ class Quadruples:
 
     def get_quad(self):
         return self.quadruple
-
+    
+    #Function for print quad, only for debugging purposes
     def print_quadruples(self):
         for i in range(len(self.quadruple)):
             print(i + 1 , " - ",self.quadruple[i])

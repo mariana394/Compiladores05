@@ -22,26 +22,26 @@ class VirtualMachine:
         self.resources = []
         self.const = {}
         #Value ranges
-        #GLOBALES
+        #Global
         self.g_i_init = 1000
         self.g_f_init = 3000
         self.g_c_init = 5000
         self.g_df_init = 7000
 
-        #LOCALES
+        #Local
         self.l_i_init = 9000
         self.l_f_init = 11000
         self.l_c_init = 13000
         self.l_df_init = 15000
 
-        #START TEMPORALES
+        #START Temp
         self.t_i_init = 17000
         self.t_f_init = 19000
         self.t_c_init = 21000
         self.t_b_init = 23000
         self.t_df_init = 31000
         
-        #CONSTANTES
+        #Const
         self.c_i_init = 25000
         self.c_f_init = 27000
         self.c_c_init = 29000
@@ -56,7 +56,7 @@ class VirtualMachine:
         self.model = None
        
        
-    
+    #Setter functions for class paremeters 
     def set_quadruples(self, quad):
         self.quaduples = quad
 
@@ -66,7 +66,7 @@ class VirtualMachine:
     def set_const (self, const):
         self.const = const
 
-
+    #Function that initializes all the vistual machine
     def start_vm(self):
         main_offset = mp.res_global(self.resources[0])
         end_main = mp.res_global(self.resources[1])
@@ -75,7 +75,7 @@ class VirtualMachine:
         self.vm_handler(0, main_offset, end_main)
 
         
-        
+    #Function for print our memory map
     def print_todo(self):
 
         print("________MEMORY MAP__________")
@@ -94,6 +94,9 @@ class VirtualMachine:
                 mp.c_char,("c_char \n"),
                 )
 
+    #Fuction that converts a virtual address to a real address
+    #Using offsets and base addresses it math the type to then return 
+    # the real address with a type
     def real_address(self, offset, virtual_address):
         #________GLOBAL_________
         #INT
@@ -184,6 +187,8 @@ class VirtualMachine:
             return [13, address]
         
         #__________POINTERS__________
+        #Only if dir_base is going to be used it returns the address
+        #of the pointer
         if(virtual_address >= self.t_tp_init and virtual_address < self.t_tp_init + 1999):
             
             address = (virtual_address - self.t_tp_init)
@@ -194,11 +199,9 @@ class VirtualMachine:
             else : 
                 return  self.real_address(offset,new_address)
             
-
+    #Function that converts the const dictionary into a list of lists
+    #to be used in the virtual machine
     def sort_const(self):
-        # const_value =  list(self.const.keys)
-        # const_address = list(self.const)
-
        
         const_value = []
         int_list = []
@@ -219,11 +222,14 @@ class VirtualMachine:
 
         mp.set_constants([int_list, float_list, char_list])
         
+    
     def check_len_quad(self, inst_pointer):
         if(inst_pointer >= len(self.quaduples)):
             print("END OF FILE")
             exit()
 
+    #Main function that handlers the virtual machine
+    #Basically a huge swith with a case for every operation
     def vm_handler(self, inst_pointer, offset, offset_end):
         operation = self.quaduples[inst_pointer][0]
         match operation:
@@ -240,7 +246,7 @@ class VirtualMachine:
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
             
-            #READ ->INCOMPLETO
+            #READ 
             case 8: 
                 value = self.quaduples[inst_pointer][1]
                 read_address = self.quaduples[inst_pointer][3]
@@ -257,7 +263,6 @@ class VirtualMachine:
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
 
-                #Read a file in the same dir scope
 
             #AND
             case 9:
@@ -302,7 +307,7 @@ class VirtualMachine:
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
 
-            #PLUS - Sin terminar 
+            #PLUS
             case 11:
                 left_addr = self.quaduples[inst_pointer][1]
                 right_addr = self.quaduples[inst_pointer][2]
@@ -653,17 +658,13 @@ class VirtualMachine:
 
                 memory_size = [g_int, g_float, g_char, g_bool, g_df, t_int, t_float, t_char, t_bool, t_df, t_pointer]
                 end_era = mp.res_global(memory_size)
-                #Guardamos el tamaño para liberar memoria en endfunc 
+                #Saves the size of the memory to release it in endfunc
                 self.size_memory.append(memory_size)
-                #Guardamos el offset para usarlo en gosub
+                #Saves the offset to use it in gosub
                 self.temporal_offset = end_era
                 inst_pointer += 6
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
-                #Llama al tamaño y crea el espacio en memoria
-                #Salto de +6 en cuadruplos
-                #Transformar las duplas de los ERA en una lista para
-                #asignar memoria
 
             #GOSUB
             case 36:
@@ -675,6 +676,7 @@ class VirtualMachine:
                 pass
 
             #PARAMETER
+            #Check parameter type to save it in the correct memory
             case 37:
                 left_addr = self.quaduples[inst_pointer][1]
                 left_real_address = self.real_address(offset, left_addr)
@@ -741,8 +743,9 @@ class VirtualMachine:
                 self.check_len_quad(inst_pointer)
                 self.vm_handler(inst_pointer,offset,offset_end)
                 pass
-
+            #Creates a new swith only for special functions and its calls
             case 'special':
+                #Imports all the required libraries for the special functions
                 import matplotlib.pyplot as plt 
                 from datetime import date
                 from sklearn.model_selection import train_test_split
@@ -772,22 +775,20 @@ class VirtualMachine:
                         param1 = None
                         #CONSTANTE
                         param2 = None
+                        #Iterative search for all the parameters of the special function
                         while go_special != 38:
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
-                                 #Quiere decir que es el parametro 1
                             if (param == 1):
                                 param1 = param_value
                             if (param == 2):
                                 param2 = param_value
                             i += 1
-                                #Quiere decir que es el parametro 2
                         param1_real_address = self.real_address(offset, param1)
                         param2_real_address = self.real_address(offset, param2)
                         param1 = mp.get_value(param1_real_address)
                         param2 = mp.get_value(param2_real_address)
-                        #IF param2 == ? ponte a hacer algo
                         
                          #TEMPORAL DATAFRAME
                         save = self.quaduples[inst_pointer + i - 1][3]
@@ -797,7 +798,6 @@ class VirtualMachine:
                             #Estadisticos de posicion
                             case 1:
                                 estad_posi = param1.describe()
-                                #estad_posi = [param1.mean(numeric_only=True),param1.median(numeric_only=True),param1.mode(numeric_only=True)]
                                 mp.set_value(save_real_address, estad_posi)
                                 print("\n_____ESTADÍSTICOS DESCRIPTIVOS________\n")
                                 print(estad_posi)
@@ -838,14 +838,13 @@ class VirtualMachine:
                         #DATAFRAME
                         costos = None
                         ventas= None
-                        #fechas
                         initial = None
                         final = None
+                        #Iterative search for all the parameters of the special function
                         while go_special != 38:
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
-                                 #Quiere decir que es el parametro 1
                             if (param == 1):
                                 costos = param_value
                             if (param == 2):
@@ -915,16 +914,14 @@ class VirtualMachine:
                         go_special = self.quaduples[inst_pointer + i][0]
                         #DATAFRAME
                         param1 = None
-                        
+                        #Iterative search for all the parameters of the special function
                         while go_special != 38:
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
-                                 #Quiere decir que es el parametro 1
                             if (param == 1):
                                 ventas = param_value
                             i += 1
-                                #Quiere decir que es el parametro 2
                         ventas_real_address = self.real_address(offset, ventas)
                         ventas = mp.get_value(ventas_real_address)
                       
@@ -957,16 +954,14 @@ class VirtualMachine:
                         go_special = self.quaduples[inst_pointer + i][0]
                         #DATAFRAME
                         param1 = None
-                        
+                        #Iterative search for all the parameters of the special function
                         while go_special != 38:
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
-                                 #Quiere decir que es el parametro 1
                             if (param == 1):
                                 data_arima = param_value
                             i += 1
-                                #Quiere decir que es el parametro 2
                         data_arima_real_address = self.real_address(offset, data_arima)
                         data_arima = mp.get_value(data_arima_real_address)
                         #TEMPORAL DATAFRAME
@@ -1036,11 +1031,11 @@ class VirtualMachine:
                         ventas_rl= None
                         #META
                         meta = None
+                        #Iterative search for all the parameters of the special function
                         while go_special != 38:
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
-                                 #Quiere decir que es el parametro 1
                             if (param == 1):
                                 ventas_rl = param_value
                                 
@@ -1090,22 +1085,17 @@ class VirtualMachine:
                         go_special = self.quaduples[inst_pointer + i][0]
                         #DATAFRAME
                         param1 = None
-                        
+                        #Iterative search for all the parameters of the special function
                         while go_special != 38:
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
                             param_value = self.quaduples[inst_pointer + i][1]
-                                 #Quiere decir que es el parametro 1
                             if (param == 1):
                                 predecir = param_value
                             i += 1
-                                #Quiere decir que es el parametro 2
                         predecir_real_address = self.real_address(offset, predecir)
                         predecir = mp.get_value(predecir_real_address)
-                        #asegurarnos de que todos los datos son numericos
-                        # predecir = predecir.dropna()
                         
-
 
                         y_pred = self.model.predict(predecir.select_dtypes(include=['float', 'int']))
                         predecir['Prediccion_Total'] = y_pred
@@ -1127,7 +1117,7 @@ class VirtualMachine:
 
             #END
             case 41:
-                #self.print_todo()
+                self.print_todo()
 
                 exit()  
 
