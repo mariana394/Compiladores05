@@ -42,7 +42,9 @@ class DirFunc:
 		#memory count
 		self.memory_num = 0
 		
-		
+	#Function that add temporal variables to the function directory
+	#It receives a list of the temporal variables and the name of the function
+	#then it adds the temporal variables to the function directory
 	def add_resources_temp(self,temp_i, temp_f, temp_b, temp_c, temp_df,temp_pt,func_name):
 		#print("temp_ i ", temp_i)
 		#if(func_name != 'global'): 
@@ -57,7 +59,9 @@ class DirFunc:
 
 	#_____________________________FUNCTIONS____________________#
 	
-	# Function for adding functions to function directory
+	# It adds a function to the function directory
+	# It receives the name of the function, the scope, the type of the function 
+	# and the start of the function if its necesary
 	def add_function(self, name, scope, type, start = None):
 		#SEARCHING IF THE FUNCTION ALREADY EXISTS
 
@@ -101,11 +105,15 @@ class DirFunc:
 
 	
 	#Get the resources from a function
+	#It receives the name of the function and 
+	# returns the resources of the function
 	def get_resources(self, funct_name):
 		if(funct_name in self.dir_func.keys()):
 			return self.dir_func[funct_name]['resources']
 
-	#Function existance?
+	#Function existance validation
+	#It receives the name of the function and
+	# returns true if the function exists and false if it doesn't
 	def search_func_exist(self, funct_name):
 
 		if(funct_name in self.dir_func.keys()):
@@ -114,6 +122,9 @@ class DirFunc:
 		else:
 			return False
 	
+	#Function type validation
+	#It receives the name of the funtion, the number of the parameter and the type of the parameter
+	#it will just print an error if the type of the parameter doesn't match the type of the function parameter
 	def check_param(self, tipo, num_param, func):
 		
 		if(func in self.dir_func.keys()):
@@ -127,7 +138,8 @@ class DirFunc:
 				print("ERROR: Type mistmatch")
 				exit()
 			
-			
+	#Function that return the size of the parameters of a function
+	#It receives the name of the function and returns the size of the parameters
 	def get_size_param(self, func_name):
 		
 		if(func_name in self.dir_func.keys()):
@@ -147,6 +159,8 @@ class DirFunc:
 			return False
 		
 	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
+	#It receives the name of the variable and the scope
+	#It returns the type and the address of the variable
 	def search_variable_existance(self, name, scope):
 		if (name in self.vars[scope]['vars'].keys()):
 			
@@ -162,6 +176,8 @@ class DirFunc:
 		
 	#_________________CREATING VARIABLES_________________
 	#ADD VARIABLES
+	#It receives the name of the variable, the scope, the type of the variable and the dimensions of the variable
+	#It will just print an error if the variable already exists
 	def add_vars(self, name, scope, types, rowDim = None, columnDim = None):
 		#Check if the variable already exists no matter the scope
 		
@@ -228,7 +244,8 @@ class DirFunc:
 
 		
 			
-	# Checking for sizes of the arrays and matrix to be greater than 0 and not allowing the user to create for example a[0]
+	# Checking for sizes of the arrays and matrix to be greater than 0 
+	# and not allowing the user to create for example a[0]
 	def check_stype_size(self, size):
 		if(size == 0):
 			print('Size must be greater than 0')
@@ -237,6 +254,8 @@ class DirFunc:
 		
 
 	#ADD PARAMS
+	#It receives the name of the function and the type of the parameter
+
 	def add_params(self, func_name, type):
 		tipo = dic.datalor_translator(str(type).upper())
 		self.dir_func[func_name]['params'].append(tipo)
@@ -245,6 +264,8 @@ class DirFunc:
 
 
 	#Function for filling in the constants table with their values and address
+	#It receives the value and the type of the constant
+
 	def add_const(self, value, type):
 		#Check if the constant already exists
 		if (value not in self.constants.keys()):
@@ -275,7 +296,10 @@ class DirFunc:
 		else:
 			return self.constants[value]['address']
 	
+	
 	#_______________Array calculus______________________#
+	#It receives the name of the array and the scope
+	#It returns the size of the array
 	def get_arr_mat_info(self, name, scope): 
 		if (name in self.vars[scope]['vars'].keys()):
 			return self.vars[scope]['vars'][name]['size']
@@ -285,13 +309,15 @@ class DirFunc:
 
 		
 	#___________________________RESOURES HANDLER____________________#
+	#It receives the name of the function
+	#It assigns the resources to the function
 	def resources_handler(self,func_name):
 		#Assgin function resources
 		self.dir_func[func_name]["resources"] = self.resources
 		#Reset variable resource counter
 		self.resources = [0,0,0,0,0]
 		
-
+	
 	def print(self):
 		#print(tabulate(self.vars,headers='keys'))
 		#return json.dumps(self.dir_func)

@@ -53,6 +53,7 @@ class Quadruples:
         self.param_cont = 0
    
    #_________________STACKS__________________
+   #_________________Setters/Getters_________________
     #Function for size stac
     def size_stack_push(self, size):
         self.pSize.append(size)
@@ -99,16 +100,20 @@ class Quadruples:
     def false_button(self):
         self.pOperators.append('(')
     
+    #Relase false bottom
     def release_false_button(self):
         if (len(self.pOperators) != 0):
             if(self.pOperators[-1] == '('):
                 self.pOperators.pop()
 
     #FILL
+    #Fills the quadruple with the jump
+    #Recieves the jump and the place
     def fill(self, jump, place):
         self.quadruple[jump][3] = place
 
     #<FOR> Control and final variables declaration
+
     def control_var(self ):
         self.check_integer()
         exp_type = self.type_stack_pop()
@@ -162,6 +167,7 @@ class Quadruples:
         self.size_stack_push(0)
 
         #Duplicate data for control variable and final variable
+        #So it wont lose once the operation is done
         vcontrol = self.pOperands[-2]
         control_type = self.pTypes[-2]
         self.operands_stack_push(vcontrol)

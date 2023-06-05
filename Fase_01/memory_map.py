@@ -26,6 +26,8 @@ class MemoryMap:
         self.overflow = 10000
 
     #Function to allocate memory for every function as a None value
+    #Receive the number of variables of each type as a list
+    #Return the end point of the memory used
     def res_global (self, resources):
         int = [None] * resources[0]
         float = [None] * resources[1]
@@ -118,6 +120,8 @@ class MemoryMap:
     
     #_____________QUADRUPLES GETTERS/SETTERS_____________#
     #Function that returns the value of an address
+    #Receive a pair of elements (type, index) 
+    #Return the value inside the address
     def get_value(self,aux):
         tipo = aux[0]
         index = aux[1]
@@ -179,6 +183,8 @@ class MemoryMap:
         
         
     #Function that sets the value on an address
+    #Receive a pair of elements (type, index) and the value
+
     def set_value(self, aux, value):
         tipo = aux[0]
         index = aux[1]
@@ -227,6 +233,7 @@ class MemoryMap:
             self.pointer[index] = value
 
     #Function that release the memory of a function
+    #Receive a list of the size of each type of variable
     def release_memory(self,size):
 
         if(size[0] != 0):
@@ -243,7 +250,6 @@ class MemoryMap:
             self.t_int = self.t_int[:-size[5]]
         if(size[6] != 0):
             self.t_float = self.t_float[:-size[6]]
-        
         if(size[7] != 0):
             self.t_char = self.t_char[:-size[7]]
         if(size[8] != 0):
