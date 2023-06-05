@@ -861,11 +861,11 @@ class VirtualMachine:
                                 pass
 
                             case 2:
-                                estad_disp = [param1.std(numeric_only = True),param1.var(numeric_only = True),param1.quantile(numeric_only = True)]
+                                estad_disp = [param1.mode(numeric_only = True),param1.median(numeric_only = True),param1.var(numeric_only = True)]
                                 print("______________ESTADÍSTICOS DE DISPERSIÓN__________")
-                                print("\nDESVIACIÓN ESTÁNDAR:\n",estad_disp[0] )
-                                print("\nVARIANZA:\n",estad_disp[1])
-                                print("\nCUARTILES:\n ",estad_disp[2])
+                                print("\nMODA:\n",estad_disp[0] )
+                                print("\nMEDIANA:\n",estad_disp[1])
+                                print("\nVARIANZA:\n ",estad_disp[2])
                                 inst_pointer += i
                                 self.check_len_quad(inst_pointer)
                                 self.vm_handler(inst_pointer,offset,offset_end)
