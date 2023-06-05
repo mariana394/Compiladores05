@@ -1,0 +1,32 @@
+program TESTCORRECTO;
+
+function void message (int f){
+    var
+    int a;
+    float c,d;
+    char sara,name, tacos;
+    dataframe df, costos, ventas, masventas, mascostos;
+    
+    df = read('testDF.csv');
+    a = f + 1;
+    if (a < 10) {
+        message(a);
+        print(a);
+    };
+}
+
+main {
+var 
+int s,h, k[2][3];
+float g;
+dataframe l, m;
+k[1][1] = 2;
+s = k[1][1];
+print('HOLA',s);
+message(1);
+l = read('test2.csv');
+print(l);
+m = exploration(l, 1);
+print(m);
+}
+end

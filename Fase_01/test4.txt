@@ -1,0 +1,31 @@
+program TESTCORRECTO;
+
+import pandas as pd
+import numpy as np
+
+var dataframe costos, ventas, test2, test3;
+char inicio, fin;
+
+function void message (char name, int size, char test){
+	var 
+	int test2, a;
+    a = 3;
+}
+
+main {
+var
+int d, a;
+float c;
+
+d = 2 * 3 + (2 - 5) * 3 + (3 - 2);
+c = 3.5;
+a = 2;
+if ( a >= d + (3 - 2)  || a < 3.5  && d == 2 ) {
+    a = 2;
+}else{
+    a = 3;
+};
+
+
+}
+end

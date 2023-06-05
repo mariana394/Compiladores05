@@ -21,11 +21,13 @@ class VirtualMemory:
         self.l_i_size = 1999
         self.l_f_size = 1999
         self.l_c_size = 1999
+        self.l_df_size = 1999
 
             #TEMPORALES
         self.t_i_size = 1999
         self.t_f_size = 1999
         self.t_c_size = 1999
+        self.t_b_size = 1999
 
             #CONSTANTES
         self.c_i_size = 1999
@@ -44,16 +46,13 @@ class VirtualMemory:
         self.l_i_init = 9000
         self.l_f_init = 11000
         self.l_c_init = 13000
-
-        #TEMPORALES
-        self.t_i_init = 15000
-        self.t_f_init = 17000
-        self.t_c_init = 19000
+        self.l_df_init = 15000
 
         #CONSTANTES
-        self.c_i_init = 21000
-        self.c_f_init = 23000
-        self.c_c_init = 25000
+        self.c_i_init = 25000
+        self.c_f_init = 27000
+        self.c_c_init = 29000
+
 
         #_______COUNTERS_______
 
@@ -67,11 +66,7 @@ class VirtualMemory:
         self.l_i_cont = 0
         self.l_f_cont = 0
         self.l_c_cont = 0
-
-        #TEMPORALES
-        self.t_i_cont = 0
-        self.t_f_cont = 0
-        self.t_c_cont = 0
+        self.l_df_cont = 0
 
         #CONSTANTES
         self.c_i_cont = 0
@@ -85,9 +80,16 @@ class VirtualMemory:
             print('overflow')
             exit()
             
+    #RESET DE LAS VARIABLES LOCALES/TEMPORALES
+    def reset_local_temporal(self):
+        self.l_i_cont = 0
+        self.l_f_cont = 0
+        self.l_c_cont = 0
+        self.l_df_cont = 0
+
 
     # ASSIGN ADDRESS MEMORY TO THE VARIABLES
-    def assign_memory(self, tipo, scope):
+    def assign_memory(self, tipo, scope,size):
     #GLOBAL 
         # 1 int # 2 float # 3 char 
         address = 0 
@@ -97,15 +99,13 @@ class VirtualMemory:
                     #Overflow checker
                     self.overflow(self.g_i_cont, self.g_i_size)
                     address = self.g_i_init + self.g_i_cont
-                    self.g_i_cont += 1
-                    #print(address)
+                    self.g_i_cont += size
                     return address
                 case 2:
                     #Overflow checker
                     self.overflow(self.g_f_cont, self.g_f_size)
                     address = self.g_f_init + self.g_f_cont
-                    self.g_f_cont += 1
-                    #print(address)
+                    self.g_f_cont += size
                     return address
 
                 case 3: 
@@ -113,16 +113,14 @@ class VirtualMemory:
                     self.overflow(self.g_c_cont, self.g_c_size)
                     #returns the address 
                     address =  self.g_c_init + self.g_c_cont
-                    self.g_c_cont += 1
-                    #print(address)
+                    self.g_c_cont += size
                     return address
-                case 6:
+                case 5:
                     #Overflow checker
                     self.overflow(self.g_df_cont, self.g_df_size)
                     #returns the address
                     address = self.g_df_init + self.g_df_cont
-                    self.g_df_cont += 1
-                    #print(address)
+                    self.g_df_cont += size
                     return address
                 
         #CONSTANTS       
@@ -137,7 +135,6 @@ class VirtualMemory:
                         #returns the address
                         address = self.c_i_init + self.c_i_cont
                         self.c_i_cont += 1
-                        #print(address)
                         return address
                     #FLOAT
                     case 29:
@@ -145,7 +142,6 @@ class VirtualMemory:
                         #return the address
                         address = self.c_f_init + self.c_f_cont
                         self.c_f_cont += 1
-                        #print(address)
                         return address
                     #CHAR
                     case 30:
@@ -153,9 +149,37 @@ class VirtualMemory:
                         #return the address
                         address = self.c_c_init + self.c_c_cont
                         self.c_c_cont += 1
-                        #print (address)
                         return address
             #LOCAL
             else:
-                #print('tacos')
-                a = 1
+                match tipo:
+                    #INT
+                    case 1:
+                        #Overflow checker
+                        self.overflow(self.l_i_cont, self.l_i_size)
+                        #returns the address
+                        address = self.l_i_init + self.l_i_cont
+                        self.l_i_cont += size
+                        return address
+                    #FLOAT
+                    case 2:
+                        self.overflow(self.l_f_cont, self.l_f_size)
+                        #return the address
+                        address = self.l_f_init + self.l_f_cont
+                        self.l_f_cont += size
+                        return address
+                    #CHAR
+                    case 3:
+                        self.overflow(self.l_c_cont, self.l_c_size)
+                        #return the address
+                        address = self.l_c_init + self.l_c_cont
+                        self.l_c_cont += size
+                        return address
+                    #DATAFRAME
+                    case 5:
+                        self.overflow(self.l_df_cont, self.l_df_size)
+                        #return the address
+                        address = self.l_df_init + self.l_df_cont
+                        self.l_df_cont += size
+
+                        return address

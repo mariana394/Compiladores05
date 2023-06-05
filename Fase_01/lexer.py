@@ -62,7 +62,7 @@ reserved = {
    #FUNCIONES ESPECIALES
    'exploration' : 'EXPLORATION',
    'financial_state' : 'FINANCIAL_STATE',
-   'season_analyzer' : 'SEASON_ANALYSIS',
+   'season_analysis' : 'SEASON_ANALYSIS',
    'trend_prediction' : 'TREND_PREDICTION',
    'dummi_regression' : 'DUMMI_REGRESSION',
    
@@ -87,6 +87,8 @@ tokens = [
     'GTHAN',
     'LTHAN',
     'NOTEQUAL', #!=
+    'GORE', #>=
+    'LORE', # <=
     'COLON',
     'SEMICOLON',
     'COMMA',
@@ -114,6 +116,8 @@ t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 t_RSQBRACKET = r'\]'
 t_LSQBRACKET = r'\['
+t_GORE = r'\>\='
+t_LORE = r'\<\='
 t_EQUAL = r'=='
 t_ASSIGN = r'='
 t_GTHAN = r'>'
@@ -133,19 +137,20 @@ t_POWER = r'\^'
 
 #CONSTANTES
 def t_CTE_FLOAT(t):
-    r'\d+\.\d+'
+    r'-?\d+\.\d+'
     t.value = float(t.value)    
     return t
 
 def t_CTE_INT(t):
-    r'\d+'
+    r'-?\d+'
     t.value = int(t.value)    
     return t
 
 def t_CTE_CHAR(t):
-    r'\'[a-zA-Z0-9]*\''
+    r'\'[a-zA-Z0-9_/]*.?[a-zA-Z0-9/]*\''
     t.value = str(t.value)    
     return t
+
 
 #ID
 def t_ID(t):

@@ -1,0 +1,43 @@
+program factorial;
+
+main {
+var
+int list[9], i,j, value, mid1, mid2, key, l, r,index;
+
+for (i = 0 to 8){
+    list[i] = (i * 8) % 9;
+};
+
+
+
+for (i = 0 to 8){
+    for(j = 1 to 8){
+        if (list[j-(1)] > list[j]){
+            value = list[j-(1)];
+            list[j-(1)] = list[j];
+            list[j] = value;
+        };
+    };
+};
+
+l = 0;
+r = 8;
+key = 5;
+do{
+    index = l + (r - l) / 2;
+    if(list[index] == key){
+        print('found', key);
+        l = r;
+    };
+
+    if(list[index] < key){
+        l = index + 1;
+    }else{
+        r = index - 1;
+    };
+
+}while(l <= r);
+
+
+}
+end

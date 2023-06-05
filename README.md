@@ -5,10 +5,15 @@
 
 
 ### Descripción general del avance
-<br> **STATUS: ** "Jala para avance 2"
+<br> **STATUS: ** "JALA avance 7"
 <br> Tabla de funciones y de variables creada y funcional
 <br> Cubo semantico creado
-<br>La version 3.4.0 de DATALOR presenta el lexer y el parser con la debida sintaxis y reglas gramaticas. Se realizaron pruebas para revisar el funcionamiento correcto, se realizaron correcciones y siguen pendientes algunos errores y observaciones a corregir mencionadas a continuacion:
+<br> Creacion de cuadruplos para estatutos lineales, secuenciales
+<br> Elementos no-atomicos homogeneos
+<br> Mapa de memoria
+<br> Maquina virtual: estatutos lineales, cuadrulos: lineales, IF-Else, For, do-while, arreglos y matrices
+
+<br>La version 3.5.6 de DATALOR presenta el lexer y el parser con la debida sintaxis y reglas gramaticas. Se realizaron pruebas para revisar el funcionamiento correcto, se realizaron correcciones y siguen pendientes algunos errores y observaciones a corregir mencionadas a continuacion:
 
 
 ## Bugs de versión
