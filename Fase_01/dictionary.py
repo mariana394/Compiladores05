@@ -206,7 +206,9 @@ class Dictionary:
             print("UNDEFINED SYMBOL", symbol)
             exit()
 
-    #CHECK SEMANTICS
+    #Check semantics of the operation
+    #Receives 2 types and an operator
+    #Returns the result type or error if it doesnt exist
     def oracle_cmddwtm(self, left, right, operator ):
         if(left in self.semantics.keys()):
             if(right in self.semantics[left]):

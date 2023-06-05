@@ -25,6 +25,9 @@ class MemoryMap:
         self.c_char = []       
         self.overflow = 10000
 
+    #Function to allocate memory for every function as a None value
+    #Receive the number of variables of each type as a list
+    #Return the end point of the memory used
     def res_global (self, resources):
         int = [None] * resources[0]
         float = [None] * resources[1]
@@ -53,13 +56,14 @@ class MemoryMap:
         self.pointer += (t_pt)
 
         self.check_stack_over_flow()
-
+        #Return the end point of the memory used
         seeds = [len(self.int), len(self.float),len(self.char), len(self.bool), len(self.df),
                  len(self.t_int), len(self.t_float), len(self.t_char), len(self.t_bool),len(self.t_df),
                  len(self.pointer)]
         
         return seeds
-
+    
+    #Function to check if the memory is not full
     def check_stack_over_flow(self):
         
         if(len(self.int) > self.overflow):
@@ -83,7 +87,7 @@ class MemoryMap:
             print("ERROR: Stack overflow on dataframe variable")
             exit()
             
-        #TEMPORALES
+        #TEMP
         if(len(self.t_int) > self.overflow):
             print("ERROR: Stack overflow")
             exit()
@@ -108,17 +112,19 @@ class MemoryMap:
             print("ERROR: Stack overflow")
             exit()
 
+    #Function to constants
     def set_constants(self,consts):
         self.c_int += consts[0]
         self.c_float += consts[1]
         self.c_char += consts[2]
     
     #_____________QUADRUPLES GETTERS/SETTERS_____________#
-
+    #Function that returns the value of an address
+    #Receive a pair of elements (type, index) 
+    #Return the value inside the address
     def get_value(self,aux):
         tipo = aux[0]
         index = aux[1]
-        
 
         #Global/Local Int
         if (tipo == 0):
@@ -176,7 +182,8 @@ class MemoryMap:
             return self.c_char[index]
         
         
-        
+    #Function that sets the value on an address
+    #Receive a pair of elements (type, index) and the value
 
     def set_value(self, aux, value):
         tipo = aux[0]
@@ -200,7 +207,7 @@ class MemoryMap:
             self.df[index] = value
 
 
-        #_______________TEMPORAL________________
+        #_______________TEMP________________
         #INT
         if (tipo == 5):
             self.t_int[index] = value
@@ -225,6 +232,8 @@ class MemoryMap:
         if (tipo == 10):
             self.pointer[index] = value
 
+    #Function that release the memory of a function
+    #Receive a list of the size of each type of variable
     def release_memory(self,size):
 
         if(size[0] != 0):
@@ -241,7 +250,6 @@ class MemoryMap:
             self.t_int = self.t_int[:-size[5]]
         if(size[6] != 0):
             self.t_float = self.t_float[:-size[6]]
-        
         if(size[7] != 0):
             self.t_char = self.t_char[:-size[7]]
         if(size[8] != 0):
