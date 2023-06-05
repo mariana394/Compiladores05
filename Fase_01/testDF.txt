@@ -15,7 +15,7 @@ m = season_analysis(ventas);
 m = financial_state(costos,ventas,'1/05/2023',final);
 m = dummi_regression(ventas,'Total');
 m = trend_prediction(arima);
-m = exploration(ventas, 1);
+m = exploration(ventas, 3);
 m = model_predict(predecir);
 }
 end

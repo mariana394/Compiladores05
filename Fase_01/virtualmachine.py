@@ -803,20 +803,14 @@ class VirtualMachine:
 
                 import matplotlib.pyplot as plt
                 from matplotlib import pyplot
+                from scipy.stats import skew, kurtosis
+
+
                 special_function = self.quaduples[inst_pointer][3]
                 print("SPECIAL FUNCTION", special_function)
 
                 match special_function:
                     case 'exploration':
-                        #Busca hasta que encuentres gospecial  
-                            #Buscar el cuadruplo que tenga 1 en self.quaduples[inst_pointer][3]
-                            #y guardarlo en param1 que es temporal del case
-                            #Buscar el cuadruplo que tenga 2 en self.quaduples[inst_pointer][3]
-                            #y guardarlo en param2 que es temporal del case
-
-                        #Codigo de python para explorar
-                        # Python3 code to iterate over a list
-                        # Using for loop
                         i = 1
                         go_special = self.quaduples[inst_pointer + i][0]
                         #DATAFRAME
@@ -859,7 +853,7 @@ class VirtualMachine:
                                 estad_posi = param1.describe()
                                 #estad_posi = [param1.mean(numeric_only=True),param1.median(numeric_only=True),param1.mode(numeric_only=True)]
                                 mp.set_value(save_real_address, estad_posi)
-                                print("HOLA HOLA HOLA")
+                                print("\n_____ESTADÍSTICOS DESCRIPTIVOS________\n")
                                 print(estad_posi)
                                 inst_pointer += i
                                 self.check_len_quad(inst_pointer)
@@ -867,11 +861,25 @@ class VirtualMachine:
                                 pass
 
                             case 2:
-                                estad_disp = [param1.std(),param1.var(),param1.quantile([.25,.75])]
+                                estad_disp = [param1.std(numeric_only = True),param1.var(numeric_only = True),param1.quantile(numeric_only = True)]
                                 print("______________ESTADÍSTICOS DE DISPERSIÓN__________")
-                                print("DESVIACIÓN ESTÁNDAR: ",estad_disp[0] )
-                                print("VARIANZA: ",estad_disp[1])
-                                print("CUARTILES: ",estad_disp[2])
+                                print("\nDESVIACIÓN ESTÁNDAR:\n",estad_disp[0] )
+                                print("\nVARIANZA:\n",estad_disp[1])
+                                print("\nCUARTILES:\n ",estad_disp[2])
+                                inst_pointer += i
+                                self.check_len_quad(inst_pointer)
+                                self.vm_handler(inst_pointer,offset,offset_end)
+                                pass
+
+                            case 3:   
+                                print("______________ASIMETRIA-KURTOSIS__________")                           
+                                numeric_columns = param1.select_dtypes(include=['int', 'float']).columns
+                                for column in numeric_columns:
+                                    skewness = skew(param1[column])
+                                    kurt = kurtosis(param1[column])
+                                    print("Asimetría de", column, ":", skewness)
+                                    print("Curtosis de", column, ":", kurt)
+                                
                                 inst_pointer += i
                                 self.check_len_quad(inst_pointer)
                                 self.vm_handler(inst_pointer,offset,offset_end)
