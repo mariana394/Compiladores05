@@ -7,27 +7,11 @@
 from memory_map import MemoryMap
 #PYTHON
 import pandas as pd
-import matplotlib.pyplot as plt 
-import pandas as pd
-from datetime import date
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-import statsmodels.api as sm
-import seaborn as sns
 
-from statsmodels.tsa.stattools import adfuller
-from pmdarima import auto_arima
-from pandas.plotting import autocorrelation_plot
-
-from sklearn.metrics import mean_squared_error
-from math import sqrt
-
-import matplotlib.pyplot as plt
-from matplotlib import pyplot
 import sys
 
 
-sys.setrecursionlimit(2000)
+sys.setrecursionlimit(5000)
 mp = MemoryMap()
 
 class VirtualMachine:
@@ -803,6 +787,22 @@ class VirtualMachine:
                 pass
 
             case 'special':
+                import matplotlib.pyplot as plt 
+                from datetime import date
+                from sklearn.model_selection import train_test_split
+                from sklearn.linear_model import LinearRegression
+                import statsmodels.api as sm
+                import seaborn as sns
+
+                from statsmodels.tsa.stattools import adfuller
+                from pmdarima import auto_arima
+                from pandas.plotting import autocorrelation_plot
+
+                from sklearn.metrics import mean_squared_error
+                from math import sqrt
+
+                import matplotlib.pyplot as plt
+                from matplotlib import pyplot
                 special_function = self.quaduples[inst_pointer][3]
                 print("SPECIAL FUNCTION", special_function)
 
@@ -1093,8 +1093,6 @@ class VirtualMachine:
                         ventas_rl= None
                         #META
                         meta = None
-                        #umbral de correlacion
-                        umbral =None
                         while go_special != 38:
                             go_special = self.quaduples[inst_pointer + i][0]
                             param = self.quaduples[inst_pointer + i][3]
@@ -1105,13 +1103,11 @@ class VirtualMachine:
                                 
                             if (param == 2):
                                 meta = param_value
-                            if(param == 3):
-                                umbral = param_value
 
                             i += 1
                     
                         ventas_real_address = self.real_address(offset, ventas_rl)
-                        umbral_real_address = self.real_address(offset, umbral)
+                        meta_real_address = self.real_address(offset, meta)
                         # print('REAL ADDRESS PARAM', param1_real_address)
                         # print('VALOR DE LOS PARAMETROS',mp.get_value(param1_real_address))
                         # print('VALOR DE LOS PARAMETROS',mp.get_value(param2_real_address))
@@ -1119,7 +1115,7 @@ class VirtualMachine:
                         ventas_rl = ventas_rl.drop('Mes', axis=1)
 
                         print("domingo", ventas_rl)
-                        umbral = mp.get_value(umbral_real_address)
+                        meta = mp.get_value(meta_real_address)
                         
                         #Matriz de correlacion
                         print('MATRIZ DE CORRELACION')
@@ -1132,12 +1128,11 @@ class VirtualMachine:
                         # ventas_rl = ventas_rl.dropna()
                         
                         #ENTRENAMIENRO
-                        df_umbral = matriz_corr[(abs(matriz_corr) > umbral) & (matriz_corr != 1)].dropna(axis=0, how='all').dropna(axis=1, how='all').columns
                         X = ventas_rl[['Cantidad', 'Precio unitario']]
 
                         
-                       
-                        y = ventas_rl['Total']
+                        meta = meta.replace("'", "")
+                        y = ventas_rl[meta]
                         #20% para test 80% para train
 
                         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=50)

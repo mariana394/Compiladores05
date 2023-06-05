@@ -45,7 +45,7 @@ vm = VirtualMachine()
 
 #__________________________<PROGRAM>_________________________
 def p_program(p):
-    '''program : PROGRAM ID goto_main program_libraries program_vars program_function program_main end '''
+    '''program : PROGRAM ID goto_main program_vars program_function program_main end '''
     p[0] = "COMPILED"
 
 def p_goto_main(p):
@@ -58,37 +58,17 @@ def p_end(p):
     global curr_function
     quad.quadruple.append([41,0,0,0])
     curr_function = 'main'
-    # print("RESOURCES DONE")
-    # print("CURR_ FUNCTION", curr_function)
     tables.resources_handler(curr_function)
     tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont, quad.t_df_cont,quad.t_tp_cont, curr_function)
-    # print('TABLA DE VARS', tables.vars)
-    print(quad.print_poperands())
     all_quad = quad.get_quad()
     res = tables.get_func_res()
     const = tables.constants
+    tables.print()
     vm.set_quadruples(all_quad)
     vm.set_const(const)
     vm.set_resources(res)
-    # print("RESS MAIN", res[1])
     #____________INICIO VM___________
     vm.start_vm()
-
-    
-    #print()
-    
-
-    # ovejota = None
-    # tables.add_func_resources_glob()
-    # cuadruplos = quad.print_poperands()
-    # print("CUADRUPLOS", cuadruplos)
-    # dir = tables.print()
-    # const = tables.get_const()
-    # ovejota = "&&" + str(dir) + "&&" + str(const)
-    # with open('intermedio.txt', 'w') as filehandle:
-    #     for listitem in quad.quadruple:
-    #         filehandle.write(f'{listitem}\n')
-    #     filehandle.write(ovejota)
 
 
 #EMPTY
@@ -104,7 +84,6 @@ def p_id_saver(p):
     global curr_name
     curr_name = p[1]
 
-    #print(curr_name)
 
 #Neuralgic point for constant Int, helps us to save the constant in the constants table and memory no matter where the constant is in the code. 
 # cte_int -> for (top of the cycle), array/matrix dimensions, special functions
@@ -115,7 +94,6 @@ def p_int_const_saver(p):
     curr_const = p[1]
     for_flag = True
     address = tables.add_const(curr_const, type (curr_const))
-    print("constante for ", curr_const)
     quad.size_stack_push(0)
     quad.operands_stack_push(address)
     quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
@@ -124,7 +102,6 @@ def p_int_const_saver(p):
 def p_release_exp(p):
     '''release_exp : empty'''
     global g_test
-    #print ("Tipo de Operacion", g_test)
     quad.create_exp_quadruple(g_test)
 
 def p_resources(p):
@@ -136,7 +113,6 @@ def p_resources(p):
     #Llamar a los recursos de curr_function
     #Int - float- char- bool- df- 
     res = tables.get_resources(curr_function)
-    print("MARTES NOCHE", res)
     if(len(era_stack) != 0):
         for i in range(len(era_stack)):
             #Int - t_INT
@@ -163,23 +139,7 @@ def check_flag_func():
     if(function_flag):
         print("ERROR: Function name used as a variable")
         exit()
-    # else:
-    #     print("toy chiquito no puedo")
 
-
-#_________________________<LIBRERIES>_____________________________#
-#Uso de las librerias en el programa  
-  
-def p_program_libraries(p):
-    '''program_libraries : from_library import_library 
-                         | empty'''
-
-def p_from_library(p):
-    '''from_library : FROM ID
-                    | empty'''
-
-def p_import_library(p):
-    '''import_library : IMPORT ID AS ID  program_libraries'''   
 
 #__________________________VARIABLES____________________
 #Uso de las variables en el programa
@@ -191,13 +151,6 @@ def p_program_vars(p):
     '''program_vars : VAR var_type  
                     | empty'''
 
-#<VAR CTE>
-# def p_var_cte(p):
-#     '''var_cte : ID 
-#              | CTE_INT 
-#              | CTE_FLOAT
-#              | CTE_CHAR'''
-
 def p_s_type(p):
     '''s_type : INT 
               | FLOAT
@@ -205,15 +158,12 @@ def p_s_type(p):
     #NEURALGIC POINTS
     global curr_type 
     curr_type = p[1]
-    #print(curr_type)
 
 def p_c_type(p):
-    '''c_type : DATAFRAME
-              | DATE'''
+    '''c_type : DATAFRAME'''
     #NEURALGIC POINTS
     global curr_type 
     curr_type = p[1]
-    #print(curr_type)
 
 def p_var_multiple(p):
     '''var_multiple : var_type
@@ -254,12 +204,11 @@ def p_var_s_array(p):
     '''var_s_array : LSQBRACKET var_s_dimesions RSQBRACKET var_s_matrix 
                    | empty'''
     global curr_name
-    print("arreglo", p[1])
 
 def p_var_s_matrix(p):
     '''var_s_matrix : LSQBRACKET var_s_dimesions RSQBRACKET
                     | empty'''
-    print("matriz", p[1])
+    
 #____NEURALGIC POINT______#
 def p_var_s_dimesions(p):
     '''var_s_dimesions : CTE_INT empty'''
@@ -288,24 +237,18 @@ def p_clear_dimension(p):
 def p_var_id_saver(p):
     ''' var_id_saver : id_saver'''    
     global curr_name, scope, function_flag, curr_variable
-    #print("var m ", curr_name)
     curr_variable = curr_name
     if(tables.search_func_exist(curr_name)):
         function_flag = True
     else:
         function_flag = False
     type = []
-    #TEST1
-    #print("false_button")
+
     quad.false_button()
-    #print("variable antes ", curr_name)
     type = tables.search_variable_existance(curr_name, scope)
-    #print("variable ", curr_name, type)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
-    print("SHOW",tables.get_arr_mat_info(curr_variable, scope))
     quad.size_stack_push(tables.get_arr_mat_info(curr_variable, scope))
-    #print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
     '''variable_array : save_var exp index_arr_mat variable_matrix
@@ -315,16 +258,12 @@ def p_variable_array(p):
 def p_save_var (p):
     '''save_var : LSQBRACKET'''
     global curr_non_atomic_variable
-    print('ESTOY DENTRO DEL PRIMER CORCHETE')
     curr_non_atomic_variable = curr_variable
     
 def p_variable_matrix(p):
-    '''variable_matrix : test exp index_arr_mat
+    '''variable_matrix : LSQBRACKET exp index_arr_mat
                        | empty'''
 
-def p_test (p):
-    '''test : LSQBRACKET'''
-    print('ESTOY DENTRO DEL SEGUNDO CORCHETE')
 
 def p_index_arr_mat(p):
     '''index_arr_mat : RSQBRACKET'''
@@ -343,20 +282,6 @@ def p_index_arr_mat(p):
     else: 
         quad.arr_mat_quad(size, curr_dim)
         curr_dim = 0
-
-    #si len(size ) = 2 es matriz
-        #if(curr dim == 1 )
-            #cuadruplos de matrices para dim 1
-        #if(curr dim == 2 )
-            #cuadruplos de matrices para dim 2
-    #sino (quiere decir que es un arreglo) entonces
-        #cuadruplos de arreglos 
-        #dim = 0
-
-    #curr_dim += 1
-    #print('CURR DIM', curr_dim)
-    #print('CURR MATRIZ', curr_non_atomic_variable, scope)
-    #quad.arr_mat_quad(size, curr_dim)
     
 
     
@@ -364,7 +289,7 @@ def p_index_arr_mat(p):
 #
 #Program functions 
 def p_program_function(p):
-    '''program_function : FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function
+    '''program_function : FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN LBRACKET program_vars inner_body return end_function program_function
                         | empty'''
 
 
@@ -379,7 +304,6 @@ def p_f_type(p):
     return_type = curr_type
     scope += 1
     
-    #print(curr_type,scope)
 #______FUNCTION___NEURALGIC POINTS________#
 
 def p_func_creator(p):
@@ -387,19 +311,9 @@ def p_func_creator(p):
     global scope, curr_function, curr_type, curr_name
     curr_function = curr_name
     start = quad.cont_place()
-    print ("func_creator", curr_function, scope, curr_type, start)
     tables.add_vars(curr_function,0,return_type, 0,0)
     tables.add_function(curr_name,scope,curr_type, start)
 
-
-def p_add_func_glob(p):
-    '''add_func_glob : LBRACKET'''
-    global curr_function,scope, return_type,function_flag, curr_name, curr_type
-    #tables.memory_num = quad.cont_place()
-
-    #Idea de nosotros donde guardaba tipo funcion
-    # y a donde debe de saltar
-    #tables.add_vars(curr_function,0,6)
 
 def p_end_function(p):
     '''end_function : RBRACKET'''
@@ -412,18 +326,15 @@ def p_end_function(p):
 def p_param(p):
     '''param : s_type id_saver add_params param2
              | empty'''
-    print("PARAMETRO")    
 
 def p_param2(p):
     '''param2 : COMMA s_type id_saver add_params param2
               | empty'''
-    print("PARAMETRO 2")
 #________PARAMS NEURALGIC POINTS___________________________
 def p_add_params(p):
     '''add_params : empty'''
     global curr_type, curr_name, scope, curr_function
     tables.add_vars(curr_name,scope,curr_type)
-    print("parametros", curr_name, scope, curr_type, curr_function)
     tables.add_params(curr_function,curr_type)
 
 #_________________________<RETURN>____________________#
@@ -434,11 +345,11 @@ def p_return(p):
 def p_return_np(p):
     '''return_np : RETURN'''
     global return_type
-    if(return_type != 'void'):
-        print("okay")
-    else:
+    if(return_type == 'void'):
         print("ERROR: FUNCTION IS VOID: NON-VALUE RETURNING FUNCTION")
         exit()
+    
+        
 
 def p_return_quad(p):
     '''return_quad : empty'''
@@ -446,7 +357,6 @@ def p_return_quad(p):
     #Needs to be used address instead only name
     address = []
     address = tables.search_variable_existance(curr_function, 0)
-    print('ADDRESS', address, curr_function)
     quad.return_quad(return_type, address[1])
 
 # Void function for empty path
@@ -469,7 +379,6 @@ def p_main_id(p):
     global scope, curr_function
     scope += 1
     curr_function = 'main'
-   # print("TIPOO JUMPS", quad.jump_stack_pop())
     quad.fill(quad.jump_stack_pop()-1,quad.cont_place())
     tables.add_function('main',scope,'void')
     
@@ -486,7 +395,6 @@ def p_inner_body(p):
 #__________________________<ASSIGN>____________________________________
 def p_assign(p):
     '''assign : variable keep_assign specialf_assign end_assign'''
-   #PRINT
    
 def p_specialf_assign(p):
     '''specialf_assign : exp
@@ -497,16 +405,8 @@ def p_specialf_assign(p):
 def p_keep_assign(p):
     '''keep_assign : ASSIGN empty'''
     global curr_name, scope
-    #print('ASSIGN H ', curr_name)
-    #PUSH operators and operanas to the stakc
-    #quad.operands_stack_push(curr_name)
-    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
-    #save the type 
-    # var_type = tables.search_variable_existance(curr_name, scope)
-    # quad.type_stack_push(var_type)
 
-   
-    #quad.type_stack_push(curr_type)
+    quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
 
 #END-> Quadruple
@@ -528,14 +428,12 @@ def p_condition2(p):
 # Neuralgic point 1
 def p_condition_GOTOF(p):   
     '''condition_GOTOF : empty'''
-    print('\t\tcondition_GOTOF\n')
     quad.jump_stack_push()
     quad.insert_goto(18)
 
 #Neuralgic point 2
 def p_condition_GOTO(p):   
     '''condition_GOTO : empty'''
-    print('\t\tcondition_GOTO\n')
     quad.insert_goto(17)
 
 def p_end_condition(p):
@@ -571,16 +469,13 @@ def p_end_print_np(p):
     
 #________________________<READ>_______________________
 def p_read(p):
-    '''read : np_read LPAREN valid_exp_read read_np'''
+    '''read : READ LPAREN valid_exp_read read_np'''
 
-def p_np_read(p):
-    '''np_read : READ'''
 
 def p_valid_exp_read(p):
     '''valid_exp_read : exp'''
     #CHECK TOP OF THE STACK
     type_exp = quad.type_stack_pop()
-    print('PRINT END', type_exp)
     if (type_exp != 3 ):
         print('ERROR: Only char parameters are allowed')        
         exit()
@@ -590,7 +485,6 @@ def p_read_np(p):
     
     value = quad.operands_stack_pop()
     quad.size_stack_pop()
-    print("SI LLEGA AL READ", value)
     quad.read_quadruple(value)
 
 #_____________________<CYCLE>_________________
@@ -635,8 +529,6 @@ def p_for_np1(p):
 def p_for_end(p):
      '''for_end : int_const_saver RPAREN'''
      quad.final_var()
-     #Se inserta un 32 para que se haga la comparacion
-     #quad.print_poperands()
      quad.operators_stack_push(31)
      quad.create_exp_quadruple(31)
      quad.jump_stack_push()
@@ -644,69 +536,24 @@ def p_for_end(p):
      quad.jump_stack_push()
 
 
-
 def p_for_np2(p):
     '''for_np2 : SEMICOLON'''
     quad.end_for()
-
-# # def p_for(p):
-# #     '''for : FOR LPAREN id_saver for_np1 TO for_end  RPAREN body SEMICOLON'''
-
-
-# def p_for_end(p):
-#     '''for_end : int_const_saver
-#                | ID '''
-#     print('\t\tSEGUNDO PUNTO\n', p[1])
-    
-
-
-# def p_for_np1(p):
-#     '''for_np1 : TO'''
-#     global curr_name, scope
-#     type = tables.search_variable_existance(curr_name, scope)
-#     quad.type_stack_push(str(type))
-#     quad.operands_stack_push(curr_name)
-#     quad.check_integer()
-#     quad.control_var()
-#     #Insert the operator that represents "TO"
-#     quad.operators_stack_push(32)
-    
-    
-#     #print('\t\tPRIMER PUNTO\n', curr_name, scope)
-
-# def p_for_np2(p):
-#     '''for_np2 : RPAREN'''
-#     global curr_name, curr_const,scope, for_flag
-#     if (for_flag == True):
-#         quad.type_stack_push('28')
-#         quad.operands_stack_push(curr_const)
-#         for_flag = False
-#     else:
-#         tipo = tables.search_variable_existance(curr_name, scope)
-#         quad.type_stack_push(str(tipo))
-#         quad.operands_stack_push(curr_name)
-#         quad.check_integer()
-#     quad.create_exp_quadruple()
     
 #____________________________<CALL_FUNCTION>___________________________#
 def p_call_function(p):
     '''call_function : function_saver function_flag call_params check_not_void '''
-    #TEST 
-    #print('factor funcion ', p[-1])
 
 def p_check_not_void(p):
     '''check_not_void : RPAREN'''
     global return_flag, curr_function
     quad.release_false_button()
-    print("return flag ", return_flag)
     if (return_flag == True):
         print("ERROR: Function must not be part of an expression")
         exit()
     #CHECK AMOUNT OF PARAMETERS   
     params_len = tables.get_size_param(curr_function)
-    print("entro al verificador", params_len, quad.param_cont-1)
     if(params_len > quad.param_cont-1):
-        print("PARAMETERSssssss",params_len)
         print("ERROR: MISSING PARAMETERS ")
         exit()
     #Inserts Gosub for void function
@@ -724,9 +571,7 @@ def p_verify_params(p):
     '''verify_params : RPAREN'''
     global curr_function 
     params_len = tables.get_size_param(curr_function)
-    print("entro al verificador", params_len, quad.param_cont-1)
     if(params_len > quad.param_cont-1):
-        print("2.PARAMETERSssssss",params_len)
         print("ERROR: MISSING PARAMETERS ")
         exit()
     
@@ -734,7 +579,7 @@ def p_check_void(p):
     '''check_void : SEMICOLON'''
     global return_flag, curr_function
     #CHECK FOR VOID FUNCTION
-    quad.realease_false_button()
+    quad.release_false_button()
     if (return_flag == False):
         print("ERROR: Function must be part of an expression")
         exit()
@@ -755,7 +600,7 @@ def p_function_saver(p):
     function_flag = tables.search_func_exist(curr_name)
     #It is after return_type becuase it will exit in case
     #the function does not exist and will continue if it does
-    print('factor funcion ', curr_name)
+
 
 def p_function_flag(p):
     '''function_flag : LPAREN'''
@@ -766,13 +611,11 @@ def p_function_flag(p):
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
-    print("SIZE DE FUNC", tables.get_arr_mat_info(curr_name , 0))
     quad.size_stack_push(tables.get_arr_mat_info(curr_name , 0))
     quad.false_button()
     if (type[0] == 6):
         return_flag = True 
     era_resource = tables.get_resources(curr_name)
-    print("TEST",len(era_resource))
     if (len(era_resource) != 0 ):
         quad.create_era(era_resource)
     else:
@@ -813,7 +656,6 @@ def p_check_param(p):
     param = quad.operands_stack_pop()
     quad.size_stack_pop()
     param_type = quad.type_stack_pop()
-    print ("param ", param, param_type)
     tables.check_param(param_type, quad.param_cont, curr_function)
     quad.quadruple.append([37, param, '', quad.param_cont])
     quad.cont += 1
@@ -851,7 +693,6 @@ def p_tag_sp(p):
     curr_function = p[-1]
     #Inicializa el contador de parametros en 1
     quad.param_cont = 1
-    print("TAMOS PROBANDO", p[-1])
     quad.quadruple.append(['special','','',curr_function])
     quad.cont += 1
 
@@ -870,8 +711,6 @@ def p_sp_param(p):
     tipo = quad.type_stack_pop()
     value = quad.operands_stack_pop()
     quad.size_stack_pop()
-    print("PARAMETROS", tipo , value)
-    print("ESTOY DENTRO DE LA COMA", param)
     special.search_sf_param(curr_function, param, tipo)
     
     
@@ -884,16 +723,13 @@ def p_np_check_size(p):
     global curr_function
     param = quad.param_cont
     #Check tipy for special function params
-    print('Operadores', quad.pOperands)
     
     tipo = quad.type_stack_pop()
     value = quad.operands_stack_pop()
     quad.size_stack_pop()
-    #print("ESTOY DENTRO DE LA COMA", tipo)
-    print("ESTOY DENTRO DEL PARENTESIS", param)
+
     special.search_sf_param(curr_function, param, tipo)
     
-    print("PARAMETROS", tipo , value)
 
     #
     quad.quadruple.append([37,value,'',param])
@@ -928,16 +764,7 @@ def p_trend_prediction(p):
 
 #_____________<DUMMI_PREDICTION>__________________
 def p_dummi_regression(p):
-    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param exp sp_param exp np_check_size'''
-    print("sabado",p[1])
-
-# def p_dr_array_mp(p):
-#     '''dr_array_mp : CTE_CHAR'''
-
-
-# def p_dr_float(p):
-#     '''dr_int : CTE_FLOAT'''
-#     print("sabado",p[1])
+    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param exp np_check_size'''
     
 #____________<MODEL_PREDICT>___________
 def p_model_predict(p):
@@ -957,7 +784,6 @@ def p_exp_keep_or(p):
     '''exp_keep_or : OR'''
      #NEURALGIC POINT 2
      #Se coloca p[-1] para que s 
-    print("exp_keep_or\n\n" , p[1])
     check_flag_func()
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
@@ -984,12 +810,10 @@ def p_expression(p):
     '''expression : m_exp release_exp expression_comp'''
     global g_test
     g_test = 9
-    print("expression")
 
 def p_expression_comp(p):
     '''expression_comp :  expression_comp_2  m_exp release_exp
                        |  empty'''
-    print("expression_comp", p[1])
     
 
 def p_expression_comp_2(p):
@@ -1002,7 +826,6 @@ def p_expression_comp_2(p):
                          '''
      #NEURALGIC POINT 2
     
-    print("expression_comp_2", p[1])
     check_flag_func()
     quad.operators_stack_push(oracle.datalor_translator_symbols(p[1]))
 
@@ -1012,7 +835,6 @@ def p_m_exp(p):
     global g_test
     #Valor de not equal
     g_test = 24
-    #print("m_exp")
 
 def p_m_exp_sr(p): 
     '''m_exp_sr : m_exp_sr_2 m_exp
@@ -1031,7 +853,6 @@ def p_term(p):
     '''term : sub_factor release_exp term_pc'''
     global g_test
     g_test = 11
-    #print("term")
 
 def p_term_pc(p):
     '''term_pc : term_pc_2 term
@@ -1081,7 +902,6 @@ def p_factor_exp(p):
 def p_false_button(p):
     '''false_button : LPAREN'''
     #NEURALGIC POINT 1
-    print("false_button")
     quad.false_button()
 
 def p_release_false_button(p):
@@ -1106,7 +926,6 @@ def p_factor_cte(p):
     quad.operands_stack_push(address)
     quad.size_stack_push(0)
 
-    print('Const ',curr_name , type_test, const_type)
 
 
 

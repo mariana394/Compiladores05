@@ -25,20 +25,16 @@ r = 8;
 key = 5;
 do{
     index = l + (r - l) / 2;
-    print('index',index);
     if(list[index] == key){
-        print('found');
+        print('found', key);
         l = r;
     };
 
     if(list[index] < key){
         l = index + 1;
-        print('not found');
     }else{
         r = index - 1;
-        print('not found');
     };
-    print (l);
 
 }while(l <= r);
 
