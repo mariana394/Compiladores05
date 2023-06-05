@@ -729,7 +729,7 @@ class VirtualMachine:
 
                 left_value = mp.get_value(left_real_address)
                 mp.set_value(param_real_address,left_value)
-                #self.print_todo()
+                self.print_todo()
                 self.vm_handler(inst_pointer+1,offset,offset_end)
                 pass
 
