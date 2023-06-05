@@ -1,0 +1,22 @@
+program fibonacci;
+
+function int fibo (int n){
+    print('enfillmat', n);
+    if (n == 0 || n == 1){
+        n = 1;
+    };
+    return fibo(n-1);
+}
+    
+main {
+var
+int i, j, h, k;
+
+j = 0;
+
+k = fibo (0);
+
+print(k);
+
+}
+end

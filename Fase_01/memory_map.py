@@ -25,11 +25,8 @@ class MemoryMap:
         self.c_char = []       
         self.overflow = 10000
 
-        
-
-
     def res_global (self, resources):
-        print("MEMORY MAP", resources)
+        #print("MEMORY MAP", resources)
         int = [None] * resources[0]
         float = [None] * resources[1]
         char= [None] * resources[2]
@@ -38,8 +35,8 @@ class MemoryMap:
 
         t_int = [None] * resources[5]
         t_float = [None] * resources[6]
-        t_bool = [None] * resources[7]
-        t_char= [None] * resources[8]
+        t_char= [None] * resources[7]
+        t_bool = [None] * resources[8]
         t_df = [None] * resources[9]
         t_pt = [None] * resources[10]
 
@@ -126,12 +123,12 @@ class MemoryMap:
 
         #Global/Local Int
         if (tipo == 0):
-            print("GET INT", self.int[index])
+            #print("GET INT", self.int[index])
             return self.int[index]
         
         #Global/Local Float
         if (tipo == 1):
-            print("GET FLOAT", self.float[index])
+            #print("GET FLOAT", self.float[index])
             return self.float[index]
         
         #Global/Local Char
@@ -139,60 +136,61 @@ class MemoryMap:
             return self.char[index]
         
         #Global/Local Char
-        if (tipo == 3):
+        if (tipo == 4):
             return self.df[index]
         
         #_____TEMPORAL____
         # TEMP INT
-        if (tipo == 4):
+        if (tipo == 5):
             return self.t_int[index]
 
         #TEMPORAL FLOAT
-        if (tipo == 5):
-            return self.t_float[index]
-       
-       # TEMP BOOL
         if (tipo == 6):
-            return self.t_bool[index]
+            return self.t_float[index]
 
         #TEMPORAL CHAR
         if (tipo == 7):
             return self.t_char[index]
+    
+        # TEMP BOOL
+        if (tipo == 8):
+            return self.t_bool[index]
         
         #TEMPORAL DATAFRAME
-        if (tipo == 8):
+        if (tipo == 9):
             return self.t_df[index]
        
+        #__________POINTER _______
+        if(tipo == 10):
+            print("VALOR EN POINTER",self.pointer[index])
+            
+            return self.pointer[index]
        
        #_______CONSTANTES__________
         #Const int
-        if(tipo == 9):
+        if(tipo == 11):
             return self.c_int[index]
-        
+       
         #Const Float
-        if(tipo == 10):
+        if(tipo == 12):
             return self.c_float[index]
     
         #Const char
-        if(tipo == 11):
+        if(tipo == 13):
             return self.c_char[index]
         
-        if(tipo == 12):
-            print("VALOR EN POINTER",self.pointer[index])
-            return self.pointer[index]
         
-
-    
-
+        
 
     def set_value(self, aux, value):
         tipo = aux[0]
         index = aux[1]
-
+        #print("SET VALUE", tipo, index, value)
         #________________GLOBAL/LOCAL_______
         #Int
         if (tipo == 0):
-            self.int[index] = value
+
+            self.int[index] = int(value)
             
         # FLOAT
         if(tipo == 1):
@@ -203,31 +201,66 @@ class MemoryMap:
             self.char[index] = value
 
          # DATAFRAME
-        if(tipo == 3):
+        if(tipo == 4):
             self.df[index] = value
 
 
         #_______________TEMPORAL________________
         #INT
-        if (tipo == 4):
+        if (tipo == 5):
             self.t_int[index] = value
         
         # FLOAT
-        if (tipo == 5):
+        if (tipo == 6):
             self.t_float[index] = value
     
-        #BOOL
-        if (tipo == 6):
-            self.t_bool[index] = value
-
-        #CHAR
+         #CHAR
         if (tipo == 7):
             self.t_char[index] = value
-        
-        #DATAFRAME
+
+        #BOOL
         if (tipo == 8):
+            self.t_bool[index] = value
+        
+        #DATAFRAME"
+        if (tipo == 9):
+            print("MIERCOLES val", index)
             self.t_df[index] = value
         
         #POINTER
-        if (tipo == 12):
+        if (tipo == 10):
+            print('COLOCARE EL VALOR', value, ' EN EL LUGAR ', index, ' DE LOS POINTERS')
             self.pointer[index] = value
+
+    def release_memory(self,size):
+
+        if(size[0] != 0):
+            self.int = self.int[:-size[0]]
+        #print("RM INT AF", self.int)
+        if(size[1] != 0):
+            self.float = self.float[:-size[1]]
+        #print("RM FLOAT AF", self.float)
+        if(size[2] != 0):
+            self.char = self.char[:-size[2]]
+        if(size[3] != 0): 
+        #print("RM BOOL BEF", self.bool)
+            self.bool = self.bool[:-size[3]]
+        #print("RM BOOL AF", self.bool)
+        if(size[4] != 0):
+            self.df = self.df[:-size[4]]
+        if(size[5] != 0):
+            self.t_int = self.t_int[:-size[5]]
+        if(size[6] != 0):
+            self.t_float = self.t_float[:-size[6]]
+        
+        if(size[7] != 0):
+            self.t_char = self.t_char[:-size[7]]
+        if(size[8] != 0):
+            self.t_bool = self.t_bool[:-size[8]]
+        if(size[9] != 0):
+            self.t_df = self.t_df[:-size[9]]
+        if(size[10] != 0):
+            self.pointer = self.pointer[:-size[10]]
+        
+
+        

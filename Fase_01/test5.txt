@@ -20,7 +20,7 @@ int d, a,z,mia,size;
 float c,message;
 char name,test;
 
-d = 2 * 3 ;
+d = 2 * 3;
 c = 6 % 2;
 
 if ( a > d) {

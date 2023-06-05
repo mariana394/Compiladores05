@@ -25,11 +25,12 @@ curr_dim = 0 #por si las moscas
 curr_temp = 0
 g_test = 10
 curr_variable = ''
+curr_non_atomic_variable = ''
 curr_const = None
 for_flag = False
 return_flag = False
 function_flag = False #False for normal variables, true for functions
-
+era_stack = []
 
 
 #Objects
@@ -57,11 +58,11 @@ def p_end(p):
     global curr_function
     quad.quadruple.append([41,0,0,0])
     curr_function = 'main'
-    print("RESOURCES DONE")
-    print("CURR_ FUNCTION", curr_function)
+    # print("RESOURCES DONE")
+    # print("CURR_ FUNCTION", curr_function)
     tables.resources_handler(curr_function)
     tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont, quad.t_df_cont,quad.t_tp_cont, curr_function)
-    
+    # print('TABLA DE VARS', tables.vars)
     print(quad.print_poperands())
     all_quad = quad.get_quad()
     res = tables.get_func_res()
@@ -69,6 +70,8 @@ def p_end(p):
     vm.set_quadruples(all_quad)
     vm.set_const(const)
     vm.set_resources(res)
+    # print("RESS MAIN", res[1])
+    #____________INICIO VM___________
     vm.start_vm()
 
     
@@ -113,7 +116,7 @@ def p_int_const_saver(p):
     for_flag = True
     address = tables.add_const(curr_const, type (curr_const))
     print("constante for ", curr_const)
-    
+    quad.size_stack_push(0)
     quad.operands_stack_push(address)
     quad.type_stack_push(oracle.datalor_translator(type(curr_const).__name__.upper()))
 
@@ -126,9 +129,32 @@ def p_release_exp(p):
 
 def p_resources(p):
     '''resources : empty'''
-    global curr_function
+    global curr_function, era_stack
     tables.resources_handler(curr_function)
     tables.add_resources_temp(quad.t_i_cont,quad.t_f_cont, quad.t_b_cont, quad.t_c_cont, quad.t_df_cont,quad.t_tp_cont, curr_function)
+    #SI EN NUESTRA PILA DE ERA HAY ALGO RELLENA
+    #Llamar a los recursos de curr_function
+    #Int - float- char- bool- df- 
+    res = tables.get_resources(curr_function)
+    print("MARTES NOCHE", res)
+    if(len(era_stack) != 0):
+        for i in range(len(era_stack)):
+            #Int - t_INT
+            quad.quadruple[era_stack[i]] = [35, '', res[0], res[5]]
+            #FLOAT - t_FLOAT
+            quad.quadruple[era_stack[i]+ 1] = [35, '', res[1], res[6]]
+            
+            #BOOL - t_BOOOL
+            quad.quadruple[era_stack[i]+ 3] = [35, '', res[3], res[8]]
+            
+            #CHAR - t_CHAR
+            quad.quadruple[era_stack[i]+ 2] = [35, '', res[2], res[7]]
+            
+            #DATAFRAME - t_DATAFRAME
+            quad.quadruple[era_stack[i]+ 4] = [35, '', res[4], res[9]]
+            #POINTER
+            quad.quadruple[era_stack[i]+ 5] = [35, '', '', res[10]]
+
     quad.reset_temp()
 
 # flag check for knowing if its is a variabel or a function
@@ -137,8 +163,8 @@ def check_flag_func():
     if(function_flag):
         print("ERROR: Function name used as a variable")
         exit()
-    else:
-        print("toy chiquito no puedo")
+    # else:
+    #     print("toy chiquito no puedo")
 
 
 #_________________________<LIBRERIES>_____________________________#
@@ -253,12 +279,10 @@ def p_var_s_dimesions(p):
 
 
 def p_variable(p):
-    '''variable : var_id_saver variable_array clear_dimension'''
+    '''variable : var_id_saver variable_array clear_dimension '''
     
 def p_clear_dimension(p):
     '''clear_dimension : empty'''
-    global curr_dim
-    curr_dim = 0
     quad.release_false_button()
 
 def p_var_id_saver(p):
@@ -272,35 +296,66 @@ def p_var_id_saver(p):
         function_flag = False
     type = []
     #TEST1
-    print("false_button")
+    #print("false_button")
     quad.false_button()
-    print("variable antes ", curr_name)
+    #print("variable antes ", curr_name)
     type = tables.search_variable_existance(curr_name, scope)
-    print("variable ", curr_name, type)
+    #print("variable ", curr_name, type)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
-
+    print("SHOW",tables.get_arr_mat_info(curr_variable, scope))
+    quad.size_stack_push(tables.get_arr_mat_info(curr_variable, scope))
     #print(scope, ' factor variable ', curr_name, type )
 
 def p_variable_array(p):
-    '''variable_array : LSQBRACKET index_arr_mat RSQBRACKET variable_matrix
+    '''variable_array : save_var exp index_arr_mat variable_matrix
                       | empty'''
     check_flag_func()
-    
-    
-        
+
+def p_save_var (p):
+    '''save_var : LSQBRACKET'''
+    global curr_non_atomic_variable
+    print('ESTOY DENTRO DEL PRIMER CORCHETE')
+    curr_non_atomic_variable = curr_variable
     
 def p_variable_matrix(p):
-    '''variable_matrix : LSQBRACKET index_arr_mat RSQBRACKET
+    '''variable_matrix : test exp index_arr_mat
                        | empty'''
 
+def p_test (p):
+    '''test : LSQBRACKET'''
+    print('ESTOY DENTRO DEL SEGUNDO CORCHETE')
 
 def p_index_arr_mat(p):
-    '''index_arr_mat : exp'''
-    global curr_dim, scope,curr_variable
+    '''index_arr_mat : RSQBRACKET'''
+    global curr_dim, scope,curr_variable, curr_non_atomic_variable
     curr_dim += 1
-    size = tables.get_arr_mat_info(curr_variable, scope)
-    quad.arr_mat_quad(size, curr_dim)
+    size = tables.get_arr_mat_info(curr_non_atomic_variable, scope)
+    if (len(size) == 2):
+        if (curr_dim == 1):
+            quad.arr_mat_quad(size, curr_dim)
+        if (curr_dim == 2):
+            quad.arr_mat_quad(size, curr_dim)
+            curr_dim = 0
+
+
+    else: 
+        quad.arr_mat_quad(size, curr_dim)
+        curr_dim = 0
+
+    #si len(size ) = 2 es matriz
+        #if(curr dim == 1 )
+            #cuadruplos de matrices para dim 1
+        #if(curr dim == 2 )
+            #cuadruplos de matrices para dim 2
+    #sino (quiere decir que es un arreglo) entonces
+        #cuadruplos de arreglos 
+        #dim = 0
+
+    #curr_dim += 1
+    #print('CURR DIM', curr_dim)
+    #print('CURR MATRIZ', curr_non_atomic_variable, scope)
+    #quad.arr_mat_quad(size, curr_dim)
     
 
     
@@ -308,7 +363,7 @@ def p_index_arr_mat(p):
 #
 #Program functions 
 def p_program_function(p):
-    '''program_function : FUNCTION resources f_type id_saver func_creator  LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function
+    '''program_function : FUNCTION resources f_type id_saver func_creator LPAREN param RPAREN add_func_glob program_vars inner_body return end_function program_function
                         | empty'''
 
 
@@ -323,8 +378,6 @@ def p_f_type(p):
     return_type = curr_type
     scope += 1
     
-   
-    
     #print(curr_type,scope)
 #______FUNCTION___NEURALGIC POINTS________#
 
@@ -334,7 +387,7 @@ def p_func_creator(p):
     curr_function = curr_name
     start = quad.cont_place()
     print ("func_creator", curr_function, scope, curr_type, start)
-    tables.add_vars(curr_function,0,return_type)
+    tables.add_vars(curr_function,0,return_type, 0,0)
     tables.add_function(curr_name,scope,curr_type, start)
 
 
@@ -392,6 +445,7 @@ def p_return_quad(p):
     #Needs to be used address instead only name
     address = []
     address = tables.search_variable_existance(curr_function, 0)
+    print('ADDRESS', address, curr_function)
     quad.return_quad(return_type, address[1])
 
 # Void function for empty path
@@ -517,11 +571,9 @@ def p_end_print_np(p):
 #________________________<READ>_______________________
 def p_read(p):
     '''read : np_read LPAREN valid_exp_read read_np'''
-    print("NI LO CONOCE")
 
 def p_np_read(p):
     '''np_read : READ'''
-    print("SI LO CONOCE")
 
 def p_valid_exp_read(p):
     '''valid_exp_read : exp'''
@@ -534,8 +586,10 @@ def p_valid_exp_read(p):
 
 def p_read_np(p):
     '''read_np : RPAREN'''
-    print("SI LLEGA AL READ")
+    
     value = quad.operands_stack_pop()
+    quad.size_stack_pop()
+    print("SI LLEGA AL READ", value)
     quad.read_quadruple(value)
 
 #_____________________<CYCLE>_________________
@@ -568,7 +622,8 @@ def p_for_control(p):
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
-    
+    quad.size_stack_push(tables.get_arr_mat_info(curr_name, scope))
+
 
 
 def p_for_np1(p):
@@ -632,8 +687,6 @@ def p_for_np2(p):
 #         quad.check_integer()
 #     quad.create_exp_quadruple()
     
-    
-
 #____________________________<CALL_FUNCTION>___________________________#
 def p_call_function(p):
     '''call_function : function_saver function_flag call_params check_not_void '''
@@ -651,6 +704,7 @@ def p_check_not_void(p):
     params_len = tables.get_size_param(curr_function)
     print("entro al verificador", params_len, quad.param_cont-1)
     if(params_len > quad.param_cont-1):
+        print("PARAMETERSssssss",params_len)
         print("ERROR: MISSING PARAMETERS ")
         exit()
     #Inserts Gosub for void function
@@ -670,6 +724,7 @@ def p_verify_params(p):
     params_len = tables.get_size_param(curr_function)
     print("entro al verificador", params_len, quad.param_cont-1)
     if(params_len > quad.param_cont-1):
+        print("2.PARAMETERSssssss",params_len)
         print("ERROR: MISSING PARAMETERS ")
         exit()
     
@@ -701,19 +756,45 @@ def p_function_saver(p):
 
 def p_function_flag(p):
     '''function_flag : LPAREN'''
-    global function_flag, curr_name, return_type, return_flag
+    global function_flag, curr_name, return_type, return_flag, era_stack
     function_flag = False
     
     type= []
     type = tables.search_variable_existance(curr_name, scope)
     quad.type_stack_push(type[0])
     quad.operands_stack_push(type[1])
+    print("SIZE DE FUNC", tables.get_arr_mat_info(curr_name , 0))
+    quad.size_stack_push(tables.get_arr_mat_info(curr_name , 0))
     
     if (type[0] == 6):
         return_flag = True 
     era_resource = tables.get_resources(curr_name)
-    print("TEST",era_resource)
-    quad.create_era(era_resource)
+    print("TEST",len(era_resource))
+    if (len(era_resource) != 0 ):
+        quad.create_era(era_resource)
+    else:
+        #guardar donde estoy en la pila de ERAs
+        era_stack.append (quad.cont-1)
+        #Int
+        quad.quadruple.append([])
+        quad.cont += 1
+        #Float
+        quad.quadruple.append([])
+        quad.cont += 1
+        #Bool
+        quad.quadruple.append([])
+        quad.cont += 1
+        #Char
+        quad.quadruple.append([])
+        quad.cont += 1
+        #DF
+        quad.quadruple.append([])
+        quad.cont += 1
+        #POINTER
+        quad.quadruple.append([])
+        quad.cont += 1
+        quad.param_cont = 1
+
     
 
 
@@ -727,6 +808,7 @@ def p_check_param(p):
     '''check_param : exp'''
     global curr_function
     param = quad.operands_stack_pop()
+    quad.size_stack_pop()
     param_type = quad.type_stack_pop()
     print ("param ", param, param_type)
     tables.check_param(param_type, quad.param_cont, curr_function)
@@ -774,7 +856,7 @@ def p_tag_sp(p):
 
 #_______________<EXPLORATION>________________
 def p_exploration(p):
-    '''exploration : EXPLORATION tag_sp variable explore_var np_check_size'''
+    '''exploration : EXPLORATION tag_sp variable explore_cte np_check_size'''
 
 def p_sp_param(p):
     '''sp_param : COMMA'''
@@ -784,12 +866,13 @@ def p_sp_param(p):
     
     tipo = quad.type_stack_pop()
     value = quad.operands_stack_pop()
+    quad.size_stack_pop()
     print("PARAMETROS", tipo , value)
-    print("ESTOY DENTRO DE LA COMA", tipo)
+    print("ESTOY DENTRO DE LA COMA", param)
     special.search_sf_param(curr_function, param, tipo)
     
     
-    quad.quadruple.append([37,tipo,value,param])
+    quad.quadruple.append([37,value,'',param])
     quad.cont += 1 
     quad.param_cont += 1
 
@@ -802,35 +885,33 @@ def p_np_check_size(p):
     
     tipo = quad.type_stack_pop()
     value = quad.operands_stack_pop()
-    print("ESTOY DENTRO DE LA COMA", tipo)
-
+    quad.size_stack_pop()
+    #print("ESTOY DENTRO DE LA COMA", tipo)
+    print("ESTOY DENTRO DEL PARENTESIS", param)
     special.search_sf_param(curr_function, param, tipo)
     
     print("PARAMETROS", tipo , value)
 
     #
-    quad.quadruple.append([37,tipo,value,param])
+    quad.quadruple.append([37,value,'',param])
     quad.cont += 1 
     memory = quad.t_df_cont + quad.t_df_init
     quad.t_df_cont += 1
     quad.insert_goto(38,memory)
     quad.operands_stack_push(memory)
     quad.type_stack_push(5)
+    #Is only a single dataframe 
+    quad.size_stack_push(0)
 
 
-def p_explore_var(p):
-    '''explore_var : sp_param variable explor_cte
-                   | empty'''
-      
 
-def p_explor_cte(p):
-    '''explor_cte : sp_param int_const_saver
-                  | empty'''
+def p_explore_cte(p):
+    '''explore_cte : sp_param int_const_saver'''
     
     
 #__________<FINANCIAL_STATE>__________
 def p_financial_state(p):
-    '''financial_state : FINANCIAL_STATE tag_sp variable sp_param variable sp_param variable sp_param variable np_check_size'''
+    '''financial_state : FINANCIAL_STATE tag_sp variable sp_param variable sp_param exp sp_param exp np_check_size'''
 
 #___________<SEASON_ANALYSIS>_______
 def p_season_analysis(p):
@@ -840,27 +921,24 @@ def p_season_analysis(p):
 
 #_____________<TREND_PREDICTION>_____________
 def p_trend_prediction(p):
-    '''trend_prediction : TREND_PREDICTION tag_sp variable sp_param int_const_saver sp_param int_const_saver sp_param int_const_saver np_check_size'''
+    '''trend_prediction : TREND_PREDICTION tag_sp variable np_check_size'''
 
 #_____________<DUMMI_PREDICTION>__________________
 def p_dummi_regression(p):
-    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param variable dr_array dr_int np_check_size'''
+    '''dummi_regression : DUMMI_REGRESSION tag_sp variable sp_param exp sp_param exp np_check_size'''
+    print("sabado",p[1])
 
-def p_dr_array(p):
-    '''dr_array : COMMA LSQBRACKET CTE_CHAR dr_array_mp RSQBRACKET
-                | empty'''
+# def p_dr_array_mp(p):
+#     '''dr_array_mp : CTE_CHAR'''
 
-def p_dr_array_mp(p):
-    '''dr_array_mp : COMMA CTE_CHAR dr_array_mp
-                   | empty'''
 
-def p_dr_int(p):
-    '''dr_int : COMMA int_const_saver
-              | empty'''
+# def p_dr_float(p):
+#     '''dr_int : CTE_FLOAT'''
+#     print("sabado",p[1])
     
 #____________<MODEL_PREDICT>___________
 def p_model_predict(p):
-    '''model_predict : MODEL_PREDICT tag_sp variable sp_param variable np_check_size'''
+    '''model_predict : MODEL_PREDICT tag_sp variable np_check_size'''
 
 
 #__________________________________<EXP>___________________________
@@ -1023,6 +1101,8 @@ def p_factor_cte(p):
     const_type = oracle.datalor_translator(type_test.upper())
     quad.type_stack_push(const_type)
     quad.operands_stack_push(address)
+    quad.size_stack_push(0)
+
     print('Const ',curr_name , type_test, const_type)
 
 

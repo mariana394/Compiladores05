@@ -22,6 +22,7 @@ class Quadruples:
         #Operands with type
         self.pOperands = []
         self.pJumps = []
+        self.pSize = []
         self.pTypes = [] 
 
         #_____________TEMPORAL VARIABLES____________#
@@ -55,6 +56,12 @@ class Quadruples:
         self.param_cont = 0
    
    #_________________STACKS__________________
+    #Function for size stac
+    def size_stack_push(self, size):
+        self.pSize.append(size)
+
+    def size_stack_pop(self):
+        return self.pSize.pop()
 
     #Function for opertors stack
     def operators_stack_push(self,operator):
@@ -113,6 +120,7 @@ class Quadruples:
         self.check_integer()
         exp_type = self.type_stack_pop()
         exp = self.operands_stack_pop()
+        self.size_stack_pop()
         #Se elige el valor y tipo para la variable de control
         vControl = self.pOperands[-1]
         control_type = self.pTypes[-1]
@@ -135,6 +143,7 @@ class Quadruples:
             self.quadruple.append([21, vControl, '', place])
             self.cont += 1
             self.operands_stack_push(place)
+            self.size_stack_push(0)
             self.type_stack_push(control_type)
             
 
@@ -143,6 +152,7 @@ class Quadruples:
         self.check_integer()
         exp_type = self.type_stack_pop()
         exp = self.operands_stack_pop()
+        self.size_stack_pop()
         #Se genera un espacio en memoria para la variable Final
         place = self.t_i_cont + self.t_i_init
         if (self.t_i_cont > self.t_i_size):
@@ -155,6 +165,8 @@ class Quadruples:
         self.cont += 1
         self.operands_stack_push(place)
         self.type_stack_push(exp_type)
+        self.size_stack_push(0)
+
         print("FINAL FINAL", )
         #DUPLICAR LOS DATOS DE LA VARIABLE DE CONTROL Y LA VARIABLE FINAL
         vcontrol = self.pOperands[-2]
@@ -163,11 +175,14 @@ class Quadruples:
         #final_type = self.pTypes[-1]
         self.operands_stack_push(vcontrol)
         self.type_stack_push(control_type)
+        self.size_stack_push(0)
+
 
 
     def end_for(self):
         vControl = self.operands_stack_pop()
         vControl_type = self.type_stack_pop()
+        self.size_stack_pop()
         #Se genera un espacio para el incremento del la variable de control
         place = self.t_i_cont + self.t_i_init
         if (self.t_i_cont > self.t_i_size):
@@ -178,6 +193,7 @@ class Quadruples:
         #Se obtiene el lugar de donde se obtuvo el valor de la variable de control
         idfrom = self.operands_stack_pop()
         idfrom_type = self.type_stack_pop()
+        self.size_stack_pop()
         #17000 because is the place where 1 is stored
         self.quadruple.append([11, vControl, 25000, place])
         self.cont += 1
@@ -241,11 +257,20 @@ class Quadruples:
 
     #_________________________ASSIGN__________________#
     def assign_quadruple(self):
-        #print(self.pOperators, self.pOperands)
+        print(self.pOperators, self.pOperands, self.pSize)
        #POP from the tables for assigning it to the quadruple
         operator = self.operators_stack_pop()
         operandR = self.operands_stack_pop()
+        size_opR = self.size_stack_pop()
         result = self.operands_stack_pop()
+        size_result = self.size_stack_pop()
+        print("DATOS",size_opR, size_result)
+        if(size_opR != 0 or size_result !=0 and size_opR != None):
+            print("DATOS2",size_opR, size_result)
+
+            print("ERROR: ONLY ATOMIC ASSIGNS ARE ALLOWED")
+            exit()
+
         print("VALORES A SUMAR",operandR, result )
 
        #POP to the types
@@ -267,20 +292,35 @@ class Quadruples:
     def inner_quad_exp(self):
         print('Lista de operandos', self.pOperands)
         print('Lista de Tipos', self.pTypes)
+        print('LISTA DE SIZE', self.pSize)
         operandR = self.operands_stack_pop()
-        
+        size_right = self.size_stack_pop()
 
         typeR = self.type_stack_pop()
-        operandL = self.operands_stack_pop()
        
-
+        operandL = self.operands_stack_pop()
+        size_left = self.size_stack_pop()
         typeL = self.type_stack_pop()
-        operator = self.operators_stack_pop()
         
+        operator = self.operators_stack_pop()
+        size = 0
         #ASK TO THE ORACLE
         print('operator', operator)
         type_result = oracle.oracle_cmddwtm(str(typeL),str(typeR),str(operator))
         self.pTypes.append(type_result)
+
+        #ASK SIZE
+        #Bothe are variadbles
+        
+        print('SIZE OF EXPRESSIONS', "RIGHT ",size_right,"LEFT",size_left )
+        if(size_right != 0 or size_left != 0):
+            print("ERROR: ONLY ATOMIC SIZES ARE AVAILABLE FOR EXPRESSIONS ")
+            exit()
+        
+
+        
+
+        
         #print('type_result', type(type_result))
         match type_result:
             #INTEGER
@@ -296,6 +336,7 @@ class Quadruples:
                     self.operands_stack_push(result)
                     print("\t\tCONTADOR\t", self.cont)
                     print(self.quadruple)
+                    self.size_stack_push(0)
 
                     #print ('OPERANDOS',self.pOperands)
             #FLOAT
@@ -311,6 +352,7 @@ class Quadruples:
                     self.operands_stack_push(result)
                     print("\t\tCONTADOR\t", self.cont)
                     print(self.quadruple)
+                    self.size_stack_push(0)
 
                     #print ('OPERANDOS',self.pOperands)
             #CHAR
@@ -326,6 +368,7 @@ class Quadruples:
                     self.operands_stack_push(result)
                     print("\t\tCONTADOR\t", self.cont)
                     print(self.quadruple)
+                    self.size_stack_push(0)
 
                     #print ('OPERANDOS',self.pOperands)
             #BOOLEAN
@@ -342,6 +385,7 @@ class Quadruples:
                     self.operands_stack_push(result)
                     print("\t\tCONTADOR\t", self.cont)
                     print(self.quadruple)
+                    self.size_stack_push(0)
 
 
     def create_exp_quadruple(self, type_exp):
@@ -353,17 +397,17 @@ class Quadruples:
         #CORRECCION Se checa si se tienen operandos en la pila, esto solo sirve para 
         #resolver los operandos de comparacion 
         if (len(self.pOperators) != 0):
-            print("TAMA;O ES DIFERENTE DE 0")
+            #print("TAMA;O ES DIFERENTE DE 0")
             operator = self.pOperators[-1]
         else:
-            print("TAMA;O ES IGUAL A 0")
+            #print("TAMA;O ES IGUAL A 0")
             operator = 0
         #print("OPERATOR",type_exp)
         match type_exp:
             #AND
             
             case 9:
-                print("ENTRO AL AND")
+                #print("ENTRO AL AND")
                 if (operator == 9):
                     #LLAMAR LA FUNCIÓN PARA CREAR EL CUADRUPLO
                     print('&&')
@@ -435,6 +479,8 @@ class Quadruples:
                 self.check_bool()
                 condition = self.operands_stack_pop()
                 self.type_stack_pop()
+                self.size_stack_pop()
+                
                 self.quadruple.append([18,condition,'' , ''])
                 self.cont += 1
                 print("\t\tCONTADOR\t", self.cont)
@@ -449,6 +495,7 @@ class Quadruples:
                 gotoVerdadero = self.pJumps.pop()
                 condition = self.operands_stack_pop()
                 self.type_stack_pop()
+                self.size_stack_pop()
                 self.quadruple.append([19,condition,'' , ''])
                 print("\tCONTADOR ", self.cont, "\nSIZE QUAD", len(self.quadruple))
                 self.fill(self.cont - 1 , gotoVerdadero)
@@ -504,7 +551,12 @@ class Quadruples:
         exp = self.operands_stack_pop()
         exp_type = self.type_stack_pop()
         func_type = oracle.datalor_translator(return_type.upper())
-        
+        size_exp = self.size_stack_pop()
+
+        if(size_exp !=0):
+            print("ERROR: ONLY ATOMIC VALUES ARE ALLOWED FOR RETURN")
+            exit()
+
         if(exp_type == func_type):
             self.quadruple.append([33, exp,'', function_place])
             self.cont+=1
@@ -518,12 +570,24 @@ class Quadruples:
     
     def print_quadruple(self):
         printvalue = self.operands_stack_pop()
-        self.type_stack_pop()
-        self.quadruple.append([7, '','', printvalue])
+        tipo = self.type_stack_pop()
+        
+        size_print = self.size_stack_pop()
+        row = 0
+        col = 0
+        if (size_print != 0):
+            if(len(size_print)==4):
+                #ARRAY
+                row = size_print[1]
+            if (len(size_print) == 2):
+                #MATRIX
+                row = size_print[0][1]
+                col = size_print[1][2]
+
+        self.quadruple.append([7, row,col, printvalue])
+        
         self.cont+=1
         self.print_quadruples()
-
-        #self.quadruple.append([])
         
     # PREGUNTAR QUE SE HACE  CON EL READ 
     # SE TENÍA PENSADO USAR EL READ PARA EL TIPO LEER DATAFRAME
@@ -542,6 +606,7 @@ class Quadruples:
         #Insert read result 
         self.operands_stack_push(address)
         self.type_stack_push(5)
+        self.size_stack_push(0)
 
         #self.quadruple.append()      
                     
@@ -567,11 +632,13 @@ class Quadruples:
         #Check if type is integer
         self.check_integer()
         self.pTypes.pop()
+        print("SIZE DOS", size)
         if (curr_dim == 1):
             #ARRAY
             if (len(size) == 4):
+                print('ESTOY HACIENDO CUADRUPLOS DE ARRAY')
                 s1 = self.operands_stack_pop()
-
+                self.size_stack_pop()
                 self.quadruple.append([39,s1,size[0],size[1]])
                 self.cont += 1
                 address = self.t_i_cont + self.t_i_init
@@ -584,16 +651,20 @@ class Quadruples:
                 self.t_tp_cont += 1
                 #Clear array dir_base
                 dir_base = self.operands_stack_pop()
+                self.size_stack_pop()
                 self.quadruple.append([40,address,dir_base,pointer])
                 self.cont += 1
                 #Saves pointer in stack
                 self.operands_stack_push(pointer)
+                self.size_stack_push(0)
 
                 
             #MATRIX
             if (len(size) == 2):
-                s1 = self.operands_stack_pop()
+                print('ESTOY HACIENDO CUADRUPLOS DE MATRIX 1 ')
 
+                s1 = self.operands_stack_pop()
+                self.size_stack_pop()
                 self.quadruple.append([39,s1,size[0][0],size[0][1]])
                 self.cont += 1
                 address = self.t_i_cont + self.t_i_init
@@ -605,9 +676,13 @@ class Quadruples:
                 #Saves s1*m1 in stack
                 self.operands_stack_push(address)
                 self.type_stack_push(1)   
+                self.size_stack_push(0)
         #MATRIX
         if (curr_dim == 2):
+            print('ESTOY HACIENDO CUADRUPLOS DE MATRIX 2 ')
+
             s2 = self.operands_stack_pop()
+            self.size_stack_pop()
             print("problema", size)
             self.quadruple.append([39,s2,size[1][0],size[1][1]])
             self.cont += 1
@@ -615,6 +690,7 @@ class Quadruples:
             address = self.t_i_cont + self.t_i_init
             self.t_i_cont += 1
             s1m1 = self.operands_stack_pop()
+            self.size_stack_pop()
             self.type_stack_pop()
             self.quadruple.append([11,s1m1,s2,address])
             self.cont += 1
@@ -627,10 +703,12 @@ class Quadruples:
             pointer = self.t_tp_cont + self.t_tp_init
             self.t_tp_cont += 1
             dir_base = self.operands_stack_pop()
+            self.size_stack_pop()
             self.quadruple.append([40,address2,dir_base,pointer])
             self.cont += 1
             #ADD POINTER TO STACK
             self.operands_stack_push(pointer)
+            self.size_stack_push(0)
 
 
     def print_poperands(self):
@@ -639,8 +717,10 @@ class Quadruples:
         print ('OPERADORES',self.pOperators)
         print ('OPERANDOS',self.pOperands)
         print ('TIPOS',self.pTypes)
+        print ('SIZEs', self.pSize)
         print ('SALTOS', self.pJumps)
         print ('CONTADOR', self.cont)
+        
 
     def get_quad(self):
         return self.quadruple

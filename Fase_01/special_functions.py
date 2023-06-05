@@ -10,19 +10,20 @@ class special_functions:
     def __init__(self):
         
         self.special_func = {
-                        "exploration" : {'params': [5,3,1],},
+                        "exploration" : {'params': [5,1],},
                         "financial_state": {'params':[5,5,3,3],},
                         "dummi_regression": {'params':[5,3,2],},
                         "season_analysis": {'params':[5],},
-                        "trend_prediction": {'params':[5,1,1,1],},
+                        "trend_prediction": {'params':[5],},
                         "model_predict": {'params':[5,5],},
                         }
 
     def search_sf_param(self,func_name, param, tipo):
+        #print("VALUE PARAM MIER", param)
         if(func_name in self.special_func.keys()):
             list_param = self.special_func[func_name]['params']
             if(len(list_param) < param):
-                print("ERROR: TOO MANY PARAMETERS")
+                print("ERROR: TOO MANY PARAMETERS", len(list_param), " " , param)
                 exit()
             else: 
                 print("SPECIAL PARAM", func_name, " Param ", param, "tipo ", tipo , "tipo aqui " ,list_param[param - 1])

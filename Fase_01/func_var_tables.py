@@ -35,7 +35,7 @@ class DirFunc:
 		#Initialize the constant dictionary varibales
 		self.constants = {}
 		#RESOURCES
-		# 0->int 1->float 2->bool 3-> char 4->DF
+		# 0->int 1->float 2->Char 3-> Bool 4->DF
 		self.resources = [0,0,0,0,0]
 		#counter for function
 		self.func_cont = 0 
@@ -48,8 +48,8 @@ class DirFunc:
 		#if(func_name != 'global'): 
 		self.dir_func[func_name]["resources"].append(temp_i) 
 		self.dir_func[func_name]["resources"].append(temp_f) 
+		self.dir_func[func_name]["resources"].append(temp_c)
 		self.dir_func[func_name]["resources"].append(temp_b) 
-		self.dir_func[func_name]["resources"].append(temp_c) 
 		self.dir_func[func_name]["resources"].append(temp_df) 
 		self.dir_func[func_name]["resources"].append(temp_pt) 
 
@@ -76,6 +76,15 @@ class DirFunc:
 			self.dir_func[name]["params"] = []
 			#Creation of a place that saves where to function quadruples start
 			self.dir_func[name]["resources"] = []
+
+			match type:
+				case "int":
+					self.dir_func["global"]["resources"][0] += 1
+				case "float":
+					self.dir_func["global"]["resources"][1] += 1
+				case "char":
+					self.dir_func["global"]["resources"][2] += 1
+					
 			if (name != "main"):
 				self.dir_func[name]["start"] = start
 
@@ -89,6 +98,7 @@ class DirFunc:
 	#add function resources
 	def add_func_resources_glob(self):
 		self.dir_func['global']['resources'].append(self.func_cont)
+
 	
 	#Get the resources from a function
 	def get_resources(self, funct_name):
@@ -139,9 +149,13 @@ class DirFunc:
 		
 	#CHECK IF THE VARIABLE EXISTS (LOCAL/GLOBAL)
 	def search_variable_existance(self, name, scope):
+		print('ESTOY BUSCANDO LA FUNCION ', name, ' EN ', scope)
+		print(self.vars)
 		if (name in self.vars[scope]['vars'].keys()):
+			
 			return [(self.vars[scope]['vars'][name]['type']),(self.vars[scope]['vars'][name]['address'])] 
 		else:
+			
 			if (name in self.vars[0]['vars'].keys()):
 				return [self.vars[0]['vars'][name]['type'], self.vars[0]['vars'][name]['address']]
 			else:
@@ -155,7 +169,7 @@ class DirFunc:
 		#Check if the variable already exists no matter the scope
 		
 		size = 1
-
+		print('VARIABLE AGREGADA' , name, scope, types, rowDim, columnDim)
 		if(self.search_variable_declaration(name, scope)):
 			print("Variable already declared",name)
 			exit()

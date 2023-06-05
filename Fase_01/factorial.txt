@@ -1,0 +1,24 @@
+program TESTCORRECTO;
+
+function int fillmat (int n){
+    print('enfillmat', n);
+    if (n == 0){
+        n = 1;
+    }else{
+        n = ( n * fillmat(n - 1) );
+    }; 
+    return n;
+}
+    
+main {
+var
+int i, j, h, k;
+
+j = 0;
+
+k = fillmat (5);
+
+print(k);
+
+}
+end
