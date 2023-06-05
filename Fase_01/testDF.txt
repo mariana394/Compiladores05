@@ -11,13 +11,13 @@ predecir = read('predecirr.csv');
 initial = '1/05/2023';
 final = '30/05/2023';
 arima = read('arima_model.csv');
+m = exploration(ventas, 1);
+m = exploration(ventas, 2);
+m = exploration(ventas, 3);
 m = season_analysis(ventas);
 m = financial_state(costos,ventas,'1/05/2023',final);
 m = dummi_regression(ventas,'Total');
 m = trend_prediction(arima);
-m = exploration(ventas, 1);
-m = exploration(ventas, 2);
-m = exploration(ventas, 3);
 m = model_predict(predecir);
 }
 end
