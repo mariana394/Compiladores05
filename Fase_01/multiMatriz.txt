@@ -1,7 +1,7 @@
 program TESTCORRECTO;
 
 function void fillmat (int a){
-    print('hola');+
+    print('hola');
 }
     
 main {

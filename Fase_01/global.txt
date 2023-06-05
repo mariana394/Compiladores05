@@ -5,7 +5,7 @@ function int fillmat (int n){
     if (n == 0){
         n = 1;
     }else{
-        n = (fillmat(n - 1) *  n );
+        n = ( n  * fillmat(n - 1));
     }; 
     return n;
 }
@@ -22,3 +22,4 @@ print(k);
 
 }
 end
+

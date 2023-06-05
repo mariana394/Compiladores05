@@ -100,14 +100,12 @@ class VirtualMemory:
                     self.overflow(self.g_i_cont, self.g_i_size)
                     address = self.g_i_init + self.g_i_cont
                     self.g_i_cont += size
-                    #print(address)
                     return address
                 case 2:
                     #Overflow checker
                     self.overflow(self.g_f_cont, self.g_f_size)
                     address = self.g_f_init + self.g_f_cont
                     self.g_f_cont += size
-                    #print(address)
                     return address
 
                 case 3: 
@@ -116,7 +114,6 @@ class VirtualMemory:
                     #returns the address 
                     address =  self.g_c_init + self.g_c_cont
                     self.g_c_cont += size
-                    #print(address)
                     return address
                 case 5:
                     #Overflow checker
@@ -124,7 +121,6 @@ class VirtualMemory:
                     #returns the address
                     address = self.g_df_init + self.g_df_cont
                     self.g_df_cont += size
-                    #print(address)
                     return address
                 
         #CONSTANTS       
@@ -139,7 +135,6 @@ class VirtualMemory:
                         #returns the address
                         address = self.c_i_init + self.c_i_cont
                         self.c_i_cont += 1
-                        #print(address)
                         return address
                     #FLOAT
                     case 29:
@@ -147,7 +142,6 @@ class VirtualMemory:
                         #return the address
                         address = self.c_f_init + self.c_f_cont
                         self.c_f_cont += 1
-                        #print(address)
                         return address
                     #CHAR
                     case 30:
@@ -155,7 +149,6 @@ class VirtualMemory:
                         #return the address
                         address = self.c_c_init + self.c_c_cont
                         self.c_c_cont += 1
-                        #print (address)
                         return address
             #LOCAL
             else:
@@ -167,7 +160,6 @@ class VirtualMemory:
                         #returns the address
                         address = self.l_i_init + self.l_i_cont
                         self.l_i_cont += size
-                        #print(address)
                         return address
                     #FLOAT
                     case 2:
@@ -175,7 +167,6 @@ class VirtualMemory:
                         #return the address
                         address = self.l_f_init + self.l_f_cont
                         self.l_f_cont += size
-                        #print(address)
                         return address
                     #CHAR
                     case 3:
@@ -183,7 +174,6 @@ class VirtualMemory:
                         #return the address
                         address = self.l_c_init + self.l_c_cont
                         self.l_c_cont += size
-                        #print (address)
                         return address
                     #DATAFRAME
                     case 5:

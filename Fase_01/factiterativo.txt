@@ -4,10 +4,9 @@ main {
 var
 int n1,n2, count, nterms, fact;
 
-
 fact = 1 ;
 
-for(count = 1 to 2){
+for(count = 1 to 7){
     fact = fact * count; 
 };
 

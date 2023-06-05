@@ -1,44 +1,23 @@
-program TESTCORRECTO;
+program FUNCIONESESPECIALES;
 
-function void message (int f){
-    var
-    int a;
-    float c,d;
-    char sara,name, tacos;
-    dataframe df, costos, ventas, masventas, mascostos;
-    
-    df = read('testDF.csv');
-    a = f + 1;
-    if (a < 10) {
-        message(a);
-        print(a);
-    };
-}
 
 main {
 var 
-int s,h, k[2][3];
-float g;
-dataframe l, m, costos, ventas, predecir,arima;
+dataframe m, costos, ventas, predecir,arima;
 char initial, final;
-k[1][1] = 2;
-s = k[1][1];
-print('HOLA',s);
-message(1);
-l = read('test2.csv');
 costos = read('costoscategorias.csv');
 ventas = read('ventas.csv');
 predecir = read('predecirr.csv');
 initial = '1/05/2023';
 final = '30/05/2023';
 arima = read('arima_model.csv');
-print(l);
+m = exploration(ventas, 1);
+m = exploration(ventas, 2);
+m = exploration(ventas, 3);
 m = season_analysis(ventas);
 m = financial_state(costos,ventas,'1/05/2023',final);
-m = dummi_regression(ventas,'Total',0.5);
+m = dummi_regression(ventas,'Total');
 m = trend_prediction(arima);
-m = exploration(l, 1);
 m = model_predict(predecir);
-print(m);
 }
 end
