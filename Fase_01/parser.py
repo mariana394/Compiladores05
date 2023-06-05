@@ -331,6 +331,7 @@ def p_index_arr_mat(p):
     global curr_dim, scope,curr_variable, curr_non_atomic_variable
     curr_dim += 1
     size = tables.get_arr_mat_info(curr_non_atomic_variable, scope)
+
     if (len(size) == 2):
         if (curr_dim == 1):
             quad.arr_mat_quad(size, curr_dim)
@@ -696,6 +697,7 @@ def p_call_function(p):
 def p_check_not_void(p):
     '''check_not_void : RPAREN'''
     global return_flag, curr_function
+    quad.release_false_button()
     print("return flag ", return_flag)
     if (return_flag == True):
         print("ERROR: Function must not be part of an expression")
@@ -732,6 +734,7 @@ def p_check_void(p):
     '''check_void : SEMICOLON'''
     global return_flag, curr_function
     #CHECK FOR VOID FUNCTION
+    quad.realease_false_button()
     if (return_flag == False):
         print("ERROR: Function must be part of an expression")
         exit()
@@ -765,7 +768,7 @@ def p_function_flag(p):
     quad.operands_stack_push(type[1])
     print("SIZE DE FUNC", tables.get_arr_mat_info(curr_name , 0))
     quad.size_stack_push(tables.get_arr_mat_info(curr_name , 0))
-    
+    quad.false_button()
     if (type[0] == 6):
         return_flag = True 
     era_resource = tables.get_resources(curr_name)
@@ -799,7 +802,7 @@ def p_function_flag(p):
 
 
 def p_call_params(p):
-    '''call_params : check_param exp_many
+    '''call_params : check_param exp_many 
                    | empty'''
     
 

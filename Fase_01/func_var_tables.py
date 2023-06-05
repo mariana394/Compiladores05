@@ -296,6 +296,10 @@ class DirFunc:
 	def get_arr_mat_info(self, name, scope): 
 		if (name in self.vars[scope]['vars'].keys()):
 			return self.vars[scope]['vars'][name]['size']
+		else:
+			#Revisa en globales
+			return self.vars[0]['vars'][name]['size']
+
 		
 	#___________________________RESOURES HANDLER____________________#
 	def resources_handler(self,func_name):
