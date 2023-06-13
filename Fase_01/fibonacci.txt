@@ -1,15 +1,11 @@
 program fibonacci;
 
 function int fibo (int n){
-    var
-    int a, b;
     if (n == 0 || n == 1){
         n = n;
         print(n);
     }else{
-        b = fibo(n - 2);
-        a = fibo(n - 1);
-        n = a + b;
+        n =  fibo(n - 2) + fibo(n - 1) ;
         print(n);
     };
     return n;

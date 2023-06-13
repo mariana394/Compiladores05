@@ -576,13 +576,26 @@ def p_check_not_void(p):
         exit()
     #CHECK AMOUNT OF PARAMETERS   
     params_len = tables.get_size_param(curr_function)
+    #Parche guadalupano 
     if(params_len > quad.param_cont-1):
         print("ERROR: MISSING PARAMETERS ")
         exit()
     #Inserts Gosub for void function
     quad.insert_goto(36,tables.dir_func[curr_function]["start"])
-    
-    
+    #Parche guadalupano
+
+    tipo = quad.type_stack_pop()
+    address = quad.get_address(tipo)
+
+    value = quad.operands_stack_pop()
+    #Creamos el assign
+    size = quad.size_stack_pop()
+    quad.quadruple.append([21, value, '', address])
+    quad.pOperands.append(address)
+    quad.pTypes.append(tipo)
+    quad.pSize.append(size)
+    quad.cont += 1
+
 
 
 #______________CALL VOID FUNCTION______________________#
