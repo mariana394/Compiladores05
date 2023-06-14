@@ -458,8 +458,6 @@ class Quadruples:
         self.quadruple.append([35,'',0, era_t_tp])
         self.cont += 1
 
-
-        
         self.param_cont = 1
     
     #Creates the cuadruples and avoid it to return not atomic values 
@@ -507,6 +505,25 @@ class Quadruples:
         
         self.cont+=1
         
+    def get_address(self, tipo):
+        if (tipo == 1):
+            a = self.t_i_cont + self.t_i_init
+            self.t_i_cont += 1
+            return a
+        elif (tipo == 2):
+            a = self.t_f_cont + self.t_f_init
+            self.t_f_cont += 1
+            return a
+        elif (tipo == 4):
+            a = self.t_c_cont + self.t_c_init
+            self.t_c_cont += 1
+            return a
+        elif (tipo == 5):
+            a = self.t_df_cont + self.t_df_init
+            self.t_df_cont += 1
+            return a
+        
+    
     #Creates a for read quadruple
     def read_quadruple(self, value):
         address = self.t_df_cont + self.t_df_init

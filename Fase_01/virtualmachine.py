@@ -639,6 +639,7 @@ class VirtualMachine:
 
             #END FUNCTION
             case 34:
+                #self.print_todo()
                 size = self.size_memory.pop()
                 mp.release_memory(size)
 
